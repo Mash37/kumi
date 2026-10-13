@@ -1,6 +1,6 @@
 // Primero intenta la red (para recibir mejoras); sin conexión, sirve lo guardado.
 // Nombre propio: en el mismo dominio puede haber otras apps con su propia caché, y no se tocan.
-const CACHE = 'kumi-app-v2';
+const CACHE = 'kumi-app-v3';
 const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png',
   './fuentes/PlayfairDisplay-Italic.woff2', './fuentes/GreatVibes.woff2', './fuentes/Jost.woff2'];
 

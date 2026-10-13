@@ -130,7 +130,7 @@
   .estado { font-size: 14px; margin: 0 0 14px; color: var(--gris); }
   .estado b { color: var(--frambuesa); }
 
-  .horas-fila { display: grid; grid-template-columns: 30px 78px 1fr 46px; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
+  .horas-fila { display: grid; grid-template-columns: 30px 78px 1fr 64px; align-items: center; gap: 8px; padding: 5px 0; font-size: 14px; }
   .horas-fila b { font-weight: 600; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 13px; }
   .horas-fila .barra { height: 10px; background: var(--rosa-suave); border-radius: 99px; overflow: hidden; }
   .horas-fila .barra i { display: block; height: 100%; background: var(--deg); border-radius: 99px; }
@@ -213,8 +213,12 @@
 
   .cuadro-img { width: 100%; background: #fff; border: 1px solid var(--borde); border-radius: 14px; display: block; }
 
-  .fila-equipo { display: flex; gap: 6px; align-items: center; margin-bottom: 8px; }
-  .fila-equipo input { flex: 1; min-width: 0; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); padding: 0 14px; font-size: 16px; font-weight: 500; text-transform: uppercase; }
+  .fila-equipo { display: grid; grid-template-columns: 30px 1fr auto; gap: 6px 8px; align-items: center; margin-bottom: 10px; background: var(--blanco); border: 1px solid var(--borde); border-radius: 18px; padding: 10px; }
+  .fila-equipo .contrato { grid-column: 2; grid-row: 2; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gris); }
+  .fila-equipo .contrato input { flex: none; width: 64px; height: 38px; padding: 0 6px; text-align: center; text-transform: none; font-weight: 600; }
+  .fila-equipo .orden { grid-column: 3; grid-row: 2; display: flex; gap: 4px; }
+  .fila-equipo .orden button { width: 38px; height: 38px; }
+  .fila-equipo input { min-width: 0; height: 46px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); padding: 0 14px; font-size: 16px; font-weight: 500; text-transform: uppercase; }
   .fila-equipo button { width: 44px; height: 48px; border-radius: 12px; border: 1px solid var(--borde); background: var(--blanco); font-size: 17px; color: var(--frambuesa); }
   .fila-equipo button:disabled { opacity: .3; }
 
@@ -442,6 +446,16 @@
   .modos button { flex: 1; border: 1px solid var(--borde); background: var(--blanco); border-radius: 12px; padding: 10px 4px; font-size: 14px; font-weight: 500; }
   .modos button.sel { border-color: var(--rosa); background: var(--rosa-suave); color: var(--frambuesa); font-weight: 600; }
 
+  /* Ajustes */
+  .regla { display: grid; grid-template-columns: 1fr 150px; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--borde); }
+  .regla:first-of-type { border-top: 0; }
+  .regla b { display: block; font-size: 14.5px; font-weight: 600; }
+  .regla small { font-size: 12px; color: var(--gris); }
+  .opcion-inicio { display: flex; align-items: center; justify-content: space-between; padding: 8px 0; border-top: 1px solid var(--borde); font-size: 15px; }
+  .opcion-inicio:first-of-type { border-top: 0; }
+  .acerca p { margin: 6px 0 0; font-size: 14px; color: var(--gris); }
+  .acerca b { color: var(--frambuesa); }
+
   #zonaImprimir { display: none; }
   .inf { font-family: 'Jost', Arial, sans-serif; color: #1f1418; font-size: 11pt; }
   .inf-marca { font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: var(--pdf-titulo); }
@@ -513,13 +527,13 @@
       <button class="btn principal" id="btnInstalar" hidden>Instalar en el móvil</button>
     </div>
 
-    <div class="tarjeta">
+    <div class="tarjeta" id="tarjetaServicio">
       <h3>El servicio de hoy</h3>
       <div class="sub" id="hoySub"></div>
       <div id="hoyLinea"></div>
     </div>
 
-    <div class="tarjeta">
+    <div class="tarjeta" id="tarjetaSemana">
       <h3>Semana que viene</h3>
       <div class="sub" id="proxSub"></div>
       <div class="resumen">
@@ -530,7 +544,7 @@
       <div class="acciones" id="proxAcciones"></div>
     </div>
 
-    <div class="tarjeta">
+    <div class="tarjeta" id="tarjetaHoras">
       <h3>Horas de cada uno</h3>
       <div class="sub">Semana que viene, sumando todos los turnos</div>
       <div id="horasLista"></div>
@@ -544,7 +558,7 @@
       <div class="acciones" style="margin-top:12px"><button class="btn secundario" data-ir="stock" id="btnIrStock">Ir al stock</button></div>
     </div>
 
-    <div class="tarjeta palabra">
+    <div class="tarjeta palabra" id="tarjetaDato">
       <div class="kicker" id="palabraKicker">Palabra del día</div>
       <div class="jp" id="palabraJp"></div>
       <div class="romaji" id="palabraRomaji"></div>
@@ -628,7 +642,54 @@
     <div class="acciones">
       <button class="btn secundario" id="btnAnadir">+ Añadir persona</button>
     </div>
-    <p class="nota">Los cambios se guardan solos en este móvil.</p>
+    <p class="nota">Las horas de contrato sirven para avisarte si alguien se pasa o no llega a su jornada. Los cambios se guardan solos.</p>
+  </section>
+
+  <section class="vista" id="vistaAjustes">
+    <button class="volver" data-volver><span>‹</span> Inicio</button>
+    <h2>Ajustes</h2>
+    <div class="tarjeta">
+      <h3>Tu perfil</h3><p class="sub">&nbsp;</p>
+      <label class="campo"><span>Tu nombre (el del saludo)</span><input id="ajPersona" autocomplete="given-name"></label>
+    </div>
+    <div class="tarjeta">
+      <h3>Restaurante</h3><p class="sub">&nbsp;</p>
+      <label class="campo"><span>Nombre del restaurante</span><input id="ajRestaurante"></label>
+      <div class="grupo-stock">Tipo de cocina</div>
+      <div class="tipos" id="ajTipos"></div>
+    </div>
+    <div class="tarjeta">
+      <h3>Apariencia</h3><p class="sub">&nbsp;</p>
+      <div class="modos" id="ajModos"></div>
+      <p class="pista-campo" style="margin-top:8px">«Automático» sigue el modo claro u oscuro del móvil.</p>
+    </div>
+    <div class="tarjeta">
+      <h3>Equipo y servicios</h3><p class="sub">Personas, horas de contrato y gente mínima por servicio.</p>
+      <div class="acciones"><button class="btn secundario" id="ajIrEquipo"></button><button class="btn secundario" id="ajServicios"></button></div>
+    </div>
+    <div class="tarjeta">
+      <h3>Reglas de descanso</h3>
+      <p class="sub">Vienen con las generales del Estatuto de los Trabajadores. Ajústalas a tu convenio.</p>
+      <div id="ajReglas"></div>
+      <button class="btn texto" id="ajReglasEstatuto" style="color:var(--frambuesa)">Volver a las del Estatuto</button>
+    </div>
+    <div class="tarjeta">
+      <h3>Pantalla de inicio</h3><p class="sub">Elige qué tarjetas quieres ver.</p>
+      <div id="ajInicio"></div>
+    </div>
+    <div class="tarjeta">
+      <h3>Tus datos</h3><p class="sub" id="ajCopiaEstado"></p>
+      <div class="acciones">
+        <button class="btn secundario" id="ajGuardarCopia">💾 Guardar copia de seguridad</button>
+        <button class="btn secundario" id="ajRecuperarCopia">📂 Recuperar desde una copia</button>
+        <button class="btn peligro" id="ajBorrar">Borrar todo y empezar de cero</button>
+      </div>
+    </div>
+    <div class="tarjeta acerca">
+      <h3>Acerca de</h3>
+      <p>Kumi · versión <b id="ajVersion"></b></p>
+      <p>Hecha por <b>Mash</b>. Todo lo que apuntas se guarda solo en este móvil.</p>
+    </div>
   </section>
 </main>
 
@@ -1156,13 +1217,17 @@ function avatar(p) {
 
 // --- Avisos de descanso (Estatuto de los Trabajadores, reglas generales; el convenio puede cambiarlas) ---
 // 12 h entre jornadas (art. 34.3) · día y medio seguido de descanso a la semana (art. 37.1) · 9 h ordinarias al día (art. 34.3) · 40 h semanales (art. 34.1).
-const DESCANSO_ENTRE_DIAS = 12 * 60, DESCANSO_SEMANAL = 36 * 60, MAX_DIA = 9 * 60, MAX_SEMANA = 40 * 60;
+const VERSION = '2.1';
+// Reglas generales del Estatuto (en horas); cada restaurante puede ajustarlas a su convenio en Ajustes.
+const REGLAS_ESTATUTO = { entreDias: 12, semanal: 36, maxDia: 9, maxSemana: 40 };
+function reglas() { return Object.assign({}, REGLAS_ESTATUTO, datos.reglas || {}); }
 function nombreCorto(n) { return n.charAt(0) + n.slice(1).toLowerCase(); }
 function avisosSemana(lunesSem) {
   const sem = datos.semanas[claveSemana(lunesSem)] || {};
   const anterior = datos.semanas[claveSemana(sumarDias(lunesSem, -7))];
   const siguiente = datos.semanas[claveSemana(sumarDias(lunesSem, 7))];
   const avisos = [];
+  const R = reglas();
   datos.equipo.forEach((p) => {
     if (!sem[p.id]) return;
     // Cada día como tramos en minutos desde el lunes a las 0:00 (el domingo anterior es el día -1).
@@ -1178,15 +1243,19 @@ function avisosSemana(lunesSem) {
     const nombre = nombreCorto(p.nombre);
     semana.forEach((x) => {
       const min = minutosDe(x.tramos);
-      if (min > MAX_DIA) avisos.push({ id: p.id, dia: x.d, texto: nombre + ' trabaja ' + horasExactas(min) + ' el ' + DIAS[x.d] + ' (más de 9 h en el día).' });
+      if (min > R.maxDia * 60) avisos.push({ id: p.id, dia: x.d, texto: nombre + ' trabaja ' + horasExactas(min) + ' el ' + DIAS[x.d] + ' (más de ' + R.maxDia + ' h en el día).' });
       const antes = dias.find((y) => y.d === x.d - 1);
       if (!x.tramos.length || !antes.tramos.length) return;
       const hueco = Math.min(...x.tramos.map((t) => t[0])) - Math.max(...antes.tramos.map((t) => t[1]));
-      if (hueco < DESCANSO_ENTRE_DIAS) {
-        avisos.push({ id: p.id, dia: x.d, texto: nombre + ' solo descansa ' + horasExactas(Math.max(0, hueco)) + ' entre el ' + (x.d === 0 ? 'domingo' : DIAS[x.d - 1]) + ' y el ' + DIAS[x.d] + ' (mínimo 12 h).' });
+      if (hueco < R.entreDias * 60) {
+        avisos.push({ id: p.id, dia: x.d, texto: nombre + ' solo descansa ' + horasExactas(Math.max(0, hueco)) + ' entre el ' + (x.d === 0 ? 'domingo' : DIAS[x.d - 1]) + ' y el ' + DIAS[x.d] + ' (mínimo ' + R.entreDias + ' h).' });
       }
     });
-    if (total > MAX_SEMANA) avisos.push({ id: p.id, dia: null, texto: nombre + ' suma ' + horasExactas(total) + ' esta semana (más de 40 h).' });
+    // Con horas de contrato se compara con su jornada; sin contrato, con el máximo semanal.
+    const contrato = (+p.contrato || 0) * 60;
+    if (contrato && total > contrato) avisos.push({ id: p.id, dia: null, texto: nombre + ' suma ' + horasExactas(total) + '; su contrato es de ' + horasExactas(contrato) + ' (' + horasExactas(total - contrato) + ' de más).' });
+    else if (contrato && total < contrato) avisos.push({ id: p.id, dia: null, texto: nombre + ' suma ' + horasExactas(total) + '; le faltan ' + horasExactas(contrato - total) + ' para sus ' + horasExactas(contrato) + ' de contrato.' });
+    else if (!contrato && total > R.maxSemana * 60) avisos.push({ id: p.id, dia: null, texto: nombre + ' suma ' + horasExactas(total) + ' esta semana (más de ' + R.maxSemana + ' h).' });
     // Descanso semanal: el hueco más largo entre turnos. Si la semana de al lado no está rellena,
     // se supone que no se entra antes del mediodía (así no salta un falso aviso por librar el domingo).
     const todos = dias.flatMap((x) => x.tramos).sort((a, b) => a[0] - b[0]);
@@ -1194,7 +1263,7 @@ function avisosSemana(lunesSem) {
     let maxHueco = 0, ultimoFin = inicio;
     todos.forEach(([a, b]) => { maxHueco = Math.max(maxHueco, a - ultimoFin); ultimoFin = Math.max(ultimoFin, b); });
     maxHueco = Math.max(maxHueco, fin - ultimoFin);
-    if (maxHueco < DESCANSO_SEMANAL) avisos.push({ id: p.id, dia: null, texto: nombre + ' no tiene día y medio de descanso seguido esta semana (36 h).' });
+    if (maxHueco < R.semanal * 60) avisos.push({ id: p.id, dia: null, texto: nombre + ' no tiene ' + R.semanal + ' h de descanso seguidas esta semana.' });
   });
   return avisos;
 }
@@ -1423,7 +1492,7 @@ function pintarInicio() {
   const horas = datos.equipo.map((p) => ({ p, min: prox && prox[p.id] ? prox[p.id].reduce((s, t) => s + minutosTurnos(t), 0) : 0 }));
   const max = Math.max(...horas.map((x) => x.min), 1);
   $('horasLista').innerHTML = horas.some((x) => x.min)
-    ? horas.map((x) => '<div class="horas-fila">' + avatar(x.p) + '<b>' + escapar(x.p.nombre.toUpperCase()) + '</b><div class="barra"><i style="width:' + (x.min / max * 100) + '%"></i></div><span>' + textoHoras(x.min) + '</span></div>').join('')
+    ? horas.map((x) => '<div class="horas-fila">' + avatar(x.p) + '<b>' + escapar(x.p.nombre.toUpperCase()) + '</b><div class="barra"><i style="width:' + (x.min / max * 100) + '%"></i></div><span>' + textoHoras(x.min).replace(' h', '') + (x.p.contrato ? '/' + cifra.format(x.p.contrato) : '') + ' h</span></div>').join('')
     : '<div class="vacio">Aparecerán cuando rellenes la semana.</div>';
 
   const inicioAno = new Date(ahora.getFullYear(), 0, 0);
@@ -1435,6 +1504,8 @@ function pintarInicio() {
   $('palabraTxt').textContent = dato.length === 3 ? dato[2] : dato[1];
   $('anio').textContent = ahora.getFullYear();
   pintarStockInicio();
+  const ver = Object.assign({ servicio: true, semana: true, horas: true, stock: true, dato: true }, datos.inicio || {});
+  [['servicio', 'tarjetaServicio'], ['semana', 'tarjetaSemana'], ['horas', 'tarjetaHoras'], ['stock', 'tarjetaStock'], ['dato', 'tarjetaDato']].forEach(([k, id]) => { $(id).hidden = !ver[k]; });
 
   pintarInstalar();
 }
@@ -1899,9 +1970,9 @@ async function pintarCuadro() {
     ? '<div class="tarjeta tarjeta-avisos"><h3>⚖️ ' + total + (total === 1 ? ' aviso del horario' : ' avisos del horario') + '</h3>' +
       '<p class="sub">Revísalo antes de enviarlo.</p>' +
       (cobertura.length ? '<div class="grupo-stock">Cobertura de los servicios</div>' + lista(cobertura) : '') +
-      (avisos.length ? '<div class="grupo-stock">Descansos</div><p class="sub">Reglas generales del Estatuto; tu convenio puede tener otras.</p>' + lista(avisos) : '') + '</div>'
+      (avisos.length ? '<div class="grupo-stock">Descansos y horas</div><p class="sub">Según tus reglas de descanso y las horas de contrato (se cambian en ⚙️ Ajustes).</p>' + lista(avisos) : '') + '</div>'
     : semanaTieneDatos(datos.semanas[claveSemana(lunes)])
-      ? '<div class="tarjeta tarjeta-ok"><i>✅</i><div><b>Sin avisos</b><span>Revisé la gente de cada servicio y los descansos (12 h, día y medio libre, 9 h al día y 40 h a la semana).</span></div></div>'
+      ? '<div class="tarjeta tarjeta-ok"><i>✅</i><div><b>Sin avisos</b><span>Revisé la gente de cada servicio, los descansos y las horas de contrato.</span></div></div>'
       : '';
   await fuentesListas();
   $('cuadroImg').src = dibujarCuadro().toDataURL('image/png');
@@ -2059,6 +2130,8 @@ function pintarHoras() {
         const i = datos.equipo.findIndex((p) => p.id === f.id);
         const color = i >= 0 ? tema().avatares[i % tema().avatares.length] : '#b3a9b1';
         const extras = [f.trabajados + (f.trabajados === 1 ? ' día' : ' días')];
+        const persona = datos.equipo.find((p) => p.id === f.id);
+        if (persona && persona.contrato) extras.push('contrato ' + cifra.format(persona.contrato) + ' h/sem');
         if (f.faltas) extras.push(f.faltas + (f.faltas === 1 ? ' falta' : ' faltas'));
         if (f.coberturas) extras.push('cubrió ' + f.coberturas);
         if (f.noche) extras.push(horasExactas(f.noche) + ' noche');
@@ -2088,9 +2161,9 @@ $('btnInforme').addEventListener('click', async () => {
     '<div class="inf-marca">Kumi · ' + escapar(restaurante().nombre || tema().cocina) + '</div>' +
     '<h1>Horas trabajadas · ' + nombreMes + '</h1>' +
     '<p class="inf-sub">Del 1 al ' + ultimo + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + generado + '</p>' +
-    '<table><thead><tr><th>Persona</th><th class="n">Días</th><th class="n">Faltas</th><th class="n">Horas totales</th><th class="n">Nocturnas (22–6 h)</th><th class="n">En domingo</th></tr></thead><tbody>' +
-    conHoras.map((f) => '<tr><td>' + escapar(f.nombre) + '</td><td class="n">' + f.trabajados + '</td><td class="n">' + (f.faltas || '—') + '</td><td class="n">' + horasExactas(f.min) + '</td><td class="n">' + (f.noche ? horasExactas(f.noche) : '—') + '</td><td class="n">' + (f.domingo ? horasExactas(f.domingo) : '—') + '</td></tr>').join('') +
-    '<tr class="suma"><td>Total</td><td class="n"></td><td class="n">' + (suma('faltas') || '—') + '</td><td class="n">' + horasExactas(suma('min')) + '</td><td class="n">' + horasExactas(suma('noche')) + '</td><td class="n">' + horasExactas(suma('domingo')) + '</td></tr>' +
+    '<table><thead><tr><th>Persona</th><th class="n">Contrato</th><th class="n">Días</th><th class="n">Faltas</th><th class="n">Horas totales</th><th class="n">Nocturnas (22–6 h)</th><th class="n">En domingo</th></tr></thead><tbody>' +
+    conHoras.map((f) => { const c = (datos.equipo.find((p) => p.id === f.id) || {}).contrato; return '<tr><td>' + escapar(f.nombre) + '</td><td class="n">' + (c ? cifra.format(c) + ' h/sem' : '—') + '</td><td class="n">' + f.trabajados + '</td><td class="n">' + (f.faltas || '—') + '</td><td class="n">' + horasExactas(f.min) + '</td><td class="n">' + (f.noche ? horasExactas(f.noche) : '—') + '</td><td class="n">' + (f.domingo ? horasExactas(f.domingo) : '—') + '</td></tr>'; }).join('') +
+    '<tr class="suma"><td>Total</td><td class="n"></td><td class="n"></td><td class="n">' + (suma('faltas') || '—') + '</td><td class="n">' + horasExactas(suma('min')) + '</td><td class="n">' + horasExactas(suma('noche')) + '</td><td class="n">' + horasExactas(suma('domingo')) + '</td></tr>' +
     '</tbody></table>' +
     '<p class="inf-nota">Horas según el horario del equipo con las incidencias apuntadas (faltas, cambios y coberturas); no son fichajes. Los turnos que pasan de medianoche cuentan en el día en que empiezan.' +
     (sinHorario.length ? ' Días del mes sin ningún turno apuntado: ' + tramosDias(sinHorario) + '.' : '') + '</p>' +
@@ -2537,8 +2610,7 @@ function abrirMas() {
     '</div><div class="grupo-stock">Más</div><div class="accesos">' +
     acceso('horas', '🕒', 'Horas del mes', 'Informe en PDF para la nómina', vista === 'horas') +
     acceso('equipo', '👥', 'Tu equipo', datos.equipo.length + (datos.equipo.length === 1 ? ' persona' : ' personas'), vista === 'equipo') +
-    acceso('restaurante', tema().emoji, 'Tu restaurante', restaurante().nombre || 'Nombre, tipo y modo oscuro') +
-    acceso('servicios', '🍽️', 'Servicios y mínimos', franjas().map((f) => f.nombre + ' ' + f.minimo).join(' · ') || 'Sin servicios') +
+    acceso('ajustes', '⚙️', 'Ajustes', 'Perfil, restaurante, reglas, apariencia…', vista === 'ajustes') +
     '</div><div class="grupo-stock">Tus datos</div><div class="accesos">' +
     acceso('guardar-copia', '💾', 'Guardar copia', textoUltimaCopia().replace(/<[^>]+>/g, '')) +
     acceso('recuperar-copia', '📂', 'Recuperar copia', 'Desde un archivo guardado') +
@@ -2550,10 +2622,9 @@ $('panel').addEventListener('click', (e) => {
   if (!b) return;
   const que = b.dataset.mas;
   if (que === 'servicios') { abrirServicios(); return; }
-  if (que === 'restaurante') { abrirAjustes(); return; }
-  const navega = ['horas', 'equipo', 'recuento', 'compra'].includes(que);
+  const navega = ['horas', 'equipo', 'ajustes', 'recuento', 'compra'].includes(que);
   cerrarPanel(navega);
-  if (que === 'horas' || que === 'equipo') irA(que);
+  if (que === 'horas' || que === 'equipo' || que === 'ajustes') irA(que);
   if (que === 'recuento' || que === 'compra') {
     if (!productosActivos().length) { subStock = 'lista'; irA('stock'); avisar('Primero añade los productos'); return; }
     subStock = que === 'compra' ? 'compras' : 'lista';
@@ -2618,7 +2689,7 @@ $('panel').addEventListener('click', (e) => {
 });
 
 // --- Bienvenida (primera vez) y ajustes del restaurante ---
-let tipoElegido = 'sushi', ajustesUI = null;
+let tipoElegido = 'sushi';
 function htmlTipos(sel, atributo) {
   return ORDEN_TEMAS.map((k) => '<button ' + atributo + '="' + k + '" class="' + (k === sel ? 'sel' : '') + '" style="background:' + TEMAS[k].colores.degIntenso + '"><i>' + TEMAS[k].emoji + '</i>' + TEMAS[k].nombre + '</button>').join('');
 }
@@ -2652,35 +2723,63 @@ $('bEmpezar').addEventListener('click', () => {
   window.scrollTo(0, 0);
   avisar('¡Lista! Ya puedes preparar el horario');
 });
-function abrirAjustes() {
-  const r = restaurante();
-  ajustesUI = { persona: r.persona || '', nombre: r.nombre || '', tipo: r.tipo || 'sushi', modo: r.modo || 'auto' };
-  pintarAjustes();
+const MODOS = [['auto', 'Automático'], ['claro', '☀️ Claro'], ['oscuro', '🌙 Oscuro']];
+const REGLAS_UI = [
+  ['entreDias', 'Descanso entre jornadas', 'Del final de un día al inicio del siguiente', 1, 6, 24],
+  ['semanal', 'Descanso semanal seguido', 'Día y medio = 36 h; dos días = 48 h', 12, 12, 96],
+  ['maxDia', 'Máximo de horas en un día', 'Horas de trabajo efectivo', 1, 4, 14],
+  ['maxSemana', 'Máximo de horas a la semana', 'Para quien no tenga horas de contrato', 1, 10, 60],
+];
+const TARJETAS_INICIO = [['servicio', 'El servicio de hoy'], ['semana', 'Semana que viene'], ['horas', 'Horas de cada uno'], ['stock', 'Stock'], ['dato', 'Palabra / dato del día']];
+function guardarRestaurante(cambios) { datos.restaurante = Object.assign({}, restaurante(), cambios); guardar(); }
+function pintarAjustesVista() {
+  const r = restaurante(), R = reglas(), ver = Object.assign({ servicio: true, semana: true, horas: true, stock: true, dato: true }, datos.inicio || {});
+  if (document.activeElement !== $('ajPersona')) $('ajPersona').value = r.persona || '';
+  if (document.activeElement !== $('ajRestaurante')) $('ajRestaurante').value = r.nombre || '';
+  $('ajTipos').innerHTML = htmlTipos(r.tipo || 'sushi', 'data-aj-tipo');
+  $('ajModos').innerHTML = MODOS.map(([k, l]) => '<button data-aj-modo="' + k + '" class="' + ((r.modo || 'auto') === k ? 'sel' : '') + '">' + l + '</button>').join('');
+  $('ajIrEquipo').textContent = '👥 Tu equipo (' + datos.equipo.length + (datos.equipo.length === 1 ? ' persona)' : ' personas)');
+  $('ajServicios').textContent = '🍽️ Servicios y mínimos';
+  $('ajReglas').innerHTML = REGLAS_UI.map(([k, t, sub]) => '<div class="regla"><div><b>' + t + '</b><small>' + sub + '</small></div>' +
+    '<div class="contador"><button data-regla-menos="' + k + '" aria-label="Menos">−</button><b>' + R[k] + ' h</b><button data-regla-mas="' + k + '" aria-label="Más">+</button></div></div>').join('');
+  $('ajInicio').innerHTML = TARJETAS_INICIO.map(([k, t]) => '<div class="opcion-inicio">' + t + '<button class="interruptor' + (ver[k] ? ' on' : '') + '" data-ver="' + k + '" role="switch" aria-checked="' + ver[k] + '" aria-label="' + t + '"><i></i></button></div>').join('');
+  $('ajCopiaEstado').innerHTML = textoUltimaCopia();
+  $('ajVersion').textContent = VERSION;
 }
-function pintarAjustes() {
-  const modos = [['auto', 'Automático'], ['claro', '☀️ Claro'], ['oscuro', '🌙 Oscuro']];
-  abrirPanel('<h3>Tu restaurante</h3><p class="sub">&nbsp;</p>' +
-    '<label class="campo"><span>Tu nombre</span><input data-aj="persona" value="' + escapar(ajustesUI.persona) + '"></label>' +
-    '<label class="campo"><span>Nombre del restaurante</span><input data-aj="nombre" value="' + escapar(ajustesUI.nombre) + '"></label>' +
-    '<div class="grupo-stock">Tipo de cocina</div><div class="tipos" style="margin-bottom:16px">' + htmlTipos(ajustesUI.tipo, 'data-aj-tipo') + '</div>' +
-    '<div class="grupo-stock">Apariencia</div><div class="modos">' + modos.map(([k, l]) => '<button data-aj-modo="' + k + '" class="' + (ajustesUI.modo === k ? 'sel' : '') + '">' + l + '</button>').join('') + '</div>' +
-    '<p class="pista-campo" style="margin-top:8px">«Automático» sigue el modo claro u oscuro del móvil.</p>' +
-    '<div class="acciones" style="margin-top:14px"><button class="btn principal" data-aj-guardar>Guardar</button><button class="btn secundario" data-aj-cerrar>Cancelar</button></div>');
-}
-$('panel').addEventListener('input', (e) => { if (ajustesUI && e.target.dataset.aj) ajustesUI[e.target.dataset.aj] = e.target.value; });
-$('panel').addEventListener('click', (e) => {
-  if (!ajustesUI) return;
+$('ajPersona').addEventListener('input', (e) => guardarRestaurante({ persona: e.target.value.trim() }));
+$('ajRestaurante').addEventListener('input', (e) => guardarRestaurante({ nombre: e.target.value.trim() }));
+$('vistaAjustes').addEventListener('click', (e) => {
   const b = e.target.closest('button');
   if (!b) return;
   const d = b.dataset;
-  if (d.ajTipo) { ajustesUI.tipo = d.ajTipo; aplicarTema(d.ajTipo); pintarAjustes(); }
-  else if (d.ajModo) { ajustesUI.modo = d.ajModo; aplicarModo(d.ajModo); pintarAjustes(); }
-  else if (d.ajGuardar !== undefined) {
-    datos.restaurante = { persona: ajustesUI.persona.trim(), nombre: ajustesUI.nombre.trim(), tipo: ajustesUI.tipo, modo: ajustesUI.modo };
-    ajustesUI = null;
-    guardar(); cerrarPanel(); aplicarTema(); aplicarModo(); refrescar();
-    avisar('Guardado');
-  } else if (d.ajCerrar !== undefined) { ajustesUI = null; cerrarPanel(); aplicarTema(); aplicarModo(); }
+  if (d.ajTipo) { guardarRestaurante({ tipo: d.ajTipo }); aplicarTema(); }
+  else if (d.ajModo) { guardarRestaurante({ modo: d.ajModo }); aplicarModo(); }
+  else if (d.reglaMenos || d.reglaMas) {
+    const k = d.reglaMenos || d.reglaMas, [, , , paso, min, max] = REGLAS_UI.find((x) => x[0] === k);
+    datos.reglas = Object.assign({}, datos.reglas || {}, { [k]: Math.min(max, Math.max(min, reglas()[k] + (d.reglaMas ? paso : -paso))) });
+    guardar();
+  } else if (d.ver) {
+    const ver = Object.assign({ servicio: true, semana: true, horas: true, stock: true, dato: true }, datos.inicio || {});
+    ver[d.ver] = !ver[d.ver];
+    datos.inicio = ver;
+    guardar();
+  } else return;
+  pintarAjustesVista();
+});
+$('ajReglasEstatuto').addEventListener('click', () => { delete datos.reglas; guardar(); pintarAjustesVista(); avisar('Reglas del Estatuto restablecidas'); });
+$('ajIrEquipo').addEventListener('click', () => irA('equipo'));
+$('ajServicios').addEventListener('click', () => abrirServicios());
+$('ajGuardarCopia').addEventListener('click', () => guardarCopia());
+$('ajRecuperarCopia').addEventListener('click', () => $('archivoCopia').click());
+$('ajBorrar').addEventListener('click', () => {
+  if (!confirm('¿Borrar TODOS los datos de Kumi en este móvil? Horarios, equipo, incidencias, stock y ajustes.')) return;
+  if (!confirm('Última comprobación: no se puede deshacer. Si no has guardado una copia de seguridad, pulsa Cancelar. ¿Borrar todo?')) return;
+  try { localStorage.removeItem(CLAVE); } catch (e) {}
+  datos = cargar();
+  aplicarModo(); aplicarTema();
+  irA('inicio');
+  mostrarBienvenida();
+  avisar('Datos borrados');
 });
 
 // --- Equipo ---
@@ -2690,17 +2789,27 @@ function pintarEquipo() {
   $('equipo').innerHTML = datos.equipo.map((p, i) =>
     '<div class="fila-equipo">' + avatar(p) +
       '<input value="' + escapar(p.nombre) + '" data-i="' + i + '" aria-label="Nombre">' +
-      '<button data-subir="' + i + '" ' + (i === 0 ? 'disabled' : '') + ' aria-label="Subir">↑</button>' +
-      '<button data-bajar="' + i + '" ' + (i === n - 1 ? 'disabled' : '') + ' aria-label="Bajar">↓</button>' +
       '<button data-quitar="' + i + '" aria-label="Quitar">🗑</button>' +
+      '<label class="contrato">Contrato <input class="numero" inputmode="decimal" data-contrato="' + i + '" value="' + (p.contrato ? String(p.contrato).replace('.', ',') : '') + '" placeholder="—" aria-label="Horas de contrato a la semana"> h/semana</label>' +
+      '<span class="orden"><button data-subir="' + i + '" ' + (i === 0 ? 'disabled' : '') + ' aria-label="Subir">↑</button>' +
+      '<button data-bajar="' + i + '" ' + (i === n - 1 ? 'disabled' : '') + ' aria-label="Bajar">↓</button></span>' +
     '</div>').join('');
 }
 $('equipo').addEventListener('input', (e) => {
-  if (e.target.tagName !== 'INPUT') return;
-  datos.equipo[+e.target.dataset.i].nombre = e.target.value.trim();
+  const c = e.target;
+  if (c.dataset.contrato !== undefined) {
+    const v = leerNumero(c.value);
+    if (Number.isNaN(v) || (v !== null && v > 80)) { c.style.borderColor = '#d92d20'; return; }
+    c.style.borderColor = '';
+    datos.equipo[+c.dataset.contrato].contrato = v || null;
+    guardar();
+    return;
+  }
+  if (c.dataset.i === undefined) return;
+  datos.equipo[+c.dataset.i].nombre = c.value.trim();
   guardar();
 });
-$('equipo').addEventListener('change', (e) => { if (e.target.tagName === 'INPUT') pintarEquipo(); });
+$('equipo').addEventListener('change', (e) => { if (e.target.dataset.i !== undefined) pintarEquipo(); });
 $('equipo').addEventListener('click', (e) => {
   const b = e.target.closest('button');
   if (!b) return;
@@ -2720,7 +2829,7 @@ $('equipo').addEventListener('click', (e) => {
 $('btnAnadir').addEventListener('click', () => {
   datos.equipo.push({ id: nuevoId(), nombre: '' });
   guardar(); pintarEquipo();
-  const inputs = $('equipo').querySelectorAll('input');
+  const inputs = $('equipo').querySelectorAll('input[data-i]');
   inputs[inputs.length - 1].focus();
 });
 
@@ -2750,8 +2859,8 @@ function irA(nombre, desdeHistorial) {
   if (nombre !== 'stock') enRecuento = false;
   vista = nombre;
   document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === 'vista' + nombre[0].toUpperCase() + nombre.slice(1)));
-  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo'].includes(nombre))));
-  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock'].includes(nombre);
+  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'ajustes'].includes(nombre))));
+  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'ajustes'].includes(nombre);
   $('dias').style.display = nombre === 'rellenar' ? '' : 'none';
   refrescar();
   window.scrollTo(0, 0);
@@ -2771,6 +2880,7 @@ function refrescar() {
   if (vista === 'inicio') { pintarInicio(); return; }
   if (vista === 'horas') { pintarHoras(); return; }
   if (vista === 'stock') { pintarStock(); return; }
+  if (vista === 'ajustes') { pintarAjustesVista(); return; }
   pintarCabecera();
   if (vista === 'rellenar') pintarDia();
   if (vista === 'cuadro') pintarCuadro();
@@ -2797,7 +2907,7 @@ if (!datos.restaurante) mostrarBienvenida();
 window.addEventListener('popstate', (e) => {
   const st = e.state || { vista: 'inicio', nivel: 0 };
   if (!st.capa) {
-    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; if (ajustesUI) { ajustesUI = null; aplicarTema(); aplicarModo(); } }
+    if (!$('panelFondo').hidden) { $('panelFondo').hidden = true; incUI = null; serviciosUI = null; }
     if (!$('hojaFondo').hidden) { $('hojaFondo').hidden = true; repetir = null; }
   }
   const salirDeRecuento = enRecuento && !st.recuento;
