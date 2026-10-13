@@ -8,11 +8,11 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Kumi Kitchen">
+<meta name="apple-mobile-web-app-title" content="Kumi">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" href="icon-180.png">
 <link rel="icon" href="icon-192.png">
-<title>Kumi Kitchen · horarios de cocina</title>
+<title>Kumi · horarios de cocina</title>
 <style>
   @font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 400 900; font-display: swap; src: url(fuentes/PlayfairDisplay-Italic.woff2) format('woff2'); }
   @font-face { font-family: 'Great Vibes'; font-weight: 400; font-display: swap; src: url(fuentes/GreatVibes.woff2) format('woff2'); }
@@ -472,7 +472,7 @@
 
 <section class="bienvenida" id="bienvenida" hidden>
   <div class="portada">
-    <div class="barra-sup"><span class="logo-txt">Kumi<small>Kitchen</small></span></div>
+    <div class="barra-sup"><span class="logo-txt">Kumi</span></div>
     <h1>Vamos a preparar tu cocina</h1>
     <p>Te llevará un minuto. Todo se guarda en tu móvil.</p>
     <div class="ilustracion" id="ilustracionBienvenida"></div>
@@ -498,7 +498,7 @@
 
 <section class="vista activa" id="vistaInicio">
   <div class="portada">
-    <div class="barra-sup"><span class="logo-txt">Kumi<small>Kitchen</small></span><span class="marca" id="marcaTxt"></span></div>
+    <div class="barra-sup"><span class="logo-txt">Kumi</span><span class="marca" id="marcaTxt"></span></div>
     <div class="saludo"><span class="t" id="saludo">Hola,</span><span class="nombre" id="nombreSaludo"></span></div>
     <div class="fecha" id="fechaHoy"></div>
     <div class="ilustracion" id="ilustracion"></div>
@@ -508,7 +508,7 @@
   <div class="tablero">
     <div class="tarjeta instalar" id="tarjetaInstalar" hidden>
       <button class="cerrar" id="cerrarInstalar" aria-label="Cerrar">✕</button>
-      <h3>Ten Kumi Kitchen como una app</h3>
+      <h3>Ten Kumi como una app</h3>
       <p id="instalarTxt"></p>
       <button class="btn principal" id="btnInstalar" hidden>Instalar en el móvil</button>
     </div>
@@ -551,7 +551,7 @@
       <p id="palabraTxt"></p>
     </div>
 
-    <div class="firma">© <span id="anio">2026</span> · Kumi Kitchen by <b>Mash</b></div>
+    <div class="firma">© <span id="anio">2026</span> · Kumi by <b>Mash</b></div>
   </div>
 </section>
 
@@ -1459,7 +1459,7 @@ const yaInstalada = () => matchMedia('(display-mode: standalone)').matches || na
 const esIphone = /iphone|ipad|ipod/i.test(navigator.userAgent);
 const esAndroid = /android/i.test(navigator.userAgent);
 window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); peticionInstalar = e; pintarInstalar(); });
-window.addEventListener('appinstalled', () => { peticionInstalar = null; pintarInstalar(); avisar('¡Kumi Kitchen instalada!'); });
+window.addEventListener('appinstalled', () => { peticionInstalar = null; pintarInstalar(); avisar('¡Kumi instalada!'); });
 function pintarInstalar() {
   const mostrar = !yaInstalada() && !leerLocal(CLAVE_INSTALAR) && (peticionInstalar || esIphone || esAndroid);
   $('tarjetaInstalar').hidden = !mostrar;
@@ -2085,7 +2085,7 @@ $('btnInforme').addEventListener('click', async () => {
   const zona = $('zonaImprimir');
   zona.className = 'informe';
   zona.innerHTML = '<div class="inf">' +
-    '<div class="inf-marca">Kumi Kitchen · ' + escapar(restaurante().nombre || tema().cocina) + '</div>' +
+    '<div class="inf-marca">Kumi · ' + escapar(restaurante().nombre || tema().cocina) + '</div>' +
     '<h1>Horas trabajadas · ' + nombreMes + '</h1>' +
     '<p class="inf-sub">Del 1 al ' + ultimo + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + generado + '</p>' +
     '<table><thead><tr><th>Persona</th><th class="n">Días</th><th class="n">Faltas</th><th class="n">Horas totales</th><th class="n">Nocturnas (22–6 h)</th><th class="n">En domingo</th></tr></thead><tbody>' +
@@ -2106,7 +2106,7 @@ $('btnInforme').addEventListener('click', async () => {
     '<div class="inf-firmas"><div>Responsable de cocina</div><div>Recibido (nóminas)</div></div>' +
     '</div>';
   await fuentesListas();
-  imprimir('Horas ' + nombreMes + ' - Kumi Kitchen');
+  imprimir('Horas ' + nombreMes + ' - Kumi');
 });
 
 // --- Stock e inventario ---
@@ -2312,7 +2312,7 @@ function imprimirInformeStock() {
   const compras = comprasDelMes(anio, mes).sort((a, b) => a.ts - b.ts);
   const zona = $('zonaImprimir');
   zona.className = 'informe';
-  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi Kitchen · ' + escapar(restaurante().nombre || tema().cocina) + '</div>' +
+  zona.innerHTML = '<div class="inf"><div class="inf-marca">Kumi · ' + escapar(restaurante().nombre || tema().cocina) + '</div>' +
     '<h1>Stock y compras · ' + nombreMes + '</h1>' +
     '<p class="inf-sub">Del 1 al ' + new Date(anio, mes + 1, 0).getDate() + ' de ' + MESES[mes] + ' de ' + anio + ' · Generado el ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '/' + hoy.getFullYear() + '</p>' +
     '<table><thead><tr><th>Producto</th><th class="n">Comprado</th><th class="n">Gastado</th><th class="n">Consumido</th><th class="n">Coste consumo</th></tr></thead><tbody>' +
@@ -2324,7 +2324,7 @@ function imprimirInformeStock() {
       compras.map((c) => { const p = producto(c.p) || { nombre: '¿?', unidad: '' }; return '<tr><td>' + fechaCorta(c.ts) + '</td><td>' + escapar(p.nombre) + '</td><td>' + escapar(c.proveedor || '—') + '</td><td class="n">' + cantidadTxt(c.cant, p) + '</td><td class="n">' + euros.format(c.coste) + '</td></tr>'; }).join('') +
       '</tbody></table></div>' : '') +
     '<div class="inf-firmas"><div>Responsable de cocina</div><div>Revisado</div></div></div>';
-  fuentesListas().then(() => imprimir('Stock ' + nombreMes + ' - Kumi Kitchen'));
+  fuentesListas().then(() => imprimir('Stock ' + nombreMes + ' - Kumi'));
 }
 
 // --- Ventanas del stock (producto y compra) ---
@@ -2491,7 +2491,7 @@ async function guardarCopia() {
   const archivo = new File([contenido], nombre, { type: 'application/json' });
   let hecho = false;
   if (navigator.canShare && navigator.canShare({ files: [archivo] })) {
-    try { await navigator.share({ files: [archivo], title: 'Copia de Kumi Kitchen' }); hecho = true; }
+    try { await navigator.share({ files: [archivo], title: 'Copia de Kumi' }); hecho = true; }
     catch (e) { if (e.name === 'AbortError') return; }
   }
   if (!hecho) descargar(archivo);
@@ -2512,7 +2512,7 @@ $('archivoCopia').addEventListener('change', async (e) => {
   e.target.value = '';
   if (!archivo) return;
   const copia = leerCopia(await archivo.text());
-  if (!copia) { avisar('Ese archivo no es una copia de Kumi Kitchen'); return; }
+  if (!copia) { avisar('Ese archivo no es una copia de Kumi'); return; }
   const cuando = copia.fecha ? ' del ' + copia.fecha.getDate() + ' de ' + MESES[copia.fecha.getMonth()] + ' de ' + copia.fecha.getFullYear() : '';
   if (!confirm('Se va a cambiar todo lo que hay en este móvil por la copia' + cuando + ' (' + copia.datos.equipo.length + ' personas en el equipo). ¿Seguir?')) return;
   const antes = datos;
