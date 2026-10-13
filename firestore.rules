@@ -1,0 +1,43 @@
+rules_version = '2';
+// Reglas de Kumi: solo el jefe (dueño) publica; solo quien se une con el código puede leer.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function conSesion() { return request.auth != null; }
+    function restaurante(rid) { return get(/databases/$(database)/documents/restaurantes/$(rid)); }
+    function esDueno(rid) { return conSesion() && restaurante(rid).data.dueno == request.auth.uid; }
+    function esMiembro(rid) { return conSesion() && exists(/databases/$(database)/documents/restaurantes/$(rid)/miembros/$(request.auth.uid)); }
+
+    // Código de invitación: se puede consultar si se conoce, pero nunca listar todos.
+    match /codigos/{codigo} {
+      allow get: if conSesion();
+      allow list: if false;
+      allow create: if conSesion() && request.resource.data.dueno == request.auth.uid;
+      allow update, delete: if conSesion() && resource.data.dueno == request.auth.uid
+                            && request.resource.data.dueno == resource.data.dueno;
+    }
+
+    match /restaurantes/{rid} {
+      allow get: if conSesion() && (resource.data.dueno == request.auth.uid || esMiembro(rid));
+      allow list: if false;
+      allow create: if conSesion() && request.resource.data.dueno == request.auth.uid;
+      allow update: if conSesion() && resource.data.dueno == request.auth.uid
+                    && request.resource.data.dueno == resource.data.dueno;
+      allow delete: if conSesion() && resource.data.dueno == request.auth.uid;
+
+      match /miembros/{uid} {
+        allow read: if esDueno(rid) || (conSesion() && uid == request.auth.uid);
+        // Unirse: solo uno mismo, como «equipo» y con el código vigente de ese restaurante.
+        allow create: if conSesion() && uid == request.auth.uid
+                      && request.resource.data.rol == 'equipo'
+                      && get(/databases/$(database)/documents/codigos/$(request.resource.data.codigo)).data.rid == rid;
+        allow update: if esDueno(rid);
+        allow delete: if esDueno(rid) || (conSesion() && uid == request.auth.uid);
+      }
+
+      match /semanas/{semana} {
+        allow read: if esDueno(rid) || esMiembro(rid);
+        allow write: if esDueno(rid);
+      }
+    }
+  }
+}

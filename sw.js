@@ -1,7 +1,7 @@
 // Primero intenta la red (para recibir mejoras); sin conexión, sirve lo guardado.
 // Nombre propio: en el mismo dominio puede haber otras apps con su propia caché, y no se tocan.
-const CACHE = 'kumi-app-v3';
-const ARCHIVOS = ['./', './index.html', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png',
+const CACHE = 'kumi-app-v4';
+const ARCHIVOS = ['./', './index.html', './nube.js', './manifest.webmanifest', './icon-180.png', './icon-192.png', './icon-512.png', './icon-maskable-512.png',
   './fuentes/PlayfairDisplay-Italic.woff2', './fuentes/GreatVibes.woff2', './fuentes/Jost.woff2'];
 
 self.addEventListener('install', (e) => {
@@ -16,6 +16,9 @@ self.addEventListener('activate', (e) => {
 
 self.addEventListener('fetch', (e) => {
   if (e.request.method !== 'GET') return;
+  // Solo la propia app y la librería de Firebase; las conexiones con la base de datos van directas.
+  const url = new URL(e.request.url);
+  if (url.origin !== location.origin && url.hostname !== 'www.gstatic.com') return;
   // «no-cache» pregunta siempre al servidor: sin él, el móvil se queda hasta 10 minutos con la versión anterior.
   e.respondWith(
     fetch(e.request, { cache: 'no-cache' })

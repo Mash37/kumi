@@ -456,6 +456,29 @@
   .acerca p { margin: 6px 0 0; font-size: 14px; color: var(--gris); }
   .acerca b { color: var(--frambuesa); }
 
+  /* Kumi en línea */
+  .solo-equipo { display: none !important; }
+  body.modo-equipo .solo-equipo { display: revert !important; }
+  body.modo-equipo .solo-jefe { display: none !important; }
+  .codigo-grande { font-size: 30px; letter-spacing: .3em; font-weight: 700; text-align: center; color: var(--frambuesa); padding: 10px; border: 2px dashed var(--rosa-medio); border-radius: 16px; margin: 6px 0 12px; }
+  .miembro { padding: 10px 0; border-top: 1px solid var(--borde); }
+  .miembro:first-child { border-top: 0; }
+  .miembro b { display: block; font-size: 15px; }
+  .miembro small { color: var(--gris); font-size: 12px; }
+  .miembro .fila { display: flex; gap: 8px; align-items: center; margin-top: 6px; }
+  .miembro select { flex: 1; height: 42px; border-radius: 12px; border: 1px solid var(--borde); background: var(--fondo); padding: 0 10px; font-size: 15px; }
+  .miembro button { border: 0; background: none; color: #b42318; font-size: 13px; font-weight: 600; }
+  .dia-mio { display: grid; grid-template-columns: 74px 1fr auto; gap: 10px; align-items: center; padding: 11px 0; border-top: 1px solid var(--borde); }
+  .dia-mio:first-child { border-top: 0; }
+  .dia-mio.hoy { background: var(--rosa-suave); margin: 0 -16px; padding: 11px 16px; }
+  .dia-mio b { display: block; font-weight: 600; }
+  .dia-mio small { display: block; font-size: 12px; color: var(--gris); }
+  .dia-mio > span { font-weight: 600; color: var(--frambuesa); font-variant-numeric: tabular-nums; }
+  .libre-mio { color: #1f7a4d; font-weight: 600; }
+  .total-mio { display: flex; justify-content: space-between; align-items: baseline; padding-top: 12px; margin-top: 4px; border-top: 2px solid var(--borde); font-size: 14px; color: var(--gris); }
+  .total-mio b { font-family: var(--titulo); font-style: italic; font-size: 22px; color: var(--frambuesa); }
+  .uCodigo { text-transform: uppercase; letter-spacing: .3em; font-size: 22px !important; text-align: center; font-weight: 700; }
+
   #zonaImprimir { display: none; }
   .inf { font-family: 'Jost', Arial, sans-serif; color: #1f1418; font-size: 11pt; }
   .inf-marca { font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: var(--pdf-titulo); }
@@ -507,6 +530,35 @@
       <label class="campo"><textarea id="bEquipo" rows="5" placeholder="Ana&#10;Luis&#10;Marta"></textarea></label>
     </div>
     <div class="acciones"><button class="btn principal" id="bEmpezar">Empezar</button></div>
+    <div class="acciones" style="margin-top:0"><button class="btn secundario" id="bSoyEquipo">Soy del equipo: tengo un código</button></div>
+  </div>
+</section>
+
+<section class="bienvenida" id="unirse" hidden>
+  <div class="portada">
+    <div class="barra-sup"><span class="logo-txt">Kumi</span></div>
+    <h1>Únete a tu equipo</h1>
+    <p>Verás tu horario en el móvil en cuanto lo publique tu jefe o jefa.</p>
+  </div>
+  <div class="tablero">
+    <div class="tarjeta">
+      <h3>1 · Entra con Google</h3>
+      <p class="sub" id="uSesion"></p>
+      <div class="acciones"><button class="btn principal" id="uEntrar">Entrar con Google</button></div>
+    </div>
+    <div class="tarjeta" id="uPaso2" hidden>
+      <h3>2 · Código de invitación</h3>
+      <p class="sub">Te lo da tu jefe o jefa: 6 letras y números.</p>
+      <label class="campo"><input id="uCodigo" class="uCodigo" maxlength="6" autocomplete="off" autocapitalize="characters" placeholder="ABC123"></label>
+      <div class="acciones"><button class="btn secundario" id="uBuscar">Buscar restaurante</button></div>
+    </div>
+    <div class="tarjeta" id="uPaso3" hidden>
+      <h3 id="uRestaurante"></h3>
+      <p class="sub">3 · ¿Quién eres?</p>
+      <div class="chips-inc" id="uNombres"></div>
+      <div class="acciones"><button class="btn principal" id="uUnirme" disabled>Unirme</button></div>
+    </div>
+    <div class="acciones"><button class="btn texto" id="uVolver" style="color:var(--frambuesa)">‹ Volver</button></div>
   </div>
 </section>
 
@@ -590,7 +642,8 @@
   </section>
 
   <section class="vista" id="vistaCuadro">
-    <div id="avisosCuadro"></div>
+    <div id="avisosCuadro" class="solo-jefe"></div>
+    <div id="publicarBox" class="solo-jefe"></div>
     <img id="cuadroImg" class="cuadro-img" alt="Cuadro de horario de la semana">
     <p class="nota">Pellizca la imagen para hacer zoom.</p>
     <div class="acciones">
@@ -598,7 +651,7 @@
       <button class="btn secundario" id="btnDescargar">Guardar imagen</button>
       <button class="btn secundario" id="btnPdf">Guardar como PDF</button>
     </div>
-    <div class="acciones">
+    <div class="acciones solo-jefe">
       <button class="btn secundario" id="btnCopiar">Copiar el horario de la semana anterior</button>
       <button class="btn peligro" id="btnLimpiar">Vaciar esta semana</button>
     </div>
@@ -645,6 +698,18 @@
     <p class="nota">Las horas de contrato sirven para avisarte si alguien se pasa o no llega a su jornada. Los cambios se guardan solos.</p>
   </section>
 
+  <section class="vista" id="vistaMihorario">
+    <h2>Mi horario</h2>
+    <p class="sub-equipo" id="miSub"></p>
+    <div id="miAviso"></div>
+    <div class="mes-nav">
+      <button id="miAnterior" aria-label="Semana anterior">‹</button>
+      <div><small id="miEtiqueta"></small><b id="miRango"></b></div>
+      <button id="miSiguiente" aria-label="Semana siguiente">›</button>
+    </div>
+    <div class="tarjeta" id="miDias"></div>
+  </section>
+
   <section class="vista" id="vistaAjustes">
     <button class="volver" data-volver><span>‹</span> Inicio</button>
     <h2>Ajustes</h2>
@@ -652,7 +717,7 @@
       <h3>Tu perfil</h3><p class="sub">&nbsp;</p>
       <label class="campo"><span>Tu nombre (el del saludo)</span><input id="ajPersona" autocomplete="given-name"></label>
     </div>
-    <div class="tarjeta">
+    <div class="tarjeta solo-jefe">
       <h3>Restaurante</h3><p class="sub">&nbsp;</p>
       <label class="campo"><span>Nombre del restaurante</span><input id="ajRestaurante"></label>
       <div class="grupo-stock">Tipo de cocina</div>
@@ -663,21 +728,31 @@
       <div class="modos" id="ajModos"></div>
       <p class="pista-campo" style="margin-top:8px">«Automático» sigue el modo claro u oscuro del móvil.</p>
     </div>
-    <div class="tarjeta">
+    <div class="tarjeta solo-jefe">
       <h3>Equipo y servicios</h3><p class="sub">Personas, horas de contrato y gente mínima por servicio.</p>
       <div class="acciones"><button class="btn secundario" id="ajIrEquipo"></button><button class="btn secundario" id="ajServicios"></button></div>
     </div>
-    <div class="tarjeta">
+    <div class="tarjeta solo-jefe" id="tarjetaNube">
+      <h3>Tu equipo en Kumi</h3>
+      <p class="sub">Publica el horario y cada persona lo verá en su móvil, sin mandar fotos.</p>
+      <div id="ajNube"></div>
+    </div>
+    <div class="tarjeta solo-equipo">
+      <h3>Tu restaurante</h3>
+      <p class="sub" id="ajMiRest"></p>
+      <div class="acciones"><button class="btn peligro" id="ajSalirRest">Salir de este restaurante</button></div>
+    </div>
+    <div class="tarjeta solo-jefe">
       <h3>Reglas de descanso</h3>
       <p class="sub">Vienen con las generales del Estatuto de los Trabajadores. Ajústalas a tu convenio.</p>
       <div id="ajReglas"></div>
       <button class="btn texto" id="ajReglasEstatuto" style="color:var(--frambuesa)">Volver a las del Estatuto</button>
     </div>
-    <div class="tarjeta">
+    <div class="tarjeta solo-jefe">
       <h3>Pantalla de inicio</h3><p class="sub">Elige qué tarjetas quieres ver.</p>
       <div id="ajInicio"></div>
     </div>
-    <div class="tarjeta">
+    <div class="tarjeta solo-jefe">
       <h3>Tus datos</h3><p class="sub" id="ajCopiaEstado"></p>
       <div class="acciones">
         <button class="btn secundario" id="ajGuardarCopia">💾 Guardar copia de seguridad</button>
@@ -694,11 +769,13 @@
 </main>
 
 <nav>
-  <button data-ir="inicio" class="activo"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</button>
-  <button data-ir="rellenar"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Rellenar</button>
-  <button id="btnMas" class="mas" aria-label="Más opciones"><span class="circulo"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Más</button>
+  <button data-ir="mihorario" class="solo-equipo"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="12" cy="15" r="2.2"/></svg>Mi horario</button>
+  <button data-ir="inicio" class="activo solo-jefe"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</button>
+  <button data-ir="rellenar" class="solo-jefe"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Rellenar</button>
+  <button id="btnMas" class="mas solo-jefe" aria-label="Más opciones"><span class="circulo"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Más</button>
   <button data-ir="cuadro"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4M9 10v10M15 10v10"/></svg>Cuadro</button>
-  <button data-ir="stock"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>Stock</button>
+  <button data-ir="stock" class="solo-jefe"><svg viewBox="0 0 24 24"><path d="M3 7l9-4 9 4-9 4z"/><path d="M3 7v10l9 4 9-4V7"/><path d="M12 11v10"/></svg>Stock</button>
+  <button data-ir="ajustes" class="solo-equipo"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>Ajustes</button>
 </nav>
 
 <div class="aviso" id="aviso"></div>
@@ -1962,6 +2039,7 @@ function fuentesListas() {
   ]).catch(() => {});
 }
 async function pintarCuadro() {
+  pintarPublicar();
   const avisos = avisosSemana(lunes);
   const cobertura = avisosCobertura(lunes);
   const total = avisos.length + cobertura.length;
@@ -2745,6 +2823,8 @@ function pintarAjustesVista() {
   $('ajInicio').innerHTML = TARJETAS_INICIO.map(([k, t]) => '<div class="opcion-inicio">' + t + '<button class="interruptor' + (ver[k] ? ' on' : '') + '" data-ver="' + k + '" role="switch" aria-checked="' + ver[k] + '" aria-label="' + t + '"><i></i></button></div>').join('');
   $('ajCopiaEstado').innerHTML = textoUltimaCopia();
   $('ajVersion').textContent = VERSION;
+  if (esEquipo()) $('ajMiRest').innerHTML = 'Estás en <b>' + escapar(restaurante().nombre || '') + '</b> como <b>' + escapar(restaurante().persona || '') + '</b>.' + (nubeConectada() ? ' Has entrado con ' + escapar(nube.usuario().email || '') + '.' : '');
+  else pintarNube();
 }
 $('ajPersona').addEventListener('input', (e) => guardarRestaurante({ persona: e.target.value.trim() }));
 $('ajRestaurante').addEventListener('input', (e) => guardarRestaurante({ nombre: e.target.value.trim() }));
@@ -2780,6 +2860,238 @@ $('ajBorrar').addEventListener('click', () => {
   irA('inicio');
   mostrarBienvenida();
   avisar('Datos borrados');
+});
+
+// --- Kumi en línea: el jefe publica, el equipo consulta (Firebase, en nube.js) ---
+function esEquipo() { return !!(datos.cuenta && datos.cuenta.rol === 'equipo'); }
+function cuenta() { return datos.cuenta || {}; }
+function aplicarModoEquipo() { document.body.classList.toggle('modo-equipo', esEquipo()); }
+function fechaDeClave(clave) { const [a, m, d] = clave.split('-').map(Number); return new Date(a, m - 1, d); }
+function fechaHora(ms) { const d = new Date(ms); return d.getDate() + '/' + (d.getMonth() + 1) + ' a las ' + d.getHours() + ':' + String(d.getMinutes()).padStart(2, '0'); }
+function nubeConectada() { return !!(window.nube && nube.usuario()); }
+let dejarDeEscuchar = null;
+window.addEventListener('nube-lista', () => {
+  nube.alCambiarSesion((u) => {
+    if (u && esEquipo() && cuenta().rid) escucharMiRestaurante();
+    if (vista === 'ajustes') pintarAjustesVista();
+    if (vista === 'cuadro') pintarPublicar();
+    if (!$('unirse').hidden) pintarUnirse();
+  });
+});
+
+// Lo que se sube al publicar: equipo y turnos de la semana (sin stock, notas ni nóminas).
+function semanaANube(clave) {
+  const lun = fechaDeClave(clave), sem = datos.semanas[clave] || {}, turnos = {}, libres = {};
+  datos.equipo.forEach((p) => {
+    if (sem[p.id]) turnos[p.id] = sem[p.id].map((t) => t.join('|'));
+    const l = [0, 1, 2, 3, 4, 5, 6].filter((d) => esLibre(sumarDias(lun, d), p.id));
+    if (l.length) libres[p.id] = l;
+  });
+  return { equipo: datos.equipo.map((p) => ({ id: p.id, nombre: p.nombre, contrato: p.contrato || null })), turnos, libres };
+}
+function semanaDesdeNube(s) {
+  const lun = fechaDeClave(s.clave), sem = {};
+  Object.entries(s.turnos || {}).forEach(([pid, dias]) => { sem[pid] = dias.map((x) => x.split('|')); });
+  datos.semanas[s.clave] = sem;
+  for (let d = 0; d < 7; d++) { const f = sumarDias(lun, d); Object.keys(libresDelDia(f)).forEach((id) => quitarLibre(f, id)); }
+  Object.entries(s.libres || {}).forEach(([pid, ds]) => ds.forEach((d) => {
+    const k = claveSemana(sumarDias(lun, d));
+    datos.libres = datos.libres || {};
+    (datos.libres[k] = datos.libres[k] || {})[pid] = ['', '', '', ''];
+  }));
+}
+function escucharMiRestaurante() {
+  if (dejarDeEscuchar || !nubeConectada()) return;
+  const c = cuenta();
+  nube.leerRestaurante(c.rid).then((r) => { if (r) { datos.restaurante = Object.assign({}, restaurante(), { nombre: r.nombre, tipo: r.tipo }); guardar(); aplicarTema(); refrescar(); } }).catch(() => {});
+  nube.leerMiFicha(c.rid).then((f) => { if (f && f.personaId !== c.personaId) { datos.cuenta.personaId = f.personaId; guardar(); refrescar(); } }).catch(() => {});
+  dejarDeEscuchar = nube.escucharSemanas(c.rid, (semanas) => {
+    if (!semanas.length) return;
+    semanas.forEach(semanaDesdeNube);
+    const ultima = semanas.reduce((a, b) => (b.publicado > a.publicado ? b : a));
+    datos.equipo = (ultima.equipo || []).map((p) => ({ id: p.id, nombre: p.nombre, contrato: p.contrato || null }));
+    datos.cuenta.ultimaPublicacion = ultima.publicado;
+    guardar();
+    refrescar();
+  }, () => { dejarDeEscuchar = null; avisar('No se pudo leer el horario. ¿Te han quitado del restaurante?'); });
+}
+
+// --- Mi horario (equipo) ---
+let lunesMi = lunesEsta;
+function pintarMiHorario() {
+  const c = cuenta(), pid = c.personaId, clave = claveSemana(lunesMi);
+  $('miSub').textContent = restaurante().nombre || '';
+  $('miEtiqueta').textContent = clave === claveSemana(lunesEsta) ? 'Esta semana' : clave === claveSemana(lunesProxima) ? 'Semana que viene' : 'Semana';
+  $('miRango').textContent = rango(lunesMi, false);
+  const nuevo = c.ultimaPublicacion && c.ultimaPublicacion > (c.visto || 0);
+  $('miAviso').innerHTML = nuevo ? '<div class="tarjeta tarjeta-ok"><i>🆕</i><div><b>Horario actualizado</b><span>Hay cambios publicados ' + fechaHora(c.ultimaPublicacion) + '.</span></div></div>' : '';
+  if (nuevo) { datos.cuenta.visto = c.ultimaPublicacion; guardar(); }
+  const yo = datos.equipo.find((p) => p.id === pid);
+  if (!yo) { $('miDias').innerHTML = '<div class="vacio">Todavía no hay ningún horario publicado contigo. Cuando tu jefe lo publique, aparecerá aquí.</div>'; return; }
+  const sem = datos.semanas[clave];
+  if (!sem) { $('miDias').innerHTML = '<div class="vacio">Esta semana todavía no está publicada.</div>'; return; }
+  let total = 0;
+  $('miDias').innerHTML = DIAS.map((nombreDia, d) => {
+    const f = sumarDias(lunesMi, d), t = sem[pid] ? sem[pid][d] : VACIO, min = minutosTurnos(t);
+    total += min;
+    const con = datos.equipo.filter((p) => p.id !== pid && sem[p.id] && sem[p.id][d].some(Boolean)).map((p) => nombreCorto(p.nombre));
+    const cuerpo = min ? '<b>' + textoTurnos4(t) + '</b>' + (con.length ? '<small>Con ' + escapar(con.join(', ')) + '</small>' : '')
+      : esLibre(f, pid) ? '<span class="libre-mio">🌴 Libre</span>' : '<small>Sin turno</small>';
+    return '<div class="dia-mio' + (claveSemana(f) === claveSemana(hoy) ? ' hoy' : '') + '"><div><b>' + nombreDia[0].toUpperCase() + nombreDia.slice(1) + '</b><small>' + f.getDate() + ' ' + MESES_CORTOS[f.getMonth()] + '</small></div><div>' + cuerpo + '</div><span>' + (min ? textoHoras(min) : '') + '</span></div>';
+  }).join('') + '<div class="total-mio"><span>Total de la semana' + (yo.contrato ? ' · contrato ' + cifra.format(yo.contrato) + ' h' : '') + '</span><b>' + textoHoras(total) + '</b></div>';
+}
+$('miAnterior').addEventListener('click', () => { lunesMi = sumarDias(lunesMi, -7); pintarMiHorario(); });
+$('miSiguiente').addEventListener('click', () => { lunesMi = sumarDias(lunesMi, 7); pintarMiHorario(); });
+
+// --- Publicar (jefe, en Cuadro) ---
+function pintarPublicar() {
+  const box = $('publicarBox');
+  if (esEquipo()) { box.innerHTML = ''; return; }
+  const c = cuenta();
+  if (!(nubeConectada() && c.rol === 'jefe' && c.rid)) {
+    box.innerHTML = '<p class="nota" style="text-align:left;margin:0 2px 12px">💡 Tu equipo puede ver este horario en su móvil, sin fotos: <b>＋ → Ajustes → Tu equipo en Kumi</b>.</p>';
+    return;
+  }
+  const clave = claveSemana(lunes), hayDatos = semanaTieneDatos(datos.semanas[clave]), pub = (datos.publicado || {})[clave];
+  const estado = !hayDatos ? 'Esta semana está vacía.' : pub && pub.huella === JSON.stringify(semanaANube(clave)) ? '✅ Publicado el ' + fechaHora(pub.cuando) : pub ? '⚠️ Hay cambios sin publicar.' : 'Todavía no está publicado.';
+  box.innerHTML = '<div class="tarjeta"><h3>Tu equipo en Kumi</h3><p class="sub">' + estado + '</p><div class="acciones"><button class="btn principal" id="btnPublicar"' + (hayDatos ? '' : ' disabled') + '>📤 Publicar este horario</button></div></div>';
+}
+$('publicarBox').addEventListener('click', async (e) => {
+  if (!e.target.closest('#btnPublicar')) return;
+  const c = cuenta(), clave = claveSemana(lunes), semana = semanaANube(clave);
+  e.target.closest('#btnPublicar').disabled = true;
+  try {
+    await nube.publicarSemana(c.rid, c.codigo, clave, semana, { nombre: restaurante().nombre || 'Mi restaurante', tipo: restaurante().tipo || 'sushi' });
+    datos.publicado = datos.publicado || {};
+    datos.publicado[clave] = { huella: JSON.stringify(semana), cuando: Date.now() };
+    guardar();
+    avisar('Publicado: tu equipo ya lo ve en Kumi');
+  } catch (err) { avisar('No se pudo publicar. ¿Tienes internet?'); }
+  pintarPublicar();
+});
+
+// --- «Tu equipo en Kumi» (jefe, en Ajustes) ---
+function pintarNube() {
+  const el = $('ajNube'), c = cuenta();
+  if (!window.nube) { el.innerHTML = '<div class="vacio">Necesitas conexión a internet para conectar con tu equipo.</div>'; return; }
+  const u = nube.usuario();
+  if (!u) {
+    el.innerHTML = '<div class="acciones"><button class="btn principal" data-nube="entrar">Entrar con Google</button></div>' +
+      '<p class="pista-campo" style="margin-top:8px">Solo se sube lo que publiques: nombres y turnos. El stock, las horas para nómina y las incidencias se quedan en tu móvil.</p>';
+    return;
+  }
+  if (c.rol !== 'jefe' || !c.rid || c.uid !== u.uid) {
+    el.innerHTML = '<p class="sub">Has entrado como <b>' + escapar(u.email || '') + '</b>.</p>' +
+      '<div class="acciones"><button class="btn principal" data-nube="crear">Crear «' + escapar(restaurante().nombre || 'Mi restaurante') + '» en línea</button>' +
+      '<button class="btn texto" data-nube="salir" style="color:var(--frambuesa)">Cerrar sesión</button></div>';
+    return;
+  }
+  el.innerHTML = '<p class="sub">Código de invitación de tu equipo:</p><div class="codigo-grande">' + c.codigo + '</div>' +
+    '<div class="acciones"><button class="btn principal" data-nube="invitar">Compartir invitación</button></div>' +
+    '<div class="grupo-stock" style="margin-top:16px">Personas unidas</div><div id="ajMiembros"><div class="vacio">Cargando…</div></div>' +
+    '<p class="pista-campo" style="margin-top:10px">Conectado como ' + escapar(u.email || '') + '. <button class="btn texto" data-nube="salir" style="display:inline;min-height:0;padding:0;color:var(--frambuesa);width:auto">Cerrar sesión</button></p>';
+  nube.miembros(c.rid).then((ms) => {
+    const opciones = (sel) => '<option value="">— Sin asignar —</option>' + datos.equipo.map((p) => '<option value="' + p.id + '"' + (p.id === sel ? ' selected' : '') + '>' + escapar(p.nombre.toUpperCase()) + '</option>').join('');
+    $('ajMiembros').innerHTML = ms.length ? ms.map((m) => '<div class="miembro"><b>' + escapar(m.nombre || 'Sin nombre') + '</b><small>' + escapar(m.correo || '') + '</small>' +
+      '<div class="fila"><select data-vincular="' + m.uid + '" aria-label="Es en el equipo">' + opciones(m.personaId) + '</select><button data-quitar-miembro="' + m.uid + '">Quitar</button></div></div>').join('')
+      : '<div class="vacio">Aún no se ha unido nadie. Comparte la invitación con tu equipo.</div>';
+  }).catch(() => { $('ajMiembros').innerHTML = '<div class="vacio">No se pudo cargar la lista. ¿Tienes internet?</div>'; });
+}
+$('ajNube').addEventListener('click', async (e) => {
+  const b = e.target.closest('button');
+  if (!b) return;
+  const c = cuenta();
+  try {
+    if (b.dataset.nube === 'entrar') await nube.entrar();
+    if (b.dataset.nube === 'salir') await nube.salir();
+    if (b.dataset.nube === 'crear') {
+      b.disabled = true;
+      const r = await nube.crearRestaurante({ nombre: restaurante().nombre || 'Mi restaurante', tipo: restaurante().tipo || 'sushi', equipo: semanaANube(claveSemana(lunesProxima)).equipo });
+      datos.cuenta = { rol: 'jefe', rid: r.rid, codigo: r.codigo, uid: nube.usuario().uid };
+      guardar();
+      avisar('Listo. Comparte el código con tu equipo');
+    }
+    if (b.dataset.nube === 'invitar') {
+      const enlace = location.origin + location.pathname + '?unirse=' + c.codigo;
+      const texto = 'Únete al equipo de ' + (restaurante().nombre || 'nuestro restaurante') + ' en Kumi para ver tu horario: ' + enlace + ' (código ' + c.codigo + ')';
+      if (navigator.share) await navigator.share({ title: 'Invitación a Kumi', text: texto }).catch(() => {});
+      else { await navigator.clipboard.writeText(texto); avisar('Invitación copiada'); }
+    }
+    if (b.dataset.quitarMiembro) {
+      if (!confirm('¿Quitar a esta persona? Dejará de ver el horario.')) return;
+      await nube.quitarMiembro(c.rid, b.dataset.quitarMiembro);
+    }
+  } catch (err) { if (err && err.code !== 'auth/popup-closed-by-user') avisar('No se pudo completar. ¿Tienes internet?'); }
+  pintarNube();
+});
+$('ajNube').addEventListener('change', (e) => {
+  const sel = e.target.closest('[data-vincular]');
+  if (sel) nube.vincular(cuenta().rid, sel.dataset.vincular, sel.value || null).then(() => avisar('Guardado')).catch(() => avisar('No se pudo guardar'));
+});
+
+// --- Unirse a un restaurante (empleado) ---
+let unirseUI = { codigo: '', datos: null, personaId: null };
+function mostrarUnirse(codigo) {
+  document.body.classList.add('en-bienvenida');
+  $('bienvenida').hidden = true;
+  $('unirse').hidden = false;
+  unirseUI = { codigo: (codigo || '').toUpperCase(), datos: null, personaId: null };
+  $('uCodigo').value = unirseUI.codigo;
+  pintarUnirse();
+  window.scrollTo(0, 0);
+}
+function pintarUnirse() {
+  const u = nubeConectada() ? nube.usuario() : null;
+  $('uSesion').innerHTML = !window.nube ? 'Necesitas conexión a internet.' : u ? 'Has entrado como <b>' + escapar(u.displayName || u.email || '') + '</b>.' : 'Así tu jefe sabe quién eres y nadie de fuera ve el horario.';
+  $('uEntrar').hidden = !!u;
+  $('uPaso2').hidden = !u;
+  $('uPaso3').hidden = !unirseUI.datos;
+  if (!unirseUI.datos) return;
+  $('uRestaurante').textContent = unirseUI.datos.nombre;
+  $('uNombres').innerHTML = (unirseUI.datos.equipo || []).map((p) => '<button data-persona="' + p.id + '" class="' + (unirseUI.personaId === p.id ? 'sel' : '') + '">' + escapar(p.nombre.toUpperCase()) + '</button>').join('') || '<div class="vacio">Tu jefe todavía no ha añadido al equipo.</div>';
+  $('uUnirme').disabled = !unirseUI.personaId;
+}
+$('bSoyEquipo').addEventListener('click', () => mostrarUnirse(''));
+$('uVolver').addEventListener('click', () => { $('unirse').hidden = true; mostrarBienvenida(); });
+$('uEntrar').addEventListener('click', () => nube.entrar().then(pintarUnirse).catch((err) => { if (err.code !== 'auth/popup-closed-by-user') avisar('No se pudo entrar con Google'); }));
+$('uBuscar').addEventListener('click', async () => {
+  const cod = $('uCodigo').value.trim().toUpperCase();
+  if (cod.length !== 6) { avisar('El código tiene 6 letras y números'); return; }
+  try {
+    const d = await nube.leerCodigo(cod);
+    if (!d) { avisar('No hay ningún restaurante con ese código'); return; }
+    unirseUI = { codigo: cod, datos: d, personaId: null };
+    pintarUnirse();
+  } catch (err) { avisar('No se pudo comprobar el código'); }
+});
+$('uNombres').addEventListener('click', (e) => { const b = e.target.closest('[data-persona]'); if (b) { unirseUI.personaId = b.dataset.persona; pintarUnirse(); } });
+$('uUnirme').addEventListener('click', async () => {
+  const d = unirseUI.datos;
+  $('uUnirme').disabled = true;
+  try { await nube.unirse(unirseUI.codigo, d.rid, unirseUI.personaId); }
+  catch (err) { avisar('No se pudo unir. Pide a tu jefe el código actual'); $('uUnirme').disabled = false; return; }
+  const yo = d.equipo.find((p) => p.id === unirseUI.personaId);
+  datos = {
+    equipo: d.equipo.map((p) => ({ id: p.id, nombre: p.nombre, contrato: p.contrato || null })), semanas: {},
+    restaurante: { persona: nombreCorto(yo.nombre), nombre: d.nombre, tipo: d.tipo, modo: restaurante().modo || 'auto' },
+    cuenta: { rol: 'equipo', rid: d.rid, codigo: unirseUI.codigo, personaId: unirseUI.personaId, uid: nube.usuario().uid },
+  };
+  guardar();
+  $('unirse').hidden = true;
+  document.body.classList.remove('en-bienvenida');
+  aplicarModoEquipo(); aplicarTema();
+  escucharMiRestaurante();
+  irA('mihorario', true);
+  avisar('¡Ya estás en el equipo de ' + d.nombre + '!');
+});
+$('ajSalirRest').addEventListener('click', async () => {
+  if (!confirm('¿Salir de «' + (restaurante().nombre || 'este restaurante') + '»? Dejarás de ver el horario.')) return;
+  try { await nube.salirDelRestaurante(cuenta().rid); } catch (err) {}
+  if (dejarDeEscuchar) { dejarDeEscuchar(); dejarDeEscuchar = null; }
+  try { localStorage.removeItem(CLAVE); } catch (err) {}
+  datos = cargar();
+  aplicarModoEquipo(); aplicarModo(); aplicarTema();
+  mostrarBienvenida();
 });
 
 // --- Equipo ---
@@ -2846,9 +3158,11 @@ function salirCapa(navegando) {
   history.back();
 }
 function irA(nombre, desdeHistorial) {
+  if (esEquipo() && ['inicio', 'rellenar', 'stock', 'horas', 'equipo'].includes(nombre)) nombre = 'mihorario';
+  const casa = nombre === 'inicio' || nombre === 'mihorario';
   if (!desdeHistorial) {
     const st = history.state || { nivel: 0 };
-    if (nombre === 'inicio') {
+    if (casa) {
       if (st.nivel > 0) { history.go(-st.nivel); return; }
     } else if (!st.nivel) {
       history.pushState({ vista: nombre, nivel: 1 }, '');
@@ -2860,7 +3174,7 @@ function irA(nombre, desdeHistorial) {
   vista = nombre;
   document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === 'vista' + nombre[0].toUpperCase() + nombre.slice(1)));
   document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'ajustes'].includes(nombre))));
-  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'ajustes'].includes(nombre);
+  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'ajustes', 'mihorario'].includes(nombre);
   $('dias').style.display = nombre === 'rellenar' ? '' : 'none';
   refrescar();
   window.scrollTo(0, 0);
@@ -2881,6 +3195,7 @@ function refrescar() {
   if (vista === 'horas') { pintarHoras(); return; }
   if (vista === 'stock') { pintarStock(); return; }
   if (vista === 'ajustes') { pintarAjustesVista(); return; }
+  if (vista === 'mihorario') { pintarMiHorario(); return; }
   pintarCabecera();
   if (vista === 'rellenar') pintarDia();
   if (vista === 'cuadro') pintarCuadro();
@@ -2903,7 +3218,11 @@ function escapar(s) {
 history.replaceState({ vista: 'inicio', nivel: 0 }, '');
 aplicarModo();
 aplicarTema();
-if (!datos.restaurante) mostrarBienvenida();
+aplicarModoEquipo();
+const codigoEnlace = new URLSearchParams(location.search).get('unirse');
+if (!datos.restaurante && codigoEnlace) mostrarUnirse(codigoEnlace);
+else if (!datos.restaurante) mostrarBienvenida();
+if (esEquipo()) irA('mihorario', true);
 window.addEventListener('popstate', (e) => {
   const st = e.state || { vista: 'inicio', nivel: 0 };
   if (!st.capa) {
@@ -2923,5 +3242,6 @@ if ('serviceWorker' in navigator && location.protocol === 'https:') {
   navigator.serviceWorker.register('sw.js').catch(() => {});
 }
 </script>
+<script type="module" src="nube.js"></script>
 </body>
 </html>
