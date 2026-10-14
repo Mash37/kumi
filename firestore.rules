@@ -1,5 +1,5 @@
 rules_version = '2';
-// Reglas de Kumi: solo el jefe (dueño) publica; solo quien se une con el código puede leer.
+// Reglas de Kumi: solo el jefe (dueño) publica y escribe avisos; solo quien se une con el código puede leer.
 service cloud.firestore {
   match /databases/{database}/documents {
     function conSesion() { return request.auth != null; }
@@ -37,6 +37,29 @@ service cloud.firestore {
       match /semanas/{semana} {
         allow read: if esDueno(rid) || esMiembro(rid);
         allow write: if esDueno(rid);
+      }
+
+      // Tablón: el jefe escribe y borra; el equipo lee. Un aviso publicado no se edita.
+      match /avisos/{aid} {
+        allow read: if esDueno(rid) || esMiembro(rid);
+        allow create: if esDueno(rid)
+                      && request.resource.data.keys().hasOnly(['texto', 'creado'])
+                      && request.resource.data.texto is string
+                      && request.resource.data.texto.size() > 0
+                      && request.resource.data.texto.size() <= 1000
+                      && request.resource.data.creado == request.time;
+        allow update: if false;
+        allow delete: if esDueno(rid);
+
+        // «Leído por»: cada persona solo apunta su propia lectura; el jefe ve todas.
+        match /leidos/{uid} {
+          allow read: if esDueno(rid) || (conSesion() && uid == request.auth.uid);
+          allow create, update: if esMiembro(rid) && uid == request.auth.uid
+                                && exists(/databases/$(database)/documents/restaurantes/$(rid)/avisos/$(aid))
+                                && request.resource.data.keys().hasOnly(['personaId', 'nombre', 'cuando'])
+                                && request.resource.data.cuando == request.time;
+          allow delete: if esDueno(rid);
+        }
       }
     }
   }

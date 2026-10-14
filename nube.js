@@ -3,8 +3,8 @@
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-app.js';
 import { getAuth, GoogleAuthProvider, signInWithPopup, signInWithCredential, signOut, onAuthStateChanged, connectAuthEmulator } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-auth.js';
 import {
-  initializeFirestore, persistentLocalCache, connectFirestoreEmulator, doc, collection, getDoc, getDocs, setDoc, updateDoc, deleteDoc,
-  onSnapshot, writeBatch, serverTimestamp,
+  initializeFirestore, persistentLocalCache, connectFirestoreEmulator, doc, collection, getDoc, getDocs, setDoc, updateDoc, deleteDoc, addDoc,
+  onSnapshot, writeBatch, serverTimestamp, query, orderBy, limit,
 } from 'https://www.gstatic.com/firebasejs/10.14.1/firebase-firestore.js';
 
 // Identificadores públicos de la app web: la seguridad la ponen las reglas de firestore.rules.
@@ -95,6 +95,32 @@ window.nube = {
     return d.exists() ? d.data() : null;
   },
   salirDelRestaurante: (rid) => deleteDoc(doc(db, 'restaurantes', rid, 'miembros', yo().uid)),
+  // --- Tablón de avisos ---
+  publicarAviso: (rid, texto) => addDoc(collection(db, 'restaurantes', rid, 'avisos'), { texto, creado: serverTimestamp() }),
+  // Borrar un documento no borra lo que cuelga de él: primero las lecturas, luego el aviso.
+  async borrarAviso(rid, aid) {
+    const leidos = await getDocs(collection(db, 'restaurantes', rid, 'avisos', aid, 'leidos'));
+    const lote = writeBatch(db);
+    leidos.docs.forEach((d) => lote.delete(d.ref));
+    lote.delete(doc(db, 'restaurantes', rid, 'avisos', aid));
+    await lote.commit();
+  },
+  async leidosDe(rid, aid) {
+    const r = await getDocs(collection(db, 'restaurantes', rid, 'avisos', aid, 'leidos'));
+    return r.docs.map((d) => ({ uid: d.id, ...d.data() }));
+  },
+  marcarLeido(rid, aid, personaId) {
+    const u = yo();
+    return setDoc(doc(db, 'restaurantes', rid, 'avisos', aid, 'leidos', u.uid), { personaId: personaId || null, nombre: u.displayName || '', cuando: serverTimestamp() });
+  },
+  escucharAvisos(rid, cb, alFallar) {
+    return onSnapshot(query(collection(db, 'restaurantes', rid, 'avisos'), orderBy('creado', 'desc'), limit(30)),
+      (r) => cb(r.docs.map((d) => {
+        const a = d.data({ serverTimestamps: 'estimate' });
+        return { id: d.id, texto: a.texto, creado: a.creado ? a.creado.toMillis() : Date.now() };
+      })),
+      alFallar);
+  },
   // Avisa cada vez que el jefe publica o cambia una semana.
   escucharSemanas(rid, cb, alFallar) {
     return onSnapshot(collection(db, 'restaurantes', rid, 'semanas'),

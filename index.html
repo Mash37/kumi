@@ -212,6 +212,32 @@
   .nota { font-size: 13px; color: var(--gris); text-align: center; margin: 4px 0 0; }
 
   .cuadro-img { width: 100%; background: #fff; border: 1px solid var(--borde); border-radius: 14px; display: block; }
+  .cuadro-lado .acciones { margin-top: 12px; }
+  .dos-botones { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .revisar { display: block; margin-top: 14px; border: 1px solid #f3d9a4; background: #fff8e8; color: #6b4a00; border-radius: 16px; }
+  .revisar summary, .revisar.ok { display: flex; align-items: center; gap: 12px; padding: 12px 14px; cursor: pointer; list-style: none; }
+  .revisar summary::-webkit-details-marker { display: none; }
+  .revisar summary::after { content: '›'; margin-left: auto; font-size: 22px; transition: transform .2s; }
+  .revisar[open] summary::after { transform: rotate(90deg); }
+  .revisar i { font-style: normal; font-size: 20px; }
+  .revisar b { display: block; font-size: 15px; }
+  .revisar small { display: block; font-size: 12.5px; opacity: .8; }
+  .revisar.ok { cursor: default; border-color: #bfe8d2; background: #f0fbf5; color: #1f7a4d; }
+  .revisar-cuerpo { padding: 0 14px 12px; }
+  .revisar ul { list-style: none; margin: 0 0 8px; padding: 0; }
+  .revisar li { display: flex; gap: 10px; align-items: baseline; padding: 8px 0; border-top: 1px solid #f3e2bd; font-size: 14px; line-height: 1.4; }
+  .revisar li em { font-style: normal; font-weight: 600; }
+  .revisar li[data-ir-dia] { cursor: pointer; }
+  .revisar li b { margin-left: auto; white-space: nowrap; font-size: 12.5px; color: var(--frambuesa); }
+  .revisar .grupo-stock { color: #8a5a00; margin-top: 4px; }
+  .revisar .pista-campo { margin: 0; color: #8a6a2a; }
+  .mas-opciones { margin: 6px 0 16px; }
+  .mas-opciones summary { cursor: pointer; text-align: center; color: var(--frambuesa); font-weight: 600; font-size: 14.5px; padding: 10px; list-style: none; }
+  .mas-opciones summary::-webkit-details-marker { display: none; }
+  .mas-opciones summary::after { content: ' ▾'; }
+  .mas-opciones[open] summary::after { content: ' ▴'; }
+  .mas-opciones .acciones { margin-top: 4px; }
+  .empezar { border: 1px dashed var(--rosa-medio); }
 
   .fila-equipo { display: grid; grid-template-columns: 30px 1fr auto; gap: 6px 8px; align-items: center; margin-bottom: 10px; background: var(--blanco); border: 1px solid var(--borde); border-radius: 18px; padding: 10px; }
   .fila-equipo .contrato { grid-column: 2; grid-row: 2; display: flex; align-items: center; gap: 6px; font-size: 13px; color: var(--gris); }
@@ -278,6 +304,18 @@
   .tarjeta-ok b { color: #1f7a4d; font-size: 15px; }
   .tarjeta-ok span { display: block; font-size: 12.5px; color: #4b7a63; margin-top: 2px; }
   .tarjeta-ok i { font-style: normal; font-size: 24px; }
+  .tarjeta-ok[data-ver-avisos] { cursor: pointer; }
+  .tablon-item { padding: 12px 0; border-top: 1px solid var(--borde); }
+  .tablon-item:first-child { border-top: 0; }
+  .tablon-item p { margin: 0 0 6px; white-space: pre-wrap; overflow-wrap: anywhere; font-size: 15px; line-height: 1.45; }
+  .tablon-item small { display: block; font-size: 12px; color: var(--gris); }
+  .tablon-item .leido { margin-top: 4px; }
+  .tablon-item.nuevo { background: var(--rosa-suave); margin: 0 -12px; padding: 12px; border-radius: 12px; border-top-color: transparent; }
+  .fila-aviso { display: flex; justify-content: space-between; align-items: center; gap: 8px; }
+  .fila-aviso button { border: 0; background: none; color: var(--frambuesa); font-size: 13px; padding: 6px 0; }
+  nav button[data-ir="avisos"] { position: relative; }
+  nav .burbuja { position: absolute; top: 4px; left: 50%; margin-left: 6px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 99px; background: #d92d20; color: #fff; font-size: 11px; font-weight: 700; line-height: 18px; }
+  nav .burbuja[hidden] { display: none; }
   .incid { display: flex; align-items: center; gap: 8px; margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--borde); }
   .incid .badge { flex: 1; min-width: 0; font-size: 12.5px; font-weight: 500; padding: 5px 10px; border-radius: 10px; }
   .badge.falta { background: #ffe4e1; color: #b42318; }
@@ -422,6 +460,10 @@
   :root[data-modo="oscuro"] .tarjeta-avisos h3, :root[data-modo="oscuro"] .tarjeta-avisos ul, :root[data-modo="oscuro"] .tarjeta-avisos .grupo-stock { color: #ffd98a; }
   :root[data-modo="oscuro"] .franja.ok, :root[data-modo="oscuro"] .tarjeta-ok, :root[data-modo="oscuro"] .badge.cubre, :root[data-modo="oscuro"] .dia-libre { background: #16362a; border-color: #2b6b4f; color: #8fe0b5; }
   :root[data-modo="oscuro"] .tarjeta-ok b, :root[data-modo="oscuro"] .tarjeta-ok span { color: #8fe0b5; }
+  :root[data-modo="oscuro"] .revisar { background: #3a2c14; border-color: #6b5320; color: #ffd98a; }
+  :root[data-modo="oscuro"] .revisar li { border-top-color: #6b5320; }
+  :root[data-modo="oscuro"] .revisar .grupo-stock, :root[data-modo="oscuro"] .revisar .pista-campo { color: #e8c379; }
+  :root[data-modo="oscuro"] .revisar.ok { background: #16362a; border-color: #2b6b4f; color: #8fe0b5; }
   :root[data-modo="oscuro"] .badge.falta, :root[data-modo="oscuro"] .pill { background: #43191d; color: #ffa8a8; }
   :root[data-modo="oscuro"] .persona.es-libre { background: var(--blanco); }
   :root[data-modo="oscuro"] .interruptor i { background: #4a3d4e; }
@@ -494,6 +536,36 @@
   .inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--pdf-titulo); padding-bottom: 3px; }
   .inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
   .inf-firmas div { flex: 1; border-top: 1px solid #1f1418; padding-top: 6px; }
+  /* ---------- Tablet ---------- */
+  @media (min-width: 700px) {
+    .portada { padding-left: max(32px, calc((100% - 1100px) / 2)); padding-right: max(32px, calc((100% - 1100px) / 2)); }
+    .ilustracion { right: max(40px, calc((100% - 1100px) / 2 + 20px)); width: 220px; height: 180px; }
+    .tablero { max-width: 1100px; padding: 0 24px; columns: 2; column-gap: 18px; }
+    .tablero > * { break-inside: avoid; }
+    .tablero > .firma { column-span: all; }
+    main { max-width: 1100px; padding: 18px 24px; }
+    header.cabecera > * { max-width: 1052px; margin-left: auto; margin-right: auto; }
+    #personas { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; align-items: start; }
+    #vistaRellenar > .acciones, #vistaRellenar > .mas-opciones { max-width: 520px; margin-left: auto; margin-right: auto; }
+    .cuadro-lado { max-width: 560px; margin: 0 auto; }
+    #vistaStock, #vistaHoras, #vistaEquipo, #vistaAjustes, #vistaMihorario, #vistaAvisos { max-width: 760px; margin: 0 auto; }
+    .hoja-fondo { align-items: center; }
+    .hoja { max-width: 600px; border-radius: 26px; max-height: 90vh; overflow-y: auto; }
+    .bienvenida .tablero { columns: auto; max-width: 640px; }
+  }
+  @media (min-width: 1000px) {
+    body { padding-bottom: 24px; padding-left: 96px; }
+    body.en-bienvenida { padding-left: 0; }
+    nav { top: 0; right: auto; width: 96px; flex-direction: column; justify-content: center; gap: 4px; border-top: 0; border-right: 1px solid var(--borde); padding: 16px 0; }
+    nav button { flex: none; padding: 12px 0; }
+    nav button.mas { order: -1; margin-bottom: 16px; }
+    nav .circulo { margin: 0 auto 4px; }
+    .aviso { bottom: 28px; left: calc(50% + 48px); }
+    .cuadro-grid { display: grid; grid-template-columns: minmax(0, 1fr) 340px; gap: 20px; align-items: start; }
+    .cuadro-lado { position: sticky; top: 100px; max-width: none; }
+    .cuadro-lado .revisar { margin-top: 0; }
+  }
+
   @media print {
     @page { size: landscape; margin: 8mm; }
     @page informe { size: A4 portrait; margin: 14mm 12mm; }
@@ -596,6 +668,12 @@
       <div class="acciones" id="proxAcciones"></div>
     </div>
 
+    <div class="tarjeta solo-jefe" id="tarjetaTablon" hidden>
+      <h3>Tablón de avisos</h3>
+      <div class="sub" id="tablonSub"></div>
+      <div class="acciones"><button class="btn secundario" data-ir="avisos">Escribir a tu equipo</button></div>
+    </div>
+
     <div class="tarjeta" id="tarjetaHoras">
       <h3>Horas de cada uno</h3>
       <div class="sub">Semana que viene, sumando todos los turnos</div>
@@ -632,6 +710,7 @@
 
 <main>
   <section class="vista" id="vistaRellenar">
+    <div id="semanaVacia"></div>
     <h2 id="tituloDia"></h2>
     <div class="cobertura" id="coberturaDia"></div>
     <div id="personas"></div>
@@ -639,21 +718,32 @@
       <button class="btn secundario" id="btnRepetirDia" hidden><svg viewBox="0 0 24 24"><rect x="8" y="8" width="13" height="13" rx="2"/><path d="M16 8V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h3"/></svg>Repetir todo este día en otros días</button>
       <button class="btn principal" data-ir="cuadro">Ver cuadro y enviar</button>
     </div>
+    <details class="mas-opciones solo-jefe">
+      <summary>Más opciones de esta semana</summary>
+      <div class="acciones">
+        <button class="btn secundario" id="btnCopiar">Copiar el horario de la semana anterior</button>
+        <button class="btn peligro" id="btnLimpiar">Vaciar esta semana</button>
+      </div>
+    </details>
   </section>
 
   <section class="vista" id="vistaCuadro">
-    <div id="avisosCuadro" class="solo-jefe"></div>
-    <div id="publicarBox" class="solo-jefe"></div>
-    <img id="cuadroImg" class="cuadro-img" alt="Cuadro de horario de la semana">
-    <p class="nota">Pellizca la imagen para hacer zoom.</p>
-    <div class="acciones">
-      <button class="btn principal" id="btnCompartir">Compartir imagen (WhatsApp…)</button>
-      <button class="btn secundario" id="btnDescargar">Guardar imagen</button>
-      <button class="btn secundario" id="btnPdf">Guardar como PDF</button>
-    </div>
-    <div class="acciones solo-jefe">
-      <button class="btn secundario" id="btnCopiar">Copiar el horario de la semana anterior</button>
-      <button class="btn peligro" id="btnLimpiar">Vaciar esta semana</button>
+    <div class="cuadro-grid">
+      <div>
+        <img id="cuadroImg" class="cuadro-img" alt="Cuadro de horario de la semana">
+        <p class="nota">Pellizca la imagen para hacer zoom.</p>
+      </div>
+      <div class="cuadro-lado">
+        <div id="avisosCuadro" class="solo-jefe"></div>
+        <div class="acciones">
+          <button class="btn principal" id="btnCompartir">Compartir imagen (WhatsApp…)</button>
+          <div class="dos-botones">
+            <button class="btn secundario" id="btnDescargar">Guardar imagen</button>
+            <button class="btn secundario" id="btnPdf">Guardar PDF</button>
+          </div>
+        </div>
+        <div id="publicarBox" class="solo-jefe"></div>
+      </div>
     </div>
   </section>
 
@@ -708,6 +798,13 @@
       <button id="miSiguiente" aria-label="Semana siguiente">›</button>
     </div>
     <div class="tarjeta" id="miDias"></div>
+  </section>
+
+  <section class="vista" id="vistaAvisos">
+    <h2>Avisos</h2>
+    <p class="sub-equipo" id="avisosSub"></p>
+    <div id="avisosEscribir"></div>
+    <div class="tarjeta" id="avisosLista"></div>
   </section>
 
   <section class="vista" id="vistaAjustes">
@@ -770,6 +867,7 @@
 
 <nav>
   <button data-ir="mihorario" class="solo-equipo"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="15" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/><circle cx="12" cy="15" r="2.2"/></svg>Mi horario</button>
+  <button data-ir="avisos" class="solo-equipo"><svg viewBox="0 0 24 24"><path d="M3 11v2a1 1 0 0 0 1 1h3l6 4V6L7 10H4a1 1 0 0 0-1 1z"/><path d="M16 9a4 4 0 0 1 0 6"/><path d="M19 6a8 8 0 0 1 0 12"/></svg>Avisos<span class="burbuja" id="burbujaAvisos" hidden></span></button>
   <button data-ir="inicio" class="activo solo-jefe"><svg viewBox="0 0 24 24"><path d="M3 11l9-7 9 7"/><path d="M5 10v10h14V10"/><path d="M10 20v-6h4v6"/></svg>Inicio</button>
   <button data-ir="rellenar" class="solo-jefe"><svg viewBox="0 0 24 24"><path d="M4 20h4L19 9l-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg>Rellenar</button>
   <button id="btnMas" class="mas solo-jefe" aria-label="Más opciones"><span class="circulo"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg></span>Más</button>
@@ -1395,10 +1493,15 @@ function avisosCobertura(lunesSem) {
     const res = coberturaDia(sumarDias(lunesSem, d));
     (res || []).forEach((r) => {
       if (!r.cortos.length) return;
-      avisos.push({ dia: d, texto: DIAS[d][0].toUpperCase() + DIAS[d].slice(1) + ' · ' + r.f.nombre + ': falta gente, ' + detalleCorto(r) + ' (mínimo ' + r.f.minimo + ').' });
+      const que = r.f.nombre + ': falta gente, ' + detalleCorto(r) + ' (mínimo ' + r.f.minimo + ')';
+      avisos.push({ dia: d, que, icono: r.f.icono, texto: DIAS[d][0].toUpperCase() + DIAS[d].slice(1) + ' · ' + que + '.' });
     });
   }
   return avisos;
+}
+// Lo que Cuadro enseña en «cosas que revisar»: la falta de gente repetida en varios días cuenta una vez.
+function cosasQueRevisar(lunesSem) {
+  return avisosSemana(lunesSem).length + new Set(avisosCobertura(lunesSem).map((a) => a.que)).size;
 }
 function pintarCoberturaDia() {
   const res = coberturaDia(sumarDias(lunes, diaActivo)) || [];
@@ -1490,6 +1593,7 @@ function textoIncidencia(inc, fecha, id) {
 
 // --- Inicio ---
 function pintarInicio() {
+  pintarTablonInicio();
   const ahora = new Date();
   const h = ahora.getHours();
   const persona = restaurante().persona || '';
@@ -1556,8 +1660,8 @@ function pintarInicio() {
   $('proxEstado').innerHTML = listos === 0 ? 'Todavía <b>sin empezar</b>. Lo normal es prepararla el jueves o el viernes.'
     : listos === 7 ? '<b>¡Lista!</b> Todos los días tienen turnos. Ya puedes enviarla.'
     : 'Vas por <b>' + listos + ' de 7 días</b>. ¡Ya casi!';
-  const avisosProx = listos ? avisosSemana(lunesProxima).length + avisosCobertura(lunesProxima).length : 0;
-  if (avisosProx) $('proxEstado').innerHTML += '<br>⚖️ <b>' + avisosProx + (avisosProx === 1 ? ' aviso del horario' : ' avisos del horario') + '</b>: míralos en Cuadro antes de enviarla.';
+  const avisosProx = listos ? cosasQueRevisar(lunesProxima) : 0;
+  if (avisosProx) $('proxEstado').innerHTML += '<br>⚠️ <b>' + (avisosProx === 1 ? '1 cosa que revisar' : avisosProx + ' cosas que revisar') + '</b>: míralas en Cuadro antes de enviarla.';
   else if (listos) $('proxEstado').innerHTML += '<br>✅ Sin avisos: cobertura y descansos bien.';
 
   const esta = datos.semanas[claveSemana(lunesEsta)];
@@ -1672,6 +1776,12 @@ function casillaHora(p, i, valor, etiqueta) {
 }
 function pintarDia() {
   const fecha = sumarDias(lunes, diaActivo);
+  const anterior = datos.semanas[claveSemana(sumarDias(lunes, -7))];
+  $('semanaVacia').innerHTML = !esEquipo() && datos.equipo.length && !semanaTieneDatos(semana())
+    ? '<div class="tarjeta empezar"><h3>Semana vacía</h3><p class="sub">' + (semanaTieneDatos(anterior)
+        ? 'Lo más rápido: copia la semana anterior y cambia solo lo que sea distinto.</p><div class="acciones"><button class="btn principal" data-copiar-semana>Copiar la semana anterior</button></div>'
+        : 'Escribe las horas de cada persona día a día. Con «Repetir» las copias a otros días.</p>') + '</div>'
+    : '';
   $('tituloDia').textContent = DIAS[diaActivo] + ' ' + fecha.getDate() + ' de ' + MESES[fecha.getMonth()];
   const sem = semana();
   if (!datos.equipo.length) {
@@ -2038,23 +2148,43 @@ function fuentesListas() {
     document.fonts.load('500 20px Jost'),
   ]).catch(() => {});
 }
+// Lo mismo repetido en varios días va en una sola línea: «Noche: falta gente… · lun, mar, mié».
+function diasTxt(dias) {
+  if (dias.length === 7) return 'todos los días';
+  return dias.map((d) => DIAS[d].slice(0, 3)).join(', ');
+}
+let revisarAbierto = false;
 async function pintarCuadro() {
   pintarPublicar();
   const avisos = avisosSemana(lunes);
   const cobertura = avisosCobertura(lunes);
-  const total = avisos.length + cobertura.length;
-  const lista = (xs) => '<ul>' + xs.map((a) => '<li>' + escapar(a.texto) + '</li>').join('') + '</ul>';
+  const grupos = [];
+  cobertura.forEach((a) => {
+    const g = grupos.find((x) => x.que === a.que);
+    if (g) g.dias.push(a.dia); else grupos.push({ que: a.que, icono: a.icono, dias: [a.dia] });
+  });
+  const total = grupos.length + avisos.length;
+  const item = (texto, dia) => '<li' + (dia != null ? ' data-ir-dia="' + dia + '"' : '') + '><span>' + texto + '</span>' + (dia != null ? '<b>Ver día ›</b>' : '') + '</li>';
   $('avisosCuadro').innerHTML = total
-    ? '<div class="tarjeta tarjeta-avisos"><h3>⚖️ ' + total + (total === 1 ? ' aviso del horario' : ' avisos del horario') + '</h3>' +
-      '<p class="sub">Revísalo antes de enviarlo.</p>' +
-      (cobertura.length ? '<div class="grupo-stock">Cobertura de los servicios</div>' + lista(cobertura) : '') +
-      (avisos.length ? '<div class="grupo-stock">Descansos y horas</div><p class="sub">Según tus reglas de descanso y las horas de contrato (se cambian en ⚙️ Ajustes).</p>' + lista(avisos) : '') + '</div>'
+    ? '<details class="revisar"' + (revisarAbierto ? ' open' : '') + '><summary><i>⚠️</i><span><b>' + (total === 1 ? '1 cosa que revisar' : total + ' cosas que revisar') + '</b>' +
+      '<small>Toca para verlas antes de enviarlo</small></span></summary><div class="revisar-cuerpo">' +
+      (grupos.length ? '<div class="grupo-stock">Gente en cada servicio</div><ul>' +
+        grupos.map((g) => item(g.icono + ' ' + escapar(g.que) + ' · <em>' + diasTxt(g.dias) + '</em>', g.dias.length === 1 ? g.dias[0] : null)).join('') + '</ul>' : '') +
+      (avisos.length ? '<div class="grupo-stock">Descansos y horas</div><ul>' + avisos.map((a) => item(escapar(a.texto), a.dia)).join('') + '</ul>' : '') +
+      '<p class="pista-campo">Las reglas, los servicios y los mínimos se cambian en ＋ → Ajustes.</p></div></details>'
     : semanaTieneDatos(datos.semanas[claveSemana(lunes)])
-      ? '<div class="tarjeta tarjeta-ok"><i>✅</i><div><b>Sin avisos</b><span>Revisé la gente de cada servicio, los descansos y las horas de contrato.</span></div></div>'
+      ? '<div class="revisar ok"><i>✅</i><span><b>Todo en orden</b><small>Gente en cada servicio, descansos y horas de contrato.</small></span></div>'
       : '';
   await fuentesListas();
   $('cuadroImg').src = dibujarCuadro().toDataURL('image/png');
 }
+$('avisosCuadro').addEventListener('toggle', (e) => { revisarAbierto = e.target.open; }, true);
+$('avisosCuadro').addEventListener('click', (e) => {
+  const li = e.target.closest('[data-ir-dia]');
+  if (!li) return;
+  diaActivo = +li.dataset.irDia;
+  irA('rellenar');
+});
 function nombreArchivo(ext) {
   const domingo = sumarDias(lunes, 6);
   return 'horario-' + lunes.getDate() + '-' + MESES_CORTOS[lunes.getMonth()] + '-al-' + domingo.getDate() + '-' + MESES_CORTOS[domingo.getMonth()] + '.' + ext;
@@ -2687,6 +2817,7 @@ function abrirMas() {
     acceso('recuento', '📦', 'Hacer recuento', pedir ? pedir + ' por pedir ahora' : 'Contar lo que queda') +
     '</div><div class="grupo-stock">Más</div><div class="accesos">' +
     acceso('horas', '🕒', 'Horas del mes', 'Informe en PDF para la nómina', vista === 'horas') +
+    acceso('avisos', '📣', 'Avisos al equipo', 'Tablón con «leído por»', vista === 'avisos') +
     acceso('equipo', '👥', 'Tu equipo', datos.equipo.length + (datos.equipo.length === 1 ? ' persona' : ' personas'), vista === 'equipo') +
     acceso('ajustes', '⚙️', 'Ajustes', 'Perfil, restaurante, reglas, apariencia…', vista === 'ajustes') +
     '</div><div class="grupo-stock">Tus datos</div><div class="accesos">' +
@@ -2700,9 +2831,9 @@ $('panel').addEventListener('click', (e) => {
   if (!b) return;
   const que = b.dataset.mas;
   if (que === 'servicios') { abrirServicios(); return; }
-  const navega = ['horas', 'equipo', 'ajustes', 'recuento', 'compra'].includes(que);
+  const navega = ['horas', 'equipo', 'ajustes', 'avisos', 'recuento', 'compra'].includes(que);
   cerrarPanel(navega);
-  if (que === 'horas' || que === 'equipo' || que === 'ajustes') irA(que);
+  if (que === 'horas' || que === 'equipo' || que === 'ajustes' || que === 'avisos') irA(que);
   if (que === 'recuento' || que === 'compra') {
     if (!productosActivos().length) { subStock = 'lista'; irA('stock'); avisar('Primero añade los productos'); return; }
     subStock = que === 'compra' ? 'compras' : 'lista';
@@ -2873,6 +3004,9 @@ let dejarDeEscuchar = null;
 window.addEventListener('nube-lista', () => {
   nube.alCambiarSesion((u) => {
     if (u && esEquipo() && cuenta().rid) escucharMiRestaurante();
+    if (u && esJefeEnLinea()) escucharAvisos();
+    if (!u) pararAvisos();
+    if (vista === 'inicio' || vista === 'avisos') refrescar();
     if (vista === 'ajustes') pintarAjustesVista();
     if (vista === 'cuadro') pintarPublicar();
     if (!$('unirse').hidden) pintarUnirse();
@@ -2903,6 +3037,7 @@ function semanaDesdeNube(s) {
 function escucharMiRestaurante() {
   if (dejarDeEscuchar || !nubeConectada()) return;
   const c = cuenta();
+  escucharAvisos();
   nube.leerRestaurante(c.rid).then((r) => { if (r) { datos.restaurante = Object.assign({}, restaurante(), { nombre: r.nombre, tipo: r.tipo }); guardar(); aplicarTema(); refrescar(); } }).catch(() => {});
   nube.leerMiFicha(c.rid).then((f) => { if (f && f.personaId !== c.personaId) { datos.cuenta.personaId = f.personaId; guardar(); refrescar(); } }).catch(() => {});
   dejarDeEscuchar = nube.escucharSemanas(c.rid, (semanas) => {
@@ -2924,7 +3059,10 @@ function pintarMiHorario() {
   $('miEtiqueta').textContent = clave === claveSemana(lunesEsta) ? 'Esta semana' : clave === claveSemana(lunesProxima) ? 'Semana que viene' : 'Semana';
   $('miRango').textContent = rango(lunesMi, false);
   const nuevo = c.ultimaPublicacion && c.ultimaPublicacion > (c.visto || 0);
-  $('miAviso').innerHTML = nuevo ? '<div class="tarjeta tarjeta-ok"><i>🆕</i><div><b>Horario actualizado</b><span>Hay cambios publicados ' + fechaHora(c.ultimaPublicacion) + '.</span></div></div>' : '';
+  const pendientes = sinLeer();
+  $('miAviso').innerHTML = (pendientes.length ? '<div class="tarjeta tarjeta-ok" data-ver-avisos><i>📣</i><div><b>' + (pendientes.length === 1 ? 'Tienes 1 aviso nuevo' : 'Tienes ' + pendientes.length + ' avisos nuevos') + '</b><span>' +
+      escapar(pendientes[0].texto.split('\n')[0].slice(0, 70)) + ' · Toca para leerlo</span></div></div>' : '') +
+    (nuevo ? '<div class="tarjeta tarjeta-ok"><i>🆕</i><div><b>Horario actualizado</b><span>Hay cambios publicados ' + fechaHora(c.ultimaPublicacion) + '.</span></div></div>' : '');
   if (nuevo) { datos.cuenta.visto = c.ultimaPublicacion; guardar(); }
   const yo = datos.equipo.find((p) => p.id === pid);
   if (!yo) { $('miDias').innerHTML = '<div class="vacio">Todavía no hay ningún horario publicado contigo. Cuando tu jefe lo publique, aparecerá aquí.</div>'; return; }
@@ -2942,6 +3080,107 @@ function pintarMiHorario() {
 }
 $('miAnterior').addEventListener('click', () => { lunesMi = sumarDias(lunesMi, -7); pintarMiHorario(); });
 $('miSiguiente').addEventListener('click', () => { lunesMi = sumarDias(lunesMi, 7); pintarMiHorario(); });
+
+$('miAviso').addEventListener('click', (e) => { if (e.target.closest('[data-ver-avisos]')) irA('avisos'); });
+
+// --- Tablón de avisos: el jefe escribe, el equipo lee y queda apuntado quién lo leyó ---
+let avisos = [];
+let dejarDeEscucharAvisos = null;
+function esJefeEnLinea() { const c = cuenta(); return nubeConectada() && c.rol === 'jefe' && !!c.rid && c.uid === nube.usuario().uid; }
+function escucharAvisos() {
+  if (dejarDeEscucharAvisos || !nubeConectada() || !cuenta().rid) return;
+  dejarDeEscucharAvisos = nube.escucharAvisos(cuenta().rid, (lista) => {
+    avisos = lista;
+    pintarBurbujaAvisos();
+    if (['avisos', 'mihorario', 'inicio'].includes(vista)) refrescar();
+  }, () => { dejarDeEscucharAvisos = null; });
+}
+function pararAvisos() {
+  if (dejarDeEscucharAvisos) { dejarDeEscucharAvisos(); dejarDeEscucharAvisos = null; }
+  avisos = [];
+  pintarBurbujaAvisos();
+}
+function sinLeer() { const vistos = cuenta().leidos || []; return esEquipo() ? avisos.filter((a) => !vistos.includes(a.id)) : []; }
+function pintarBurbujaAvisos() {
+  const n = sinLeer().length;
+  $('burbujaAvisos').hidden = !n;
+  $('burbujaAvisos').textContent = n > 9 ? '9+' : n;
+}
+function pintarTablonInicio() {
+  const ver = esJefeEnLinea();
+  $('tarjetaTablon').hidden = !ver;
+  if (ver) $('tablonSub').textContent = avisos.length ? 'Último aviso: ' + fechaHora(avisos[0].creado) : 'Escribe a todo tu equipo a la vez y mira quién lo ha leído.';
+}
+function pintarAvisos() {
+  const jefe = !esEquipo();
+  $('avisosSub').textContent = restaurante().nombre || '';
+  if (jefe && !esJefeEnLinea()) {
+    $('avisosEscribir').innerHTML = '';
+    $('avisosLista').innerHTML = '<h3>Tablón de avisos</h3><p class="sub">Escribe a todo tu equipo a la vez y mira quién lo ha leído.</p>' +
+      '<div class="vacio">Primero conecta a tu equipo en <b>＋ → Ajustes → Tu equipo en Kumi</b>.</div>';
+    return;
+  }
+  if (jefe) {
+    // Al llegar un aviso nuevo se vuelve a pintar: lo que estaba escribiendo no se pierde.
+    const borrador = $('avisoTexto') ? $('avisoTexto').value : '';
+    $('avisosEscribir').innerHTML = '<div class="tarjeta"><h3>Nuevo aviso</h3><p class="sub">Lo verá todo tu equipo en Kumi.</p>' +
+      '<label class="campo"><textarea id="avisoTexto" rows="3" maxlength="1000" placeholder="Ej.: El sábado hacemos inventario a las 10"></textarea></label>' +
+      '<div class="acciones"><button class="btn principal" id="btnAviso">📣 Publicar aviso</button></div></div>';
+    $('avisoTexto').value = borrador;
+  } else $('avisosEscribir').innerHTML = '';
+  const nuevos = new Set(sinLeer().map((a) => a.id));
+  $('avisosLista').innerHTML = avisos.length
+    ? avisos.map((a) => '<div class="tablon-item' + (nuevos.has(a.id) ? ' nuevo' : '') + '"><p>' + escapar(a.texto) + '</p>' +
+        '<div class="fila-aviso"><small>' + (nuevos.has(a.id) ? '🆕 ' : '') + fechaHora(a.creado) + '</small>' + (jefe ? '<button data-borrar-aviso="' + a.id + '">Borrar</button>' : '') + '</div>' +
+        (jefe ? '<small class="leido" data-leido="' + a.id + '">Mirando quién lo ha leído…</small>' : '') + '</div>').join('')
+    : '<div class="vacio">' + (jefe ? 'Todavía no has escrito ningún aviso.' : 'Tu jefe todavía no ha escrito ningún aviso.') + '</div>';
+  if (jefe) pintarLeidos(); else marcarLeidos([...nuevos]);
+}
+async function pintarLeidos() {
+  const rid = cuenta().rid;
+  try {
+    const ms = await nube.miembros(rid);
+    const nombre = (uid, respaldo) => {
+      const m = ms.find((x) => x.uid === uid), p = m && datos.equipo.find((q) => q.id === m.personaId);
+      return p ? nombreCorto(p.nombre) : (m && m.nombre) || respaldo || 'Alguien';
+    };
+    await Promise.all(avisos.map(async (a) => {
+      const el = document.querySelector('[data-leido="' + a.id + '"]');
+      if (!el) return;
+      const leidos = await nube.leidosDe(rid, a.id);
+      const quien = new Set(leidos.map((l) => l.uid));
+      const faltan = ms.filter((m) => !quien.has(m.uid));
+      el.textContent = (leidos.length ? '✓ Leído por ' + leidos.map((l) => nombre(l.uid, l.nombre)).join(', ') : 'Nadie lo ha leído todavía') +
+        (leidos.length && faltan.length ? ' · falta ' + faltan.map((m) => nombre(m.uid)).join(', ') : '');
+    }));
+  } catch (err) {
+    document.querySelectorAll('[data-leido]').forEach((el) => { el.textContent = 'No se pudo ver quién lo ha leído. ¿Tienes internet?'; });
+  }
+}
+function marcarLeidos(ids) {
+  if (!ids.length || !nubeConectada()) return;
+  const c = cuenta();
+  ids.forEach((id) => nube.marcarLeido(c.rid, id, c.personaId).then(() => {
+    datos.cuenta.leidos = [id].concat((datos.cuenta.leidos || []).filter((x) => x !== id)).slice(0, 100);
+    guardar();
+    pintarBurbujaAvisos();
+  }).catch(() => {}));
+}
+$('avisosEscribir').addEventListener('click', async (e) => {
+  if (!e.target.closest('#btnAviso')) return;
+  const texto = $('avisoTexto').value.trim();
+  if (!texto) { avisar('Escribe el aviso'); return; }
+  // Se vacía antes de enviar: así no se publica dos veces si se toca otra vez mientras sube.
+  $('avisoTexto').value = '';
+  try { await nube.publicarAviso(cuenta().rid, texto); avisar('Aviso publicado'); }
+  catch (err) { if ($('avisoTexto')) $('avisoTexto').value = texto; avisar('No se pudo publicar. ¿Tienes internet?'); }
+});
+$('avisosLista').addEventListener('click', async (e) => {
+  const b = e.target.closest('[data-borrar-aviso]');
+  if (!b || !confirm('¿Borrar este aviso? Tu equipo dejará de verlo.')) return;
+  try { await nube.borrarAviso(cuenta().rid, b.dataset.borrarAviso); avisar('Aviso borrado'); }
+  catch (err) { avisar('No se pudo borrar. ¿Tienes internet?'); }
+});
 
 // --- Publicar (jefe, en Cuadro) ---
 function pintarPublicar() {
@@ -3009,6 +3248,7 @@ $('ajNube').addEventListener('click', async (e) => {
       const r = await nube.crearRestaurante({ nombre: restaurante().nombre || 'Mi restaurante', tipo: restaurante().tipo || 'sushi', equipo: semanaANube(claveSemana(lunesProxima)).equipo });
       datos.cuenta = { rol: 'jefe', rid: r.rid, codigo: r.codigo, uid: nube.usuario().uid };
       guardar();
+      escucharAvisos();
       avisar('Listo. Comparte el código con tu equipo');
     }
     if (b.dataset.nube === 'invitar') {
@@ -3088,6 +3328,7 @@ $('ajSalirRest').addEventListener('click', async () => {
   if (!confirm('¿Salir de «' + (restaurante().nombre || 'este restaurante') + '»? Dejarás de ver el horario.')) return;
   try { await nube.salirDelRestaurante(cuenta().rid); } catch (err) {}
   if (dejarDeEscuchar) { dejarDeEscuchar(); dejarDeEscuchar = null; }
+  pararAvisos();
   try { localStorage.removeItem(CLAVE); } catch (err) {}
   datos = cargar();
   aplicarModoEquipo(); aplicarModo(); aplicarTema();
@@ -3173,13 +3414,14 @@ function irA(nombre, desdeHistorial) {
   if (nombre !== 'stock') enRecuento = false;
   vista = nombre;
   document.querySelectorAll('.vista').forEach((v) => v.classList.toggle('activa', v.id === 'vista' + nombre[0].toUpperCase() + nombre.slice(1)));
-  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'ajustes'].includes(nombre))));
-  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'ajustes', 'mihorario'].includes(nombre);
+  document.querySelectorAll('nav button').forEach((b) => b.classList.toggle('activo', b.dataset.ir === nombre || (b.id === 'btnMas' && ['horas', 'equipo', 'ajustes', 'avisos'].includes(nombre))));
+  $('cabecera').hidden = ['inicio', 'equipo', 'horas', 'stock', 'ajustes', 'mihorario', 'avisos'].includes(nombre);
   $('dias').style.display = nombre === 'rellenar' ? '' : 'none';
   refrescar();
   window.scrollTo(0, 0);
 }
 document.querySelectorAll('[data-ir]').forEach((b) => b.addEventListener('click', () => irA(b.dataset.ir)));
+$('semanaVacia').addEventListener('click', (e) => { if (e.target.closest('[data-copiar-semana]')) $('btnCopiar').click(); });
 $('dias').addEventListener('click', (e) => {
   const b = e.target.closest('button');
   if (!b) return;
@@ -3196,6 +3438,7 @@ function refrescar() {
   if (vista === 'stock') { pintarStock(); return; }
   if (vista === 'ajustes') { pintarAjustesVista(); return; }
   if (vista === 'mihorario') { pintarMiHorario(); return; }
+  if (vista === 'avisos') { pintarAvisos(); return; }
   pintarCabecera();
   if (vista === 'rellenar') pintarDia();
   if (vista === 'cuadro') pintarCuadro();
