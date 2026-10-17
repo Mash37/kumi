@@ -70,3 +70,44 @@ describe('stock: igual que en la versión 2 en 300 cocinas al azar', () => {
     for (const n of ['ANA', 'ANDRÉS', 'LUIS', ' sofía ', '', 'X']) expect(iniciales(d, n)).toBe(v2.iniciales(n));
   });
 });
+
+describe('pedido al proveedor', () => {
+  it('pide lo que falta hasta el doble del mínimo, en enteros si la unidad no se parte', () => {
+    expect(v3.cantidadSugerida({ minimo: 10, unidad: 'kg' }, 3)).toBe(17);
+    expect(v3.cantidadSugerida({ minimo: 5, unidad: 'kg' }, 2.3)).toBe(8);
+    expect(v3.cantidadSugerida({ minimo: 3, unidad: 'caja' }, 0.5)).toBe(6);
+    expect(v3.cantidadSugerida({ minimo: 4, unidad: 'L' }, 9)).toBe(0);
+    expect(v3.cantidadSugerida({ minimo: null, unidad: 'kg' }, 1)).toBe(0);
+  });
+  it('el pedido lista solo lo que está por debajo del mínimo, con su importe y el total', () => {
+    const d: Datos = { equipo: [], semanas: {}, stock: {
+      productos: [
+        { id: 'a', nombre: 'Arroz', unidad: 'kg', categoria: 'Arroz y secos', minimo: 10, precio: 1.5 },
+        { id: 't', nombre: 'Tomate', unidad: 'kg', categoria: 'Verdura y fruta', minimo: 5, precio: null },
+        { id: 's', nombre: 'Sal', unidad: 'kg', categoria: 'Salsas y condimentos', minimo: 1, precio: 0.6 },
+      ],
+      compras: [],
+      recuentos: [{ id: 'r1', p: 'a', cant: 4, ts: 1 }, { id: 'r2', p: 't', cant: 1, ts: 1 }, { id: 'r3', p: 's', cant: 3, ts: 1 }],
+    } };
+    const { filas, total } = v3.pedidoSugerido(d);
+    expect(filas.map((f) => [f.p.nombre, f.quedan, f.pedir, f.importe])).toEqual([['Arroz', 4, 16, 24], ['Tomate', 1, 9, null]]);
+    expect(total).toBe(24);
+    expect(v3.pedidoSugerido({ equipo: [], semanas: {} })).toEqual({ filas: [], total: null });
+  });
+});
+
+describe('PDF hecho a mano', () => {
+  it('tiene la estructura que piden los lectores de PDF', async () => {
+    const { pdfDeImagenes } = await import('../src/componentes/pdf');
+    const pdf = pdfDeImagenes([{ jpeg: new Uint8Array([255, 216, 1, 2, 255, 217]), ancho: 10, alto: 14 }, { jpeg: new Uint8Array([255, 216, 255, 217]), ancho: 10, alto: 14 }]);
+    const t = new TextDecoder('latin1').decode(pdf);
+    expect(t.startsWith('%PDF-1.4\n')).toBe(true);
+    expect(t.endsWith('%%EOF\n')).toBe(true);
+    expect(t).toContain('/Count 2');
+    // Cada entrada del índice apunta exactamente al principio de su objeto.
+    const xref = Number(t.match(/startxref\n(\d+)/)![1]);
+    expect(t.slice(xref, xref + 4)).toBe('xref');
+    const entradas = t.slice(xref).split('\n').slice(3, 3 + 8);
+    entradas.forEach((e, i) => expect(t.slice(Number(e.slice(0, 10)), Number(e.slice(0, 10)) + String(i + 1).length + 6)).toBe((i + 1) + ' 0 obj'));
+  });
+});
