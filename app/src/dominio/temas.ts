@@ -1,8 +1,14 @@
+import { KUMI_KITCHEN } from './temaKumi';
+
 // Los 7 tipos de cocina: colores, dibujo, productos de ejemplo y datos curiosos. Copiado tal cual de la versión 2.
 export interface Colores {
   rosa: string; coral: string; frambuesa: string; frambuesaOscuro: string; medio: string; suave: string; borde: string; fondo: string;
   fondoDeg: string; deg: string; degIntenso: string; degOscuro: string; brillo1: string; brillo2: string; sombra: string;
   degNoche: string; degBarra: string; barra: string; tituloOscuro: string; pdfCabecera: string; anillo: string[];
+  /** Color del texto sobre el degradado principal (botones). Blanco si no se indica. */
+  textoSobreDeg?: string;
+  /** Color de acento en modo oscuro, si el normal no se ve sobre fondo oscuro. */
+  rosaOscuro?: string;
 }
 export interface Tema {
   nombre: string; emoji: string; cocina: string; etiquetaDato: string; colores: Colores; avatares: string[];
@@ -11,6 +17,7 @@ export interface Tema {
 }
 const BRILLOS = '<g fill="#fff"><path d="M28 64 l3 -9 l3 9 l9 3 l-9 3 l-3 9 l-3 -9 l-9 -3z" opacity=".9"/><path d="M196 86 l2 -6 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2z" opacity=".75"/></g>';
 export const TEMAS: Record<string, Tema> = {
+  kumi: KUMI_KITCHEN,
   sushi: {
     nombre: 'Sushi', emoji: '🍣', cocina: 'Cocina japonesa', etiquetaDato: 'Palabra del día',
     colores: {
@@ -379,4 +386,4 @@ const PALABRAS: [string, string, string][] = [
 ];
 TEMAS.sushi.datos = PALABRAS;
 
-export const ORDEN_TEMAS = ['sushi', 'asador', 'italiano', 'vegano', 'marisqueria', 'cerveceria', 'pasteleria'];
+export const ORDEN_TEMAS = ['kumi', 'sushi', 'asador', 'italiano', 'vegano', 'marisqueria', 'cerveceria', 'pasteleria'];

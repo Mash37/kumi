@@ -88,11 +88,11 @@
   .fila-linea .quien span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
   .pista { position: relative; height: 22px; background: var(--rosa-suave); border-radius: 8px; }
   .tramo {
-    position: absolute; top: 0; bottom: 0; border-radius: 8px; color: #fff; font-size: 10.5px; font-weight: 600;
+    position: absolute; top: 0; bottom: 0; border-radius: 8px; color: var(--texto-sobre-deg); font-size: 10.5px; font-weight: 600;
     display: flex; align-items: center; justify-content: center; white-space: nowrap; overflow: hidden;
     background: var(--deg);
   }
-  .tramo.noche { background: var(--deg-noche); }
+  .tramo.noche { background: var(--deg-noche); color: #fff; }
   .horas-eje { position: relative; height: 18px; margin-left: 116px; font-size: 10.5px; color: var(--gris); }
   .horas-eje span { position: absolute; transform: translateX(-50%); }
   .ya { position: absolute; top: -6px; bottom: 16px; width: 2px; background: var(--tinta); border-radius: 2px; pointer-events: none; }
@@ -189,7 +189,7 @@
   .acciones { display: grid; gap: 10px; margin: 16px 0; }
   .tarjeta .acciones { margin: 0; }
   .btn { display: block; width: 100%; min-height: 52px; border-radius: 16px; border: 0; font-weight: 600; font-size: 16.5px; padding: 12px; letter-spacing: .01em; }
-  .btn.principal { background: var(--deg); color: #fff; box-shadow: 0 8px 20px var(--sombra); }
+  .btn.principal { background: var(--deg); color: var(--texto-sobre-deg); box-shadow: 0 8px 20px var(--sombra); }
   .btn.secundario { background: var(--blanco); border: 1px solid var(--rosa-medio); color: var(--frambuesa); }
   .btn.peligro { background: var(--blanco); border: 1px solid #f0c9c9; color: #b42318; }
   .btn:active { transform: scale(.985); }
@@ -356,7 +356,7 @@
     padding: 6px 6px 6px 16px; border-radius: 99px; white-space: nowrap; box-shadow: 0 6px 20px rgba(0,0,0,.2);
   }
   .deshacer[hidden] { display: none; }
-  .deshacer button { border: 0; background: var(--rosa); color: #fff; border-radius: 99px; padding: 7px 14px; font-weight: 600; font-size: 14px; }
+  .deshacer button { border: 0; background: var(--deg); color: var(--texto-sobre-deg); border-radius: 99px; padding: 7px 14px; font-weight: 600; font-size: 14px; }
 
   /* Informe mensual de horas */
   .mes-nav {

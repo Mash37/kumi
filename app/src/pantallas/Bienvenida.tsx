@@ -10,7 +10,7 @@ export function Bienvenida({ soyEquipo }: { soyEquipo: () => void }) {
   const d = usarAlmacen((s) => s.datos);
   const cambiar = usarAlmacen((s) => s.cambiar);
   const r = d.restaurante ?? {};
-  const [tipo, setTipo] = useState(r.tipo || 'sushi');
+  const [tipo, setTipo] = useState(r.tipo || 'kumi');
   const [persona, setPersona] = useState(r.persona || '');
   const [nombre, setNombre] = useState(r.nombre || '');
   const [equipo, setEquipo] = useState(d.equipo.map((p) => p.nombre).join('\n'));
