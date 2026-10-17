@@ -1,0 +1,15 @@
+/* Estilos de los informes en PDF. Se usan en la web (al imprimir) y en la app nativa (documento aparte). */
+.inf { font-family: 'Jost', Arial, sans-serif; color: #1f1418; font-size: 11pt; }
+.inf-marca { font-size: 8.5pt; letter-spacing: .18em; text-transform: uppercase; color: var(--pdf-titulo); }
+.inf h1 { font-family: 'Playfair Display', Georgia, serif; font-style: italic; font-size: 22pt; margin: 4px 0 2px; color: var(--pdf-titulo); }
+.inf .inf-sub { margin: 0 0 14px; color: #7a6970; font-size: 10pt; }
+.inf table { width: 100%; border-collapse: collapse; margin-bottom: 10px; }
+.inf th { background: var(--pdf-cabecera); text-align: left; font-weight: 600; padding: 6px 8px; font-size: 9.5pt; }
+.inf td { padding: 5px 8px; border-bottom: 1px solid #ead6dd; font-variant-numeric: tabular-nums; }
+.inf td.n, .inf th.n { text-align: right; }
+.inf tr.suma td { font-weight: 700; border-top: 2px solid #1f1418; border-bottom: 0; }
+.inf .inf-nota { font-size: 9pt; color: #7a6970; margin: 0 0 16px; }
+.inf-persona { break-inside: avoid; margin-top: 14px; }
+.inf h2 { font-size: 12pt; margin: 0 0 4px; display: flex; justify-content: space-between; border-bottom: 2px solid var(--pdf-titulo); padding-bottom: 3px; }
+.inf-firmas { display: flex; gap: 40px; margin-top: 36px; break-inside: avoid; font-size: 10pt; }
+.inf-firmas div { flex: 1; border-top: 1px solid #1f1418; padding-top: 6px; }
