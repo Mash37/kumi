@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Cómo hacer el cuadrante de turnos de una cocina, paso a paso | Kumi</title>
+<meta name="description" content="Guía práctica para hacer el cuadrante de turnos de la cocina de un restaurante: servicios, mínimos por turno, libres, horas del mes y errores que conviene evitar.">
+<link rel="canonical" href="https://mash37.github.io/kumi-web/guias/cuadrante-turnos-cocina/">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta name="theme-color" content="#ff5f80">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="Kumi">
+<meta property="og:title" content="Cómo hacer el cuadrante de turnos de una cocina, paso a paso">
+<meta property="og:description" content="Servicios, mínimos por turno, libres y horas del mes: la guía para que el cuadrante deje de ser un dolor de cabeza.">
+<meta property="og:url" content="https://mash37.github.io/kumi-web/guias/cuadrante-turnos-cocina/">
+<meta property="og:image" content="https://mash37.github.io/kumi-web/og.png">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" sizes="192x192" href="../../icon-192.png">
+<link rel="apple-touch-icon" href="../../icon-180.png">
+<link rel="preload" href="../../fuentes/Jost.woff2" as="font" type="font/woff2" crossorigin>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "headline": "Cómo hacer el cuadrante de turnos de una cocina, paso a paso",
+      "description": "Guía práctica para hacer el cuadrante de turnos de la cocina de un restaurante.",
+      "inLanguage": "es-ES",
+      "datePublished": "2026-10-17",
+      "dateModified": "2026-10-17",
+      "author": { "@type": "Organization", "name": "Kumi", "url": "https://mash37.github.io/kumi-web/" },
+      "image": "https://mash37.github.io/kumi-web/og.png",
+      "mainEntityOfPage": "https://mash37.github.io/kumi-web/guias/cuadrante-turnos-cocina/"
+    },
+    {
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Kumi", "item": "https://mash37.github.io/kumi-web/" },
+        { "@type": "ListItem", "position": 2, "name": "Cuadrante de turnos de cocina", "item": "https://mash37.github.io/kumi-web/guias/cuadrante-turnos-cocina/" }
+      ]
+    }
+  ]
+}
+</script>
+<style>
+@font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 400 900; font-display: swap; src: url(../../fuentes/PlayfairDisplay-Italic.woff2) format('woff2'); }
+@font-face { font-family: 'Jost'; font-weight: 100 900; font-display: swap; src: url(../../fuentes/Jost.woff2) format('woff2'); }
+:root {
+  --fondo: #fff8f9; --papel: #ffffff; --tinta: #1f1418; --gris: #74656b; --borde: #f1e2e8;
+  --rosa: #ff4d8d; --acento: #b0135f; --suave: #fff0f5;
+  --deg: linear-gradient(135deg, #ff4d8d 0%, #ff7a59 100%);
+  --titulo: 'Playfair Display', Georgia, serif; --texto: 'Jost', 'Avenir Next', system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --fondo: #17111a; --papel: #221a24; --tinta: #f3eaf0; --gris: #b6a7b0; --borde: #3b2f3e; --acento: #ffc2d6; --suave: #2c1f2c; color-scheme: dark; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fondo); color: var(--tinta); font-family: var(--texto); font-size: 18px; line-height: 1.7; }
+.envoltura { max-width: 720px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+header { border-bottom: 1px solid var(--borde); }
+header .envoltura { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding-block: 14px; max-width: 1120px; }
+.marca { font-family: var(--titulo); font-style: italic; font-weight: 800; font-size: 24px; text-decoration: none; color: inherit; }
+.boton { display: inline-flex; padding: 12px 20px; border-radius: 999px; background: var(--deg); color: #fff; font-weight: 600; text-decoration: none; }
+nav.migas { font-size: 14px; color: var(--gris); padding-top: 28px; }
+nav.migas a { color: inherit; }
+h1, h2 { font-family: var(--titulo); font-style: italic; line-height: 1.15; text-wrap: balance; }
+h1 { font-size: clamp(34px, 5.5vw, 52px); margin: 12px 0 8px; }
+h2 { font-size: clamp(26px, 3.6vw, 34px); margin: 48px 0 8px; }
+h3 { font-size: 20px; margin: 28px 0 4px; }
+.fecha { color: var(--gris); font-size: 15px; }
+.resumen { background: var(--suave); border-radius: 18px; padding: 20px 24px; margin: 28px 0; }
+.resumen ol { margin: 8px 0 0; padding-left: 22px; }
+a { color: var(--acento); }
+table { border-collapse: collapse; width: 100%; font-size: 16px; font-variant-numeric: tabular-nums; }
+.tabla { overflow-x: auto; margin: 16px 0; border: 1px solid var(--borde); border-radius: 14px; background: var(--papel); }
+th, td { padding: 8px 12px; text-align: left; white-space: nowrap; border-bottom: 1px solid var(--borde); }
+th { font-weight: 600; color: var(--gris); font-size: 14px; }
+tr:last-child td { border-bottom: 0; }
+.cta { margin: 56px 0; border-radius: 22px; padding: 28px; background: var(--deg); color: #fff; display: grid; gap: 14px; }
+.cta h2 { margin: 0; color: #fff; }
+.cta .boton { background: #fff; color: #b0135f; justify-self: start; }
+footer { border-top: 1px solid var(--borde); color: var(--gris); font-size: 14px; }
+footer .envoltura { padding-block: 28px; }
+a:focus-visible { outline: 3px solid var(--rosa); outline-offset: 3px; }
+</style>
+</head>
+<body>
+<header>
+  <div class="envoltura">
+    <a class="marca" href="../../">Kumi</a>
+    <a class="boton" href="https://mash37.github.io/kumi/">Probar gratis</a>
+  </div>
+</header>
+
+<main class="envoltura">
+  <nav class="migas" aria-label="Estás en"><a href="../../">Kumi</a> › Guías › Cuadrante de turnos de cocina</nav>
+  <article>
+    <h1>Cómo hacer el cuadrante de turnos de una cocina, paso a paso</h1>
+    <p class="fecha">Actualizado el 17 de octubre de 2026 · 6 minutos de lectura</p>
+
+    <p>El cuadrante de turnos es la tabla que dice quién trabaja cada día y a qué hora. En una cocina parece sencillo hasta que llega el viernes: alguien pide cambiar el libre, el servicio de cena se queda corto y la foto que mandaste al grupo ya no vale. Esta guía te explica cómo hacerlo bien desde el principio.</p>
+
+    <div class="resumen">
+      <strong>En resumen</strong>
+      <ol>
+        <li>Apunta los servicios de tu cocina y cuánta gente necesita cada uno.</li>
+        <li>Reúne las horas de contrato y los días libres fijos de cada persona.</li>
+        <li>Coloca primero los libres y después los turnos.</li>
+        <li>Comprueba que cada servicio tiene su mínimo de gente.</li>
+        <li>Revisa las horas de la semana de cada persona.</li>
+        <li>Publícalo con tiempo y en un sitio que todo el equipo pueda consultar.</li>
+      </ol>
+    </div>
+
+    <h2>1. Apunta los servicios y el mínimo de gente</h2>
+    <p>Antes de pensar en nombres, piensa en servicios. La mayoría de cocinas tiene dos, comida y cena, y algunas añaden desayunos o un turno de preparación por la mañana. Para cada uno, decide cuántas personas necesitas como mínimo y si eso cambia el fin de semana.</p>
+    <div class="tabla">
+      <table>
+        <thead><tr><th>Servicio</th><th>Horario</th><th>Mínimo entre semana</th><th>Mínimo viernes y sábado</th></tr></thead>
+        <tbody>
+          <tr><td>Preparación</td><td>10:00 – 12:00</td><td>1</td><td>2</td></tr>
+          <tr><td>Comida</td><td>12:00 – 16:00</td><td>2</td><td>3</td></tr>
+          <tr><td>Cena</td><td>20:00 – 00:00</td><td>2</td><td>4</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h2>2. Reúne las horas de contrato y los libres fijos</h2>
+    <p>Haz una lista con cada persona del equipo, sus horas semanales de contrato y los días que libra siempre. Añade las vacaciones y los permisos que ya conozcas. Con esto evitas la mitad de los cambios de última hora.</p>
+
+    <h2>3. Coloca primero los libres</h2>
+    <p>Es el truco que más tiempo ahorra. Si pones primero los turnos y luego intentas encajar los libres, acabas deshaciendo medio cuadrante. Reparte los libres de modo que el viernes y el sábado tengas a la mayor parte del equipo, y procura que nadie encadene muchos días seguidos.</p>
+
+    <h2>4. Rellena los turnos y comprueba la cobertura</h2>
+    <p>Ahora asigna a cada persona un turno por día: mañana, partido, noche o libre. Al terminar cada día, cuenta cuánta gente hay en cada servicio y compáralo con el mínimo del paso 1. Si un servicio se queda corto, mueve a alguien con turno partido o ajusta una entrada.</p>
+
+    <h3>Los turnos más habituales en cocina</h3>
+    <ul>
+      <li><strong>Mañana:</strong> de la preparación al final de la comida.</li>
+      <li><strong>Partido:</strong> comida y cena, con descanso por la tarde.</li>
+      <li><strong>Noche:</strong> de la tarde al cierre.</li>
+    </ul>
+
+    <h2>5. Revisa las horas de la semana</h2>
+    <p>Suma las horas de cada persona y compáralas con su contrato. Así detectas a tiempo a quien se pasa de horas y a quien se queda corto. A fin de mes, esas sumas son las que te pedirá la gestoría.</p>
+
+    <h2>6. Publícalo con tiempo y en un solo sitio</h2>
+    <p>Lo ideal es que el equipo conozca su horario con varios días de antelación. Que esté en un único sitio importa tanto como la antelación: si hay una foto en el grupo, una hoja en la nevera y un cambio por mensaje privado, alguien acabará mirando la versión equivocada.</p>
+
+    <h2>Errores que conviene evitar</h2>
+    <ul>
+      <li>Cambiar el cuadrante sin avisar a todo el equipo.</li>
+      <li>Dejar el fin de semana para el final.</li>
+      <li>No guardar los cuadrantes anteriores: son tu mejor plantilla para la semana siguiente.</li>
+      <li>Sumar las horas a mano a fin de mes, cuando ya no se puede corregir nada.</li>
+    </ul>
+
+    <h2>¿Y el registro de jornada?</h2>
+    <p>El cuadrante dice las horas <em>previstas</em>. El registro de jornada apunta las horas <em>reales</em> de entrada y salida, y en España es obligatorio desde 2019. El Gobierno prepara una norma para que ese registro sea digital; en octubre de 2026 seguía en trámite. Conviene tener las dos cosas en orden.</p>
+
+    <section class="cta">
+      <h2>Haz tu próximo cuadrante con Kumi</h2>
+      <p>Kumi hace estos seis pasos por ti: te avisa si un servicio se queda corto, suma las horas solas y cada persona ve su horario en el móvil. Es gratis para empezar.</p>
+      <a class="boton" href="https://mash37.github.io/kumi/">Empezar gratis</a>
+    </section>
+  </article>
+</main>
+
+<footer>
+  <div class="envoltura"><a href="../../">Kumi · horarios de cocina</a> · Hecho en España para cocinas de verdad</div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://mash37.github.io/kumi-web/sitemap.xml
