@@ -2,7 +2,7 @@
 import type { Datos } from '../datos/tipos';
 import { DIAS_ABREV, MESES } from './fechas';
 import { horasExactas, informeMes, nombreDe, textoDiaInforme, textoIncidencia, tramosDias } from './horario';
-import { cantidadSugerida, cantidadTxt, cifra, columnasHoja, comprasDelMes, euros, fechaCorta, informeStock, listaPedir, producto, productosEnOrden } from './stock';
+import { cantidadTxt, cifra, columnasHoja, comprasDelMes, euros, fechaCorta, informeStock, producto, productosEnOrden } from './stock';
 import { escapar } from './texto';
 
 export function htmlInformeHoras(d: Datos, anio: number, mes: number, hoy: Date, cocina: string): string | null {
@@ -63,24 +63,4 @@ export function htmlHoja(d: Datos, hoy: Date, cocina: string): string {
     '<table><thead><tr><th>Producto</th><th>Unidad</th>' + cols.map((c) => { const f = new Date(c.ts); return '<th class="n">' + f.getDate() + '/' + (f.getMonth() + 1) + (c.mes ? ' (mes)' : '') + '</th>'; }).join('') + '</tr></thead><tbody>' +
     productosEnOrden(d).map((p) => '<tr><td>' + escapar(p.nombre) + '</td><td>' + p.unidad + '</td>' + cols.map((c) => '<td class="n">' + (c.valores[p.id] == null ? '' : cifra.format(c.valores[p.id])) + '</td>').join('') + '</tr>').join('') +
     '</tbody></table><div class="inf-firmas"><div>Responsable de cocina</div><div>Revisado</div></div></div>';
-}
-
-// Hoja de pedido para el proveedor: lo que está por debajo del mínimo y cuánto pedir. null si no hay nada que pedir.
-export function htmlPedido(d: Datos, hoy: Date, cocina: string): string | null {
-  const filas = listaPedir(d).map(({ p, e }) => ({ p, quedan: e.cantidad ?? 0, pedir: cantidadSugerida(p, e.cantidad ?? 0) }));
-  if (!filas.length) return null;
-  const conPrecio = filas.filter((f) => f.p.precio != null);
-  const total = conPrecio.reduce((s, f) => s + f.pedir * f.p.precio!, 0);
-  const celda = (x: string) => '<td class="n">' + x + '</td>';
-  return '<div class="inf"><div class="inf-marca">Kumi · ' + escapar(d.restaurante?.nombre || cocina) + '</div>' +
-    '<h1>Pedido · ' + hoy.getDate() + ' de ' + MESES[hoy.getMonth()] + ' de ' + hoy.getFullYear() + '</h1>' +
-    '<p class="inf-sub">' + filas.length + (filas.length === 1 ? ' producto' : ' productos') + ' por debajo del mínimo</p>' +
-    '<table><thead><tr><th>Producto</th><th class="n">Quedan</th><th class="n">Mínimo</th><th class="n">Pedir</th><th class="n">Precio</th><th class="n">Importe aprox.</th></tr></thead><tbody>' +
-    filas.map((f) => '<tr><td>' + escapar(f.p.nombre) + '</td>' + celda(cantidadTxt(f.quedan, f.p)) + celda(cantidadTxt(f.p.minimo!, f.p)) +
-      celda('<b>' + cantidadTxt(f.pedir, f.p) + '</b>') + celda(f.p.precio != null ? euros.format(f.p.precio) : '—') +
-      celda(f.p.precio != null ? euros.format(f.pedir * f.p.precio) : '—') + '</tr>').join('') +
-    (conPrecio.length ? '<tr class="suma"><td>Total aproximado</td><td class="n"></td><td class="n"></td><td class="n"></td><td class="n"></td>' + celda(euros.format(total)) + '</tr>' : '') +
-    '</tbody></table>' +
-    '<p class="inf-nota">«Pedir» es lo que falta para llegar al doble del mínimo. El importe usa el precio guardado de cada producto y es orientativo.</p>' +
-    '<div class="inf-firmas"><div>Pedido por</div><div>Recibido</div></div></div>';
 }

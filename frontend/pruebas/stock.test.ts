@@ -79,9 +79,8 @@ describe('pedido al proveedor', () => {
     expect(v3.cantidadSugerida({ minimo: 4, unidad: 'L' }, 9)).toBe(0);
     expect(v3.cantidadSugerida({ minimo: null, unidad: 'kg' }, 1)).toBe(0);
   });
-  it('la hoja de pedido lista solo lo que está por debajo del mínimo, con su importe', async () => {
-    const { htmlPedido } = await import('../src/dominio/informes');
-    const d: Datos = { equipo: [], semanas: {}, restaurante: { nombre: 'Casa <Kumi>' }, stock: {
+  it('el pedido lista solo lo que está por debajo del mínimo, con su importe y el total', () => {
+    const d: Datos = { equipo: [], semanas: {}, stock: {
       productos: [
         { id: 'a', nombre: 'Arroz', unidad: 'kg', categoria: 'Arroz y secos', minimo: 10, precio: 1.5 },
         { id: 't', nombre: 'Tomate', unidad: 'kg', categoria: 'Verdura y fruta', minimo: 5, precio: null },
@@ -90,14 +89,25 @@ describe('pedido al proveedor', () => {
       compras: [],
       recuentos: [{ id: 'r1', p: 'a', cant: 4, ts: 1 }, { id: 'r2', p: 't', cant: 1, ts: 1 }, { id: 'r3', p: 's', cant: 3, ts: 1 }],
     } };
-    const html = htmlPedido(d, new Date(2026, 9, 17), 'Cualquier cocina')!;
-    expect(html).toContain('Pedido · 17 de octubre de 2026');
-    expect(html).toContain('Casa &lt;Kumi&gt;');
-    expect(html).toContain('Arroz');
-    expect(html).toContain('Tomate');
-    expect(html).not.toContain('Sal<');
-    expect(html).toContain('<b>16 kg</b>');
-    expect(html).toContain(v3.euros.format(24));
-    expect(htmlPedido({ equipo: [], semanas: {} }, new Date(), 'x')).toBeNull();
+    const { filas, total } = v3.pedidoSugerido(d);
+    expect(filas.map((f) => [f.p.nombre, f.quedan, f.pedir, f.importe])).toEqual([['Arroz', 4, 16, 24], ['Tomate', 1, 9, null]]);
+    expect(total).toBe(24);
+    expect(v3.pedidoSugerido({ equipo: [], semanas: {} })).toEqual({ filas: [], total: null });
+  });
+});
+
+describe('PDF hecho a mano', () => {
+  it('tiene la estructura que piden los lectores de PDF', async () => {
+    const { pdfDeImagenes } = await import('../src/componentes/pdf');
+    const pdf = pdfDeImagenes([{ jpeg: new Uint8Array([255, 216, 1, 2, 255, 217]), ancho: 10, alto: 14 }, { jpeg: new Uint8Array([255, 216, 255, 217]), ancho: 10, alto: 14 }]);
+    const t = new TextDecoder('latin1').decode(pdf);
+    expect(t.startsWith('%PDF-1.4\n')).toBe(true);
+    expect(t.endsWith('%%EOF\n')).toBe(true);
+    expect(t).toContain('/Count 2');
+    // Cada entrada del índice apunta exactamente al principio de su objeto.
+    const xref = Number(t.match(/startxref\n(\d+)/)![1]);
+    expect(t.slice(xref, xref + 4)).toBe('xref');
+    const entradas = t.slice(xref).split('\n').slice(3, 3 + 8);
+    entradas.forEach((e, i) => expect(t.slice(Number(e.slice(0, 10)), Number(e.slice(0, 10)) + String(i + 1).length + 6)).toBe((i + 1) + ' 0 obj'));
   });
 });

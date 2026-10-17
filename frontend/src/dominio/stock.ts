@@ -89,3 +89,14 @@ export function cantidadSugerida(p: Pick<Producto, 'minimo' | 'unidad'>, quedan:
   const falta = Math.max(0, p.minimo * 2 - quedan);
   return ENTERAS.includes(p.unidad) ? Math.ceil(falta) : Math.ceil(falta * 2) / 2;
 }
+
+export interface FilaPedido { p: Producto; quedan: number; pedir: number; importe: number | null }
+// Lo que hay que pedir hoy y su importe aproximado (solo si el producto tiene precio).
+export function pedidoSugerido(d: Datos): { filas: FilaPedido[]; total: number | null } {
+  const filas = listaPedir(d).map(({ p, e }) => {
+    const quedan = e.cantidad ?? 0, pedir = cantidadSugerida(p, quedan);
+    return { p, quedan, pedir, importe: p.precio != null ? pedir * p.precio : null };
+  });
+  const conImporte = filas.filter((f) => f.importe != null);
+  return { filas, total: conImporte.length ? conImporte.reduce((t, f) => t + f.importe!, 0) : null };
+}

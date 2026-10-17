@@ -3,9 +3,10 @@ import { usarAlmacen } from '../datos/almacen';
 import { borrarRecuento, corregirRecuento, moverRecuento, nuevoId } from '../datos/acciones';
 import type { Producto } from '../datos/tipos';
 import { MESES, claveSemana, fechaDeClave } from '../dominio/fechas';
-import { htmlHoja, htmlInformeStock, htmlPedido } from '../dominio/informes';
+import { htmlHoja, htmlInformeStock } from '../dominio/informes';
 import { CATEGORIAS, UNIDADES, cantidadSugerida, cantidadTxt, cifra, columnasHoja, productosEnOrden, recuentosDelDia, comprasDelMes, estadoProducto, euros, fechaCorta, hayQuePedir, informeStock, leerNumero, listaPedir, producto, productosActivos, stockDe } from '../dominio/stock';
 import { fuentesListas, imprimir } from '../componentes/archivos';
+import { enviarPedidoPdf } from '../componentes/pedido';
 import { cambiarConDeshacer, usarUi } from '../estado/ui';
 import { tema } from '../tema';
 
@@ -69,7 +70,7 @@ function Lista() {
           <h3>🛒 {pedir.length + (pedir.length === 1 ? ' producto por pedir' : ' productos por pedir')}</h3>
           <ul>{pedir.map((x) => <li key={x.p.id}><b>{x.p.nombre}</b>: quedan {cantidadTxt(x.e.cantidad!, x.p)} (mínimo {cantidadTxt(x.p.minimo!, x.p)})</li>)}</ul>
           <div className="acciones">
-            <button className="btn principal" onClick={async () => { await fuentesListas(); imprimir('Pedido ' + new Date().toLocaleDateString('es-ES') + ' - Kumi', htmlPedido(d, new Date(), tema(d.restaurante?.tipo).cocina) ?? '', true); }}>Guardar PDF del pedido</button>
+            <button className="btn principal" onClick={() => { enviarPedidoPdf(d, tema(d.restaurante?.tipo).cocina).catch(() => avisar('No se pudo crear el PDF del pedido')); }}>Enviar PDF del pedido</button>
             <button className="btn secundario" onClick={mandarPedido}>Enviar por mensaje</button>
           </div>
         </div>
