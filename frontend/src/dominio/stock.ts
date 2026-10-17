@@ -80,3 +80,12 @@ export function productosEnOrden(d: Datos): Producto[] {
   return CATEGORIAS.flatMap((cat) => activos.filter((p) => p.categoria === cat));
 }
 export function recuentosDelDia(d: Datos, k: string): Recuento[] { return stockDe(d).recuentos.filter((r) => claveSemana(new Date(r.ts)) === k); }
+
+// Unidades que se piden enteras: no se piden 2,5 cajas.
+const ENTERAS = ['ud', 'paquete', 'caja', 'bote', 'bandeja', 'manojo', 'barril', 'docena', 'rollo'];
+// Cuánto pedir: lo que falta para llegar al doble del mínimo, para no quedarse corto antes del siguiente pedido.
+export function cantidadSugerida(p: Pick<Producto, 'minimo' | 'unidad'>, quedan: number): number {
+  if (p.minimo == null) return 0;
+  const falta = Math.max(0, p.minimo * 2 - quedan);
+  return ENTERAS.includes(p.unidad) ? Math.ceil(falta) : Math.ceil(falta * 2) / 2;
+}

@@ -3,8 +3,8 @@ import { usarAlmacen } from '../datos/almacen';
 import { borrarRecuento, corregirRecuento, moverRecuento, nuevoId } from '../datos/acciones';
 import type { Producto } from '../datos/tipos';
 import { MESES, claveSemana, fechaDeClave } from '../dominio/fechas';
-import { htmlHoja, htmlInformeStock } from '../dominio/informes';
-import { CATEGORIAS, UNIDADES, cantidadTxt, cifra, columnasHoja, productosEnOrden, recuentosDelDia, comprasDelMes, estadoProducto, euros, fechaCorta, hayQuePedir, informeStock, leerNumero, listaPedir, producto, productosActivos, stockDe } from '../dominio/stock';
+import { htmlHoja, htmlInformeStock, htmlPedido } from '../dominio/informes';
+import { CATEGORIAS, UNIDADES, cantidadSugerida, cantidadTxt, cifra, columnasHoja, productosEnOrden, recuentosDelDia, comprasDelMes, estadoProducto, euros, fechaCorta, hayQuePedir, informeStock, leerNumero, listaPedir, producto, productosActivos, stockDe } from '../dominio/stock';
 import { fuentesListas, imprimir } from '../componentes/archivos';
 import { cambiarConDeshacer, usarUi } from '../estado/ui';
 import { tema } from '../tema';
@@ -58,7 +58,7 @@ function Lista() {
   const mandarPedido = () => {
     const hoy = new Date();
     const texto = 'Pedido ' + (d.restaurante?.nombre || 'cocina') + ' · ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '\n' +
-      pedir.map((x) => '• ' + x.p.nombre + ' (quedan ' + cantidadTxt(x.e.cantidad!, x.p) + ', mínimo ' + cantidadTxt(x.p.minimo!, x.p) + ')').join('\n');
+      pedir.map((x) => '• ' + x.p.nombre + ': pedir ' + cantidadTxt(cantidadSugerida(x.p, x.e.cantidad!), x.p) + ' (quedan ' + cantidadTxt(x.e.cantidad!, x.p) + ')').join('\n');
     if (navigator.share) navigator.share({ text: texto }).catch(() => {});
     else window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
   };
@@ -68,7 +68,10 @@ function Lista() {
         <div className="tarjeta pedir">
           <h3>🛒 {pedir.length + (pedir.length === 1 ? ' producto por pedir' : ' productos por pedir')}</h3>
           <ul>{pedir.map((x) => <li key={x.p.id}><b>{x.p.nombre}</b>: quedan {cantidadTxt(x.e.cantidad!, x.p)} (mínimo {cantidadTxt(x.p.minimo!, x.p)})</li>)}</ul>
-          <button className="btn principal" onClick={mandarPedido}>Mandar la lista al proveedor</button>
+          <div className="acciones">
+            <button className="btn principal" onClick={async () => { await fuentesListas(); imprimir('Pedido ' + new Date().toLocaleDateString('es-ES') + ' - Kumi', htmlPedido(d, new Date(), tema(d.restaurante?.tipo).cocina) ?? '', true); }}>Guardar PDF del pedido</button>
+            <button className="btn secundario" onClick={mandarPedido}>Enviar por mensaje</button>
+          </div>
         </div>
       )}
       <div className="fila-botones">

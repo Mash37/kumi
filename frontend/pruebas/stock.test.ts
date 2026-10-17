@@ -70,3 +70,34 @@ describe('stock: igual que en la versión 2 en 300 cocinas al azar', () => {
     for (const n of ['ANA', 'ANDRÉS', 'LUIS', ' sofía ', '', 'X']) expect(iniciales(d, n)).toBe(v2.iniciales(n));
   });
 });
+
+describe('pedido al proveedor', () => {
+  it('pide lo que falta hasta el doble del mínimo, en enteros si la unidad no se parte', () => {
+    expect(v3.cantidadSugerida({ minimo: 10, unidad: 'kg' }, 3)).toBe(17);
+    expect(v3.cantidadSugerida({ minimo: 5, unidad: 'kg' }, 2.3)).toBe(8);
+    expect(v3.cantidadSugerida({ minimo: 3, unidad: 'caja' }, 0.5)).toBe(6);
+    expect(v3.cantidadSugerida({ minimo: 4, unidad: 'L' }, 9)).toBe(0);
+    expect(v3.cantidadSugerida({ minimo: null, unidad: 'kg' }, 1)).toBe(0);
+  });
+  it('la hoja de pedido lista solo lo que está por debajo del mínimo, con su importe', async () => {
+    const { htmlPedido } = await import('../src/dominio/informes');
+    const d: Datos = { equipo: [], semanas: {}, restaurante: { nombre: 'Casa <Kumi>' }, stock: {
+      productos: [
+        { id: 'a', nombre: 'Arroz', unidad: 'kg', categoria: 'Arroz y secos', minimo: 10, precio: 1.5 },
+        { id: 't', nombre: 'Tomate', unidad: 'kg', categoria: 'Verdura y fruta', minimo: 5, precio: null },
+        { id: 's', nombre: 'Sal', unidad: 'kg', categoria: 'Salsas y condimentos', minimo: 1, precio: 0.6 },
+      ],
+      compras: [],
+      recuentos: [{ id: 'r1', p: 'a', cant: 4, ts: 1 }, { id: 'r2', p: 't', cant: 1, ts: 1 }, { id: 'r3', p: 's', cant: 3, ts: 1 }],
+    } };
+    const html = htmlPedido(d, new Date(2026, 9, 17), 'Cualquier cocina')!;
+    expect(html).toContain('Pedido · 17 de octubre de 2026');
+    expect(html).toContain('Casa &lt;Kumi&gt;');
+    expect(html).toContain('Arroz');
+    expect(html).toContain('Tomate');
+    expect(html).not.toContain('Sal<');
+    expect(html).toContain('<b>16 kg</b>');
+    expect(html).toContain(v3.euros.format(24));
+    expect(htmlPedido({ equipo: [], semanas: {} }, new Date(), 'x')).toBeNull();
+  });
+});
