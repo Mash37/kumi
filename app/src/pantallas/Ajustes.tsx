@@ -45,7 +45,7 @@ export function Ajustes() {
           <h3>Restaurante</h3><p className="sub">&nbsp;</p>
           <label className="campo"><span>Nombre del restaurante</span><input value={nombre} onChange={(e) => { setNombre(e.target.value); ponerR({ nombre: e.target.value.trim() }); }} /></label>
           <div className="grupo-stock">Tipo de cocina</div>
-          <Tipos sel={r.tipo || 'sushi'} elegir={(tipo) => ponerR({ tipo })} />
+          <Tipos sel={r.tipo || 'kumi'} elegir={(tipo) => ponerR({ tipo })} />
         </div>
         <div className="tarjeta">
           <h3>Apariencia</h3><p className="sub">&nbsp;</p>

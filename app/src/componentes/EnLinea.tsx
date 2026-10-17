@@ -24,7 +24,7 @@ export function Publicar({ clave }: { clave: string }) {
     const c = d.cuenta!, semana = semanaANube(d, clave);
     setSubiendo(true);
     try {
-      await nube.publicarSemana(c.rid, c.codigo, clave, semana, { nombre: d.restaurante?.nombre || 'Mi restaurante', tipo: d.restaurante?.tipo || 'sushi' });
+      await nube.publicarSemana(c.rid, c.codigo, clave, semana, { nombre: d.restaurante?.nombre || 'Mi restaurante', tipo: d.restaurante?.tipo || 'kumi' });
       usarAlmacen.getState().cambiar((x) => { x.publicado = x.publicado || {}; x.publicado[clave] = { huella: JSON.stringify(semana), cuando: Date.now() }; });
       usarUi.getState().avisar('Publicado: tu equipo ya lo ve en Kumi');
     } catch { usarUi.getState().avisar('No se pudo publicar. ¿Tienes internet?'); }
@@ -69,7 +69,7 @@ export function NubeJefe() {
           <button className="btn principal" disabled={ocupado} onClick={() => intentar(async () => {
             setOcupado(true);
             try {
-              const r = await nube.crearRestaurante({ nombre: d.restaurante?.nombre || 'Mi restaurante', tipo: d.restaurante?.tipo || 'sushi', equipo: d.equipo.map((p) => ({ id: p.id, nombre: p.nombre, contrato: p.contrato || null })) });
+              const r = await nube.crearRestaurante({ nombre: d.restaurante?.nombre || 'Mi restaurante', tipo: d.restaurante?.tipo || 'kumi', equipo: d.equipo.map((p) => ({ id: p.id, nombre: p.nombre, contrato: p.contrato || null })) });
               usarAlmacen.getState().cambiar((x) => { x.cuenta = { rol: 'jefe', rid: r.rid, codigo: r.codigo, uid: u.uid }; });
               escucharAvisos();
               avisar('Listo. Comparte el código con tu equipo');
