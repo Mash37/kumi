@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { usarAlmacen } from '../datos/almacen';
 import { borrarRecuento, corregirRecuento, moverRecuento, nuevoId } from '../datos/acciones';
-import type { Producto } from '../datos/tipos';
+import type { Producto, Proveedor } from '../datos/tipos';
 import { MESES, claveSemana, fechaDeClave } from '../dominio/fechas';
 import { htmlHoja, htmlInformeStock } from '../dominio/informes';
-import { CATEGORIAS, UNIDADES, cantidadSugerida, cantidadTxt, cifra, columnasHoja, productosEnOrden, recuentosDelDia, comprasDelMes, estadoProducto, euros, fechaCorta, hayQuePedir, informeStock, leerNumero, listaPedir, producto, productosActivos, stockDe } from '../dominio/stock';
+import { CATEGORIAS, UNIDADES, cantidadTxt, cifra, columnasHoja, productosEnOrden, recuentosDelDia, comprasDelMes, estadoProducto, euros, fechaCorta, hayQuePedir, informeStock, leerNumero, listaPedir, pedidoPorProveedor, producto, productosActivos, proveedorDe, proveedoresActivos, stockDe, telefonoWhatsApp } from '../dominio/stock';
 import { fuentesListas, imprimir } from '../componentes/archivos';
-import { enviarPedidoPdf } from '../componentes/pedido';
+import { enviarMensajePedido, enviarPedidoPdf } from '../componentes/pedido';
 import { cambiarConDeshacer, usarUi } from '../estado/ui';
 import { tema } from '../tema';
 
@@ -56,28 +56,31 @@ function Lista() {
     );
   }
   const pedir = listaPedir(d);
-  const mandarPedido = () => {
-    const hoy = new Date();
-    const texto = 'Pedido ' + (d.restaurante?.nombre || 'cocina') + ' · ' + hoy.getDate() + '/' + (hoy.getMonth() + 1) + '\n' +
-      pedir.map((x) => '• ' + x.p.nombre + ': pedir ' + cantidadTxt(cantidadSugerida(x.p, x.e.cantidad!), x.p) + ' (quedan ' + cantidadTxt(x.e.cantidad!, x.p) + ')').join('\n');
-    if (navigator.share) navigator.share({ text: texto }).catch(() => {});
-    else window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
-  };
+  const grupos = pedidoPorProveedor(d);
+  const nProveedores = proveedoresActivos(d).length;
   return (
     <>
       {pedir.length > 0 && (
         <div className="tarjeta pedir">
           <h3>🛒 {pedir.length + (pedir.length === 1 ? ' producto por pedir' : ' productos por pedir')}</h3>
-          <ul>{pedir.map((x) => <li key={x.p.id}><b>{x.p.nombre}</b>: quedan {cantidadTxt(x.e.cantidad!, x.p)} (mínimo {cantidadTxt(x.p.minimo!, x.p)})</li>)}</ul>
-          <div className="acciones">
-            <button className="btn principal" onClick={() => { enviarPedidoPdf(d, tema(d.restaurante?.tipo).cocina).catch(() => avisar('No se pudo crear el PDF del pedido')); }}>Enviar PDF del pedido</button>
-            <button className="btn secundario" onClick={mandarPedido}>Enviar por mensaje</button>
-          </div>
+          {grupos.map((g) => (
+            <div className="grupo-pedido" key={g.proveedor?.id ?? 'sin'}>
+              {(g.proveedor || grupos.length > 1) && <div className="grupo-stock">{g.proveedor ? g.proveedor.nombre : 'Sin proveedor'}</div>}
+              <ul>{g.filas.map((f) => <li key={f.p.id}><b>{f.p.nombre}</b>: quedan {cantidadTxt(f.quedan, f.p)}, pedir <b>{cantidadTxt(f.pedir, f.p)}</b></li>)}</ul>
+              <div className="acciones">
+                <button className="btn principal" onClick={() => { enviarPedidoPdf(d, t.cocina, g).catch(() => avisar('No se pudo crear el PDF del pedido')); }}>{g.proveedor ? 'Enviar PDF a ' + g.proveedor.nombre : 'Enviar PDF del pedido'}</button>
+                <button className="btn secundario" onClick={() => enviarMensajePedido(d, g)}>{g.proveedor && telefonoWhatsApp(g.proveedor.telefono) ? 'WhatsApp a ' + g.proveedor.nombre : 'Enviar por mensaje'}</button>
+              </div>
+            </div>
+          ))}
         </div>
       )}
       <div className="fila-botones">
         <button className="btn principal" onClick={empezarRecuento}>Hacer recuento</button>
         <button className="btn secundario" onClick={() => abrirPanel(<PanelProducto id={null} />)}>+ Producto</button>
+      </div>
+      <div className="acciones">
+        <button className="btn secundario" onClick={() => abrirPanel(<PanelProveedores />)}>{nProveedores ? 'Proveedores (' + nProveedores + ')' : 'Proveedores'}</button>
       </div>
       <div className="tarjeta">
         {porCategoria(activos).map(([cat, ps]) => (
@@ -87,6 +90,8 @@ function Lista() {
               const e = estadoProducto(d, p);
               const detalle: string[] = [];
               if (p.minimo != null) detalle.push('mín. ' + cantidadTxt(p.minimo, p));
+              const pr = proveedorDe(d, p.proveedor);
+              if (pr) detalle.push(pr.nombre);
               if (e.ult) detalle.push('contado ' + fechaCorta(e.ult.ts) + (e.compras ? ' + compras' : ''));
               else if (e.compras) detalle.push('solo compras, sin contar');
               return (
@@ -233,8 +238,9 @@ function PanelProducto({ id }: { id: string | null }) {
   const d = usarAlmacen((s) => s.datos);
   const cambiar = usarAlmacen((s) => s.cambiar);
   const { avisar, cerrarPanel } = usarUi.getState();
-  const p = (id && producto(d, id)) || { nombre: '', unidad: 'kg', categoria: 'Otros', minimo: null, precio: null };
-  const [f, setF] = useState({ nombre: p.nombre, unidad: p.unidad, categoria: p.categoria, minimo: p.minimo != null ? cifra.format(p.minimo) : '', precio: p.precio != null ? String(p.precio).replace('.', ',') : '' });
+  const p = (id && producto(d, id)) || { nombre: '', unidad: 'kg', categoria: 'Otros', minimo: null, precio: null, proveedor: null };
+  const [f, setF] = useState({ nombre: p.nombre, unidad: p.unidad, categoria: p.categoria, minimo: p.minimo != null ? cifra.format(p.minimo) : '', precio: p.precio != null ? String(p.precio).replace('.', ',') : '', proveedor: proveedorDe(d, p.proveedor)?.id ?? '' });
+  const proveedores = proveedoresActivos(d);
   const st = stockDe(d);
   const historial = id ? st.compras.filter((c) => c.p === id).map((c) => ({ ts: c.ts, txt: 'Compra ' + cantidadTxt(c.cant, p) + ' · ' + euros.format(c.coste) }))
     .concat(st.recuentos.filter((r) => r.p === id).map((r) => ({ ts: r.ts, txt: 'Recuento: ' + cantidadTxt(r.cant, p) }))).sort((a, b) => b.ts - a.ts).slice(0, 6) : [];
@@ -243,7 +249,7 @@ function PanelProducto({ id }: { id: string | null }) {
     const minimo = leerNumero(f.minimo), precio = leerNumero(f.precio);
     if (!nombre) { avisar('Ponle un nombre'); return; }
     if (Number.isNaN(minimo) || Number.isNaN(precio)) { avisar('Revisa el mínimo o el precio'); return; }
-    const datosP = { nombre, unidad: f.unidad, categoria: f.categoria, minimo, precio };
+    const datosP = { nombre, unidad: f.unidad, categoria: f.categoria, minimo, precio, proveedor: f.proveedor || null };
     cambiar((x) => {
       if (!x.stock) x.stock = { productos: [], compras: [], recuentos: [] };
       if (id) Object.assign(x.stock.productos.find((y) => y.id === id)!, datosP);
@@ -264,6 +270,13 @@ function PanelProducto({ id }: { id: string | null }) {
         <label className="campo"><span>Precio por unidad (€)</span><input className="numero" inputMode="decimal" value={f.precio} placeholder="—" onChange={(e) => setF({ ...f, precio: e.target.value })} /></label>
       </div>
       <p className="pista-campo">El precio se actualiza solo cada vez que apuntas una compra.</p>
+      <label className="campo"><span>Proveedor</span>
+        <select value={f.proveedor} onChange={(e) => setF({ ...f, proveedor: e.target.value })}>
+          <option value="">— Sin proveedor —</option>
+          {proveedores.map((x) => <option key={x.id} value={x.id}>{x.nombre}</option>)}
+        </select>
+      </label>
+      {!proveedores.length && <p className="pista-campo">Añade tus proveedores en Stock → Proveedores.</p>}
       {historial.length > 0 && <><div className="grupo-stock">Últimos movimientos</div><div className="historial">{historial.map((h, i) => <div key={i}><span>{fechaCorta(h.ts)}</span><span>{h.txt}</span></div>)}</div></>}
       <div className="acciones">
         <button className="btn principal" onClick={guardar}>Guardar</button>
@@ -285,7 +298,9 @@ export function PanelCompra() {
   const activos = productosActivos(d);
   const grupos = porCategoria(activos);
   const hoyISO = claveSemana(new Date());
-  const [f, setF] = useState({ p: grupos[0]?.[1][0]?.id ?? '', cant: '', coste: '', fecha: hoyISO, proveedor: stockDe(d).ultimoProveedor || '' });
+  const nombreProveedor = (pid: string) => proveedorDe(d, producto(d, pid)?.proveedor)?.nombre;
+  const inicial = grupos[0]?.[1][0]?.id ?? '';
+  const [f, setF] = useState({ p: inicial, cant: '', coste: '', fecha: hoyISO, proveedor: nombreProveedor(inicial) || stockDe(d).ultimoProveedor || '' });
   const p = producto(d, f.p);
   const cant = leerNumero(f.cant);
   const guardar = () => {
@@ -309,7 +324,7 @@ export function PanelCompra() {
     <>
       <h3>Apuntar compra</h3><p className="sub">Lo que ha llegado y lo que ha costado.</p>
       <label className="campo"><span>Producto</span>
-        <select value={f.p} onChange={(e) => setF({ ...f, p: e.target.value })}>
+        <select value={f.p} onChange={(e) => setF({ ...f, p: e.target.value, proveedor: nombreProveedor(e.target.value) || f.proveedor })}>
           {grupos.map(([cat, ps]) => <optgroup key={cat} label={cat}>{ps.map((x) => <option key={x.id} value={x.id}>{x.nombre}</option>)}</optgroup>)}
         </select>
       </label>
@@ -320,7 +335,8 @@ export function PanelCompra() {
       <p className="pista-campo">{p?.precio ? 'Último precio: ' + euros.format(p.precio) + ' / ' + p.unidad + (cant ? ' → unos ' + euros.format(cant * p.precio) : '') : 'Aún no hay precio de este producto.'}</p>
       <div className="campos-2">
         <label className="campo"><span>Fecha</span><input type="date" value={f.fecha} max={hoyISO} onChange={(e) => setF({ ...f, fecha: e.target.value })} /></label>
-        <label className="campo"><span>Proveedor (opcional)</span><input placeholder="—" value={f.proveedor} onChange={(e) => setF({ ...f, proveedor: e.target.value })} /></label>
+        <label className="campo"><span>Proveedor (opcional)</span><input placeholder="—" list="listaProveedores" value={f.proveedor} onChange={(e) => setF({ ...f, proveedor: e.target.value })} /></label>
+        <datalist id="listaProveedores">{proveedoresActivos(d).map((x) => <option key={x.id} value={x.nombre} />)}</datalist>
       </div>
       <div className="acciones">
         <button className="btn principal" onClick={guardar}>Guardar compra</button>
@@ -426,6 +442,74 @@ function PanelCelda({ k, pid }: { k: string; pid: string }) {
       <div className="acciones">
         <button className="btn principal" onClick={guardar}>Guardar</button>
         <button className="btn secundario" onClick={() => cerrarPanel()}>Cancelar</button>
+      </div>
+    </>
+  );
+}
+
+function PanelProveedores() {
+  const d = usarAlmacen((s) => s.datos);
+  const { abrirPanel, cerrarPanel } = usarUi.getState();
+  const lista = proveedoresActivos(d);
+  const activos = productosActivos(d);
+  return (
+    <>
+      <h3>Proveedores</h3><p className="sub">Quién trae cada producto. Asígnalo en la ficha de cada producto y el pedido saldrá separado por proveedor.</p>
+      {lista.length ? lista.map((x) => {
+        const n = activos.filter((p) => p.proveedor === x.id).length;
+        return (
+          <div className="producto" key={x.id} onClick={() => abrirPanel(<PanelProveedor id={x.id} />)}>
+            <div className="info"><b>{x.nombre}</b><small>{[x.telefono, n + (n === 1 ? ' producto' : ' productos')].filter(Boolean).join(' · ')}</small></div>
+          </div>
+        );
+      }) : <div className="vacio">Aún no hay proveedores.</div>}
+      <div className="acciones">
+        <button className="btn principal" onClick={() => abrirPanel(<PanelProveedor id={null} />)}>+ Proveedor</button>
+        <button className="btn secundario" onClick={() => cerrarPanel()}>Cerrar</button>
+      </div>
+    </>
+  );
+}
+
+function PanelProveedor({ id }: { id: string | null }) {
+  const d = usarAlmacen((s) => s.datos);
+  const cambiar = usarAlmacen((s) => s.cambiar);
+  const { avisar, abrirPanel } = usarUi.getState();
+  const x: Partial<Proveedor> = (id && proveedorDe(d, id)) || {};
+  const [f, setF] = useState({ nombre: x.nombre ?? '', telefono: x.telefono ?? '', email: x.email ?? '', notas: x.notas ?? '' });
+  const volver = () => abrirPanel(<PanelProveedores />);
+  const guardar = () => {
+    const nombre = f.nombre.trim(), telefono = f.telefono.trim(), email = f.email.trim();
+    if (!nombre) { avisar('Ponle un nombre'); return; }
+    if (proveedoresActivos(d).some((y) => y.id !== id && y.nombre.toLowerCase() === nombre.toLowerCase())) { avisar('Ya hay un proveedor con ese nombre'); return; }
+    if (telefono && !telefonoWhatsApp(telefono)) { avisar('Revisa el teléfono'); return; }
+    if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) { avisar('Revisa el correo'); return; }
+    const datosPr = { nombre, telefono, email, notas: f.notas.trim() };
+    cambiar((y) => {
+      if (!y.stock) y.stock = { productos: [], compras: [], recuentos: [] };
+      if (!y.stock.proveedores) y.stock.proveedores = [];
+      if (id) Object.assign(y.stock.proveedores.find((z) => z.id === id)!, datosPr);
+      else y.stock.proveedores.push({ id: nuevoId(), ...datosPr });
+    });
+    volver();
+  };
+  return (
+    <>
+      <h3>{id ? 'Editar proveedor' : 'Nuevo proveedor'}</h3><p className="sub">&nbsp;</p>
+      <label className="campo"><span>Nombre</span><input autoFocus={!id} value={f.nombre} placeholder="Ej.: Frutas Juan" onChange={(e) => setF({ ...f, nombre: e.target.value })} /></label>
+      <div className="campos-2">
+        <label className="campo"><span>Teléfono (WhatsApp)</span><input type="tel" inputMode="tel" value={f.telefono} placeholder="600 11 22 33" onChange={(e) => setF({ ...f, telefono: e.target.value })} /></label>
+        <label className="campo"><span>Correo</span><input type="email" inputMode="email" value={f.email} placeholder="—" onChange={(e) => setF({ ...f, email: e.target.value })} /></label>
+      </div>
+      <label className="campo"><span>Notas</span><input value={f.notas} placeholder="Ej.: reparte martes y viernes" onChange={(e) => setF({ ...f, notas: e.target.value })} /></label>
+      <div className="acciones">
+        <button className="btn principal" onClick={guardar}>Guardar</button>
+        <button className="btn secundario" onClick={volver}>Cancelar</button>
+        {id && <button className="btn texto" onClick={() => {
+          if (!confirm('¿Dar de baja a «' + x.nombre + '»? Sus productos pasarán a «Sin proveedor».')) return;
+          cambiarConDeshacer('Proveedor dado de baja', (y) => { y.stock!.proveedores!.find((z) => z.id === id)!.archivado = true; });
+          volver();
+        }}>Dar de baja este proveedor</button>}
       </div>
     </>
   );

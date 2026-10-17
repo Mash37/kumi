@@ -111,3 +111,33 @@ describe('PDF hecho a mano', () => {
     entradas.forEach((e, i) => expect(t.slice(Number(e.slice(0, 10)), Number(e.slice(0, 10)) + String(i + 1).length + 6)).toBe((i + 1) + ' 0 obj'));
   });
 });
+
+describe('proveedores', () => {
+  it('prepara el teléfono para WhatsApp', () => {
+    expect(v3.telefonoWhatsApp('600 11 22 33')).toBe('34600112233');
+    expect(v3.telefonoWhatsApp('+34 600-11-22-33')).toBe('34600112233');
+    expect(v3.telefonoWhatsApp('0034600112233')).toBe('34600112233');
+    expect(v3.telefonoWhatsApp('+58 412 1234567')).toBe('584121234567');
+    expect(v3.telefonoWhatsApp('123')).toBeNull();
+    expect(v3.telefonoWhatsApp('')).toBeNull();
+  });
+  it('separa el pedido por proveedor; lo que no tiene, o tiene uno dado de baja, va al final', () => {
+    const prod = (id: string, nombre: string, proveedor: string | null, precio: number | null) => ({ id, nombre, unidad: 'kg', categoria: 'Otros', minimo: 10, precio, proveedor });
+    const d: Datos = { equipo: [], semanas: {}, restaurante: { nombre: 'Casa Kumi' }, stock: {
+      proveedores: [{ id: 'pj', nombre: 'Frutas Juan', telefono: '600112233' }, { id: 'pp', nombre: 'arroces Pedro' }, { id: 'pb', nombre: 'Baja', archivado: true }],
+      productos: [prod('a', 'Arroz', 'pp', 2), prod('t', 'Tomate', 'pj', 1), prod('c', 'Cebolla', 'pj', null), prod('s', 'Sal', null, 1), prod('h', 'Harina', 'pb', 1)],
+      compras: [],
+      recuentos: ['a', 't', 'c', 's', 'h'].map((p) => ({ id: 'r' + p, p, cant: 4, ts: 1 })),
+    } };
+    const g = v3.pedidoPorProveedor(d);
+    expect(g.map((x) => [x.proveedor?.nombre ?? null, x.filas.map((f) => f.p.nombre)])).toEqual([
+      ['arroces Pedro', ['Arroz']],
+      ['Frutas Juan', ['Cebolla', 'Tomate']],
+      [null, ['Harina', 'Sal']],
+    ]);
+    expect(g[0].total).toBe(32);
+    expect(g[1].total).toBe(16);
+    expect(v3.textoPedido(d, g[1], new Date(2026, 9, 17))).toBe('Hola Frutas Juan, te paso el pedido de Casa Kumi (17/10):\n• Cebolla: 16 kg\n• Tomate: 16 kg\nGracias.');
+    expect(v3.textoPedido(d, g[2], new Date(2026, 9, 17))).toBe('Pedido Casa Kumi · 17/10\n• Harina: 16 kg\n• Sal: 16 kg');
+  });
+});
