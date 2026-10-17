@@ -5,7 +5,7 @@
 | `logo-1024.png` | Logo con esquinas redondeadas: web, presentaciones, redes |
 | `tiendas-1024.png` | Logo cuadrado sin redondear: App Store y Google Play (la tienda pone la forma) |
 
-Los iconos de la app viven en `app/public/` (`icon-180`, `icon-192`, `icon-512`, `icon-maskable-512`).
+Los iconos de la app viven en `frontend/public/` (`icon-180`, `icon-192`, `icon-512`, `icon-maskable-512`).
 
 ## Paleta: pizarra y azafrán
 
@@ -20,4 +20,4 @@ Los iconos de la app viven en `app/public/` (`icon-180`, `icon-192`, `icon-512`,
 
 Tipografías: Playfair Display cursiva (títulos), Jost (texto), Great Vibes (firma «Kumi»).
 
-En la app, el tema de marca se llama **Kumi Kitchen** (`app/src/dominio/temaKumi.ts`) y es el que se usa si el restaurante no elige tipo de cocina. Los demás tipos (sushi, asador…) conservan sus colores.
+En la app, el tema de marca se llama **Kumi Kitchen** (`frontend/src/dominio/temaKumi.ts`) y es el que se usa si el restaurante no elige tipo de cocina. Los demás tipos (sushi, asador…) conservan sus colores.
