@@ -8,10 +8,10 @@ Horarios, horas e inventario para cocinas de restaurante, en el móvil de todo e
 
 | Carpeta | Qué es |
 |---|---|
-| `app/` | La app (React + TypeScript + Capacitor para iPhone y Android) |
+| `frontend/` | La app (React + TypeScript + Capacitor para iPhone y Android) |
+| `backend/` | Firebase: reglas de seguridad de la base de datos y configuración del emulador |
 | `web/` | La web pública con SEO (HTML estático) |
-| `firestore.rules` | Reglas de seguridad de la base de datos (Firebase) |
-| `firebase.json` | Configuración de Firebase y del emulador |
+| `marca/` | Logo y paleta de colores |
 
 ## Requisitos
 
@@ -20,12 +20,12 @@ Horarios, horas e inventario para cocinas de restaurante, en el móvil de todo e
 
 ## Arrancar la app
 
-    cd app
+    cd frontend
     nvm use
     npm install
     npm run dev
 
-| Comando (dentro de `app/`) | Qué hace |
+| Comando (dentro de `frontend/`) | Qué hace |
 |---|---|
 | `npm run dev` | Abre la app en el navegador mientras programas |
 | `npm test` | Pasa las pruebas automáticas |
@@ -34,8 +34,9 @@ Horarios, horas e inventario para cocinas de restaurante, en el móvil de todo e
 
 ## Probar la nube sin tocar datos reales
 
-Desde la raíz, arranca el emulador de Firebase:
+Desde `backend/`, arranca el emulador de Firebase:
 
+    cd backend
     npx -y firebase-tools@13 emulators:start --only auth,firestore --project kumi-22211
 
 Después abre la app en local añadiendo `?emulador` a la dirección.
@@ -50,12 +51,13 @@ Y abre http://localhost:4491
 
 ## Cómo trabajamos
 
-- **Ramas:** `main` es lo publicado. Cada cambio se hace en su propia rama.
+- **Ramas:** `main` es lo publicado. Cada cambio se hace en su propia rama y entra por PR.
 - **Commits:** formato `tipo(zona): qué hace`, en español.
-  - Tipos: `feat` (algo nuevo), `fix` (arreglo), `refactor` (reorganizar sin cambiar lo que hace), `docs` (documentación), `test` (pruebas).
-  - Zonas: `app`, `web`, `shared`, `docs`.
-  - Ejemplo: `feat(app): añade el precio a los productos del stock`.
+  - Tipos: `feat` (algo nuevo), `fix` (arreglo), `refactor` (reorganizar sin cambiar lo que hace), `docs` (documentación), `test` (pruebas), `ci` (automatizaciones).
+  - Zonas: `frontend`, `backend`, `web`, `marca`, `docs`.
+  - Ejemplo: `feat(frontend): añade el precio a los productos del stock`.
 - **Antes de cada commit:** `npm test` y `npm run build` en verde.
+- **CI:** cada PR pasa tipos, pruebas y compilación. Al entrar en `main` se publica sola en GitHub Pages.
 
 ## Licencia
 

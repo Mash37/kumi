@@ -21,14 +21,14 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: app
+        working-directory: frontend
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
           node-version-file: .nvmrc
           cache: npm
-          cache-dependency-path: app/package-lock.json
+          cache-dependency-path: frontend/package-lock.json
       - run: npm ci
       - run: npm run check
       - run: npm test
@@ -43,15 +43,15 @@ jobs:
       name: github-pages
       url: ${{ steps.despliegue.outputs.page_url }}
     steps:
-      - uses: actions/checkout@v4
-      # Por ahora se publica la versión 2 (la que se usa hoy). Al pasar a la 3, se cambia por app/dist.
+      - uses: actions/checkout@v7
+      # Por ahora se publica la versión 2 (la que se usa hoy). Al pasar a la 3, se cambia por frontend/dist.
       - name: Montar el sitio
         run: |
           mkdir _site
-          cp -R app/public/. _site/
-          cp -R app/legado/. _site/
-      - uses: actions/upload-pages-artifact@v3
+          cp -R frontend/public/. _site/
+          cp -R frontend/legado/. _site/
+      - uses: actions/upload-pages-artifact@v5
         with:
           path: _site
       - id: despliegue
-        uses: actions/deploy-pages@v4
+        uses: actions/deploy-pages@v5
