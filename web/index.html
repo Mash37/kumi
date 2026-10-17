@@ -360,7 +360,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
             <li>Repites la semana anterior y cambias solo lo distinto.</li>
             <li>Publicas, y cada persona recibe su horario en el móvil.</li>
             <li>Las horas de cada persona se cuentan solas.</li>
-            <li>El recuento de stock queda guardado, con su fecha y su valor en euros.</li>
+            <li>Haces el recuento y Kumi te prepara el pedido en PDF para el proveedor.</li>
           </ul>
         </div>
       </div>
@@ -389,17 +389,17 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
         </article>
         <article class="funcion">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7l8-4 8 4v10l-8 4-8-4z"/><path d="M4 7l8 4 8-4M12 11v10"/></svg></div>
-          <h3>Stock con precios</h3>
-          <p>Tu lista de productos con su precio. Haz el recuento semanal o el de fin de mes y Kumi te dice cuánto dinero tienes en la cámara.</p>
-          <div class="muestra" aria-label="Ejemplo de recuento con valor">
+          <h3>Stock y pedidos</h3>
+          <p>Tu lista de productos con su precio y su mínimo. Haz el recuento y Kumi te dice qué falta y cuánto pedir, y te prepara el pedido en PDF para mandarlo al proveedor por WhatsApp.</p>
+          <div class="muestra" aria-label="Ejemplo de pedido al proveedor">
             <table>
-              <thead><tr><th>Producto</th><th>Precio</th><th>Hay</th><th>Valor</th></tr></thead>
+              <thead><tr><th>Producto</th><th>Quedan</th><th>Mínimo</th><th>Pedir</th></tr></thead>
               <tbody>
-                <tr><td>Aguacate</td><td>0,90 €/ud</td><td>18 ud</td><td>16,20 €</td></tr>
-                <tr><td>Arroz de sushi</td><td>2,40 €/kg</td><td>15 kg</td><td>36,00 €</td></tr>
-                <tr><td>Salmón</td><td>16,50 €/kg</td><td>9,5 kg</td><td>156,75 €</td></tr>
+                <tr><td>Aguacate</td><td>6 ud</td><td>20 ud</td><td><b>34 ud</b></td></tr>
+                <tr><td>Arroz de sushi</td><td>4 kg</td><td>10 kg</td><td><b>16 kg</b></td></tr>
+                <tr><td>Salmón</td><td>3 kg</td><td>8 kg</td><td><b>13 kg</b></td></tr>
               </tbody>
-              <tfoot><tr><td colspan="3">Valor del recuento</td><td>208,95 €</td></tr></tfoot>
+              <tfoot><tr><td colspan="3">Pedido aproximado</td><td>283,50 €</td></tr></tfoot>
             </table>
           </div>
         </article>
@@ -667,7 +667,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
     $('j-inicial').textContent = tu[0].toUpperCase();
     $('j-mensaje').textContent =
       'Hola ' + jefe + ', te escribo por una cosa que creo que nos vendría muy bien en ' + local + '.\n\n' +
-      'Se llama Kumi. Con ella hago el cuadrante de los ' + personas + ' en el móvil, cada uno ve su horario al momento y se acaban las fotos por WhatsApp. También lleva las horas del mes y el inventario con lo que vale.\n\n' +
+      'Se llama Kumi. Con ella hago el cuadrante de los ' + personas + ' en el móvil, cada uno ve su horario al momento y se acaban las fotos por WhatsApp. También lleva las horas del mes y el inventario, y prepara el pedido al proveedor en PDF.\n\n' +
       'Calculo que me ahorraría unas ' + horasMes + ' horas al mes que puedo dedicar a la cocina. Cuesta 69 € al año para todo el local, no por persona.\n\n' +
       'Se puede probar gratis. ¿Lo miramos esta semana?\n\n' + tu;
   }
