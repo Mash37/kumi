@@ -394,6 +394,8 @@
   .pedir h3 { color: #fff; }
   .pedir ul { margin: 8px 0 14px; padding-left: 18px; font-size: 14px; line-height: 1.6; opacity: .95; }
   .grupo-stock { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin: 6px 0 4px; }
+  .pedir .grupo-stock { color: inherit; opacity: .75; margin-top: 10px; }
+  .grupo-pedido + .grupo-pedido { margin-top: 18px; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, .15); }
   .producto { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-top: 1px solid var(--borde); cursor: pointer; }
   .producto:first-of-type { border-top: 0; }
   .producto .info { flex: 1; min-width: 0; }

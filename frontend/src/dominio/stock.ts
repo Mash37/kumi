@@ -1,5 +1,5 @@
 // Stock de cocina: recuento semanal + compras. Consumo = lo que había + lo que entró − lo que queda.
-import type { Datos, Producto, Recuento, Stock } from '../datos/tipos';
+import type { Datos, Producto, Proveedor, Recuento, Stock } from '../datos/tipos';
 import { DIAS_ABREV, claveSemana } from './fechas';
 
 export const UNIDADES = ['kg', 'g', 'L', 'ud', 'paquete', 'caja', 'bote', 'bandeja', 'manojo', 'barril'];
@@ -99,4 +99,45 @@ export function pedidoSugerido(d: Datos): { filas: FilaPedido[]; total: number |
   });
   const conImporte = filas.filter((f) => f.importe != null);
   return { filas, total: conImporte.length ? conImporte.reduce((t, f) => t + f.importe!, 0) : null };
+}
+
+// ---------- Proveedores ----------
+export function proveedoresActivos(d: Datos): Proveedor[] {
+  return (stockDe(d).proveedores ?? []).filter((x) => !x.archivado).sort((a, b) => a.nombre.localeCompare(b.nombre, 'es', { sensitivity: 'base' }));
+}
+/** El proveedor de ese id, solo si sigue activo. */
+export function proveedorDe(d: Datos, id?: string | null): Proveedor | undefined {
+  return id ? (stockDe(d).proveedores ?? []).find((x) => x.id === id && !x.archivado) : undefined;
+}
+// Teléfono para WhatsApp: solo cifras con el prefijo del país; a un móvil español de 9 cifras se le pone el 34.
+export function telefonoWhatsApp(t?: string): string | null {
+  if (!t) return null;
+  const limpio = t.trim();
+  let n = limpio.replace(/\D/g, '');
+  if (limpio.startsWith('00')) n = n.slice(2);
+  else if (!limpio.startsWith('+') && /^[6789]\d{8}$/.test(n)) n = '34' + n;
+  return n.length >= 8 && n.length <= 15 ? n : null;
+}
+
+export interface GrupoPedido { proveedor: Proveedor | null; filas: FilaPedido[]; total: number | null }
+// El pedido de hoy separado por proveedor, por orden alfabético; lo que no tiene proveedor va al final.
+export function pedidoPorProveedor(d: Datos): GrupoPedido[] {
+  const grupos = new Map<string, FilaPedido[]>();
+  pedidoSugerido(d).filas.forEach((f) => {
+    const k = proveedorDe(d, f.p.proveedor)?.id ?? '';
+    grupos.set(k, [...(grupos.get(k) ?? []), f]);
+  });
+  return [...grupos.entries()].map(([k, filas]) => {
+    const conImporte = filas.filter((f) => f.importe != null);
+    return { proveedor: proveedorDe(d, k) ?? null, filas, total: conImporte.length ? conImporte.reduce((t, f) => t + f.importe!, 0) : null };
+  }).sort((a, b) => (!a.proveedor ? 1 : !b.proveedor ? -1 : a.proveedor.nombre.localeCompare(b.proveedor.nombre, 'es', { sensitivity: 'base' })));
+}
+// El mensaje para el proveedor: saludo con su nombre si lo tiene, y una línea por producto con lo que hay que pedir.
+export function textoPedido(d: Datos, g: GrupoPedido, hoy: Date): string {
+  const local = d.restaurante?.nombre || 'cocina';
+  const lineas = g.filas.map((f) => '• ' + f.p.nombre + ': ' + cantidadTxt(f.pedir, f.p)).join('\n');
+  const fecha = hoy.getDate() + '/' + (hoy.getMonth() + 1);
+  return g.proveedor
+    ? 'Hola ' + g.proveedor.nombre + ', te paso el pedido de ' + local + ' (' + fecha + '):\n' + lineas + '\nGracias.'
+    : 'Pedido ' + local + ' · ' + fecha + '\n' + lineas;
 }

@@ -17,10 +17,12 @@ export interface Franja { id: string; nombre: string; icono: string; desde: stri
 
 export interface Reglas { entreDias: number; semanal: number; maxDia: number; maxSemana: number }
 
-export interface Producto { id: string; nombre: string; unidad: string; categoria: string; minimo: number | null; precio: number | null; archivado?: boolean }
+/** proveedor: id del proveedor que lo trae (de la lista de proveedores). */
+export interface Producto { id: string; nombre: string; unidad: string; categoria: string; minimo: number | null; precio: number | null; proveedor?: string | null; archivado?: boolean }
+export interface Proveedor { id: string; nombre: string; telefono?: string; email?: string; notas?: string; archivado?: boolean }
 export interface Compra { id: string; p: string; cant: number; coste: number; ts: number; proveedor?: string }
 export interface Recuento { id: string; p: string; cant: number; ts: number; tipo?: 'mes' }
-export interface Stock { productos: Producto[]; compras: Compra[]; recuentos: Recuento[]; ultimoProveedor?: string }
+export interface Stock { productos: Producto[]; compras: Compra[]; recuentos: Recuento[]; proveedores?: Proveedor[]; ultimoProveedor?: string }
 
 export interface Restaurante { persona?: string; nombre?: string; tipo?: string; modo?: 'auto' | 'claro' | 'oscuro' }
 

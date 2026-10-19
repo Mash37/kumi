@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Versión | 0.2 (borrador) |
+| Versión | 0.3 (borrador) |
 | Fecha | 17 de octubre de 2026 |
 | Responsable | María Segura (producto) |
 | Estado | En revisión: los requisitos marcados «Pendiente» son propuestas, no compromisos |
@@ -104,9 +104,9 @@ Estado: ✅ Hecho · 🟡 Parcial · ⬜ Pendiente.
 | RF-STK-06 | Informe del mes: compras y coste de lo consumido | Debería | ✅ |
 | RF-STK-07 | Valor en euros de cada recuento (cantidad × precio) | Debería | ⬜ |
 | RF-STK-08 | Enviar el pedido al proveedor como PDF (desde «Compartir») o como mensaje, con la cantidad sugerida: lo que falta para llegar al doble del mínimo | Debería | ✅ |
-| RF-STK-09 | Lista de proveedores con nombre, teléfono, correo y notas | Debería | ⬜ |
-| RF-STK-10 | Asignar a cada producto el proveedor que lo trae | Debería | ⬜ |
-| RF-STK-11 | Pedido separado por proveedor: un PDF o un mensaje para cada uno, con WhatsApp directo a su teléfono si lo tiene | Debería | ⬜ |
+| RF-STK-09 | Lista de proveedores con nombre, teléfono, correo y notas | Debería | ✅ |
+| RF-STK-10 | Asignar a cada producto el proveedor que lo trae | Debería | ✅ |
+| RF-STK-11 | Pedido separado por proveedor: un PDF o un mensaje para cada uno, con WhatsApp directo a su teléfono si lo tiene | Debería | ✅ |
 | RF-STK-12 | Importar proveedores y productos desde una plantilla (CSV, abre en Excel o Google Sheets) | Podría | ⬜ |
 
 ### 3.4 Equipo y comunicación (RF-EQP)
@@ -251,3 +251,4 @@ restaurantes/{id}
 |---|---|---|
 | 0.1 | 17/10/2026 | Primer borrador: estado actual de la app e ideas de fichaje, roles, avisos, acceso, web e integraciones |
 | 0.2 | 17/10/2026 | Pedido al proveedor en PDF (hecho); proveedores, pedido por proveedor e importación con plantilla (pendientes); APK de Android |
+| 0.3 | 17/10/2026 | Proveedores, producto con su proveedor y pedido por proveedor con WhatsApp directo (hechos) |

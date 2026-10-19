@@ -1,7 +1,7 @@
-// Pedido al proveedor en PDF: se dibuja en hojas A4 y se abre «Compartir» del móvil (WhatsApp, correo…).
+// Pedido al proveedor: en PDF (se dibuja en hojas A4 y se abre «Compartir» del móvil) o como mensaje de WhatsApp.
 import type { Datos } from '../datos/tipos';
 import { MESES } from '../dominio/fechas';
-import { cantidadTxt, euros, pedidoSugerido, type FilaPedido } from '../dominio/stock';
+import { cantidadTxt, euros, telefonoWhatsApp, textoPedido, type FilaPedido, type GrupoPedido } from '../dominio/stock';
 import { compartirArchivo, descargar, fuentesListas } from './archivos';
 import { pdfDeImagenes, type PaginaJpeg } from './pdf';
 
@@ -18,7 +18,7 @@ function recortar(g: CanvasRenderingContext2D, s: string, max: number): string {
   return s + '…';
 }
 
-function hoja(nombre: string, fecha: string, filas: FilaPedido[], cuantos: number, num: number, de: number, total: number | null, col: Colores): HTMLCanvasElement {
+function hoja(nombre: string, fecha: string, para: string, filas: FilaPedido[], cuantos: number, num: number, de: number, total: number | null, col: Colores): HTMLCanvasElement {
   const c = document.createElement('canvas');
   c.width = ANCHO; c.height = ALTO;
   const g = c.getContext('2d')!;
@@ -30,7 +30,7 @@ function hoja(nombre: string, fecha: string, filas: FilaPedido[], cuantos: numbe
   g.font = 'italic 700 58px "Playfair Display", Georgia, serif';
   g.fillText('Pedido · ' + fecha, IZQ, 200);
   g.fillStyle = GRIS; g.font = '400 26px Jost, Arial, sans-serif';
-  g.fillText(cuantos + (cuantos === 1 ? ' producto' : ' productos') + ' por debajo del mínimo' + (de > 1 ? ' · Hoja ' + num + ' de ' + de : ''), IZQ, 250);
+  g.fillText((para ? para + ' · ' : '') + cuantos + (cuantos === 1 ? ' producto' : ' productos') + (de > 1 ? ' · Hoja ' + num + ' de ' + de : ''), IZQ, 250);
 
   g.fillStyle = col.cabecera; g.fillRect(IZQ, 300, DER - IZQ, 56);
   g.fillStyle = TINTA; g.font = '600 24px Jost, Arial, sans-serif';
@@ -79,9 +79,14 @@ async function aJpeg(c: HTMLCanvasElement): Promise<PaginaJpeg> {
   return { jpeg: new Uint8Array(await blob.arrayBuffer()), ancho: c.width, alto: c.height };
 }
 
-/** Crea el PDF del pedido de hoy. null si no hay nada que pedir. */
-export async function pdfPedido(d: Datos, cocina: string, hoy = new Date()): Promise<File | null> {
-  const { filas, total } = pedidoSugerido(d);
+// Para el nombre del archivo: «Frutas Juan» → «frutas-juan».
+function trozoNombre(s: string): string {
+  return s.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '').slice(0, 30);
+}
+
+/** Crea el PDF del pedido de un proveedor (o de lo que no tiene proveedor). null si no hay nada que pedir. */
+export async function pdfPedido(d: Datos, cocina: string, grupo: GrupoPedido, hoy = new Date()): Promise<File | null> {
+  const { filas, total, proveedor } = grupo;
   if (!filas.length) return null;
   await fuentesListas();
   const raiz = getComputedStyle(document.documentElement);
@@ -90,15 +95,25 @@ export async function pdfPedido(d: Datos, cocina: string, hoy = new Date()): Pro
   const nombre = d.restaurante?.nombre || cocina;
   const trozos: FilaPedido[][] = [];
   for (let i = 0; i < filas.length; i += POR_PAGINA) trozos.push(filas.slice(i, i + POR_PAGINA));
-  const paginas = await Promise.all(trozos.map((t, i) => aJpeg(hoja(nombre, fecha, t, filas.length, i + 1, trozos.length, total, col))));
+  const para = proveedor ? 'Para ' + proveedor.nombre + (proveedor.telefono ? ' (' + proveedor.telefono + ')' : '') : '';
+  const paginas = await Promise.all(trozos.map((t, i) => aJpeg(hoja(nombre, fecha, para, t, filas.length, i + 1, trozos.length, total, col))));
   const pdf = pdfDeImagenes(paginas);
   const dia = hoy.getFullYear() + '-' + String(hoy.getMonth() + 1).padStart(2, '0') + '-' + String(hoy.getDate()).padStart(2, '0');
-  return new File([pdf.buffer as ArrayBuffer], 'pedido-' + dia + '.pdf', { type: 'application/pdf' });
+  return new File([pdf.buffer as ArrayBuffer], 'pedido-' + (proveedor ? trozoNombre(proveedor.nombre) + '-' : '') + dia + '.pdf', { type: 'application/pdf' });
 }
 
 // Abre «Compartir» con el PDF; si el móvil o el navegador no saben compartir archivos, lo descarga.
-export async function enviarPedidoPdf(d: Datos, cocina: string): Promise<void> {
-  const archivo = await pdfPedido(d, cocina);
+export async function enviarPedidoPdf(d: Datos, cocina: string, grupo: GrupoPedido): Promise<void> {
+  const archivo = await pdfPedido(d, cocina, grupo);
   if (!archivo) return;
-  if (!(await compartirArchivo(archivo, 'Pedido ' + (d.restaurante?.nombre || cocina)))) descargar(archivo);
+  if (!(await compartirArchivo(archivo, 'Pedido ' + (grupo.proveedor?.nombre || d.restaurante?.nombre || cocina)))) descargar(archivo);
+}
+
+// Con teléfono: abre directamente el chat de WhatsApp del proveedor. Sin él: «Compartir» con el texto.
+export function enviarMensajePedido(d: Datos, grupo: GrupoPedido): void {
+  const texto = textoPedido(d, grupo, new Date());
+  const tel = telefonoWhatsApp(grupo.proveedor?.telefono);
+  if (tel) { window.open('https://wa.me/' + tel + '?text=' + encodeURIComponent(texto), '_blank'); return; }
+  if (navigator.share) navigator.share({ text: texto }).catch(() => {});
+  else window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
 }
