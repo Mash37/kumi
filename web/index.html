@@ -215,6 +215,15 @@ button { font: inherit; color: inherit; }
 .barra-h .riel span { display: block; height: 100%; background: var(--deg); border-radius: inherit; }
 .barra-h b { text-align: right; font-variant-numeric: tabular-nums; }
 @media (max-width: 760px) { .funciones { grid-template-columns: 1fr; } }
+.proximos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 40px; }
+.proximo { background: var(--papel); border: 1px dashed var(--borde); border-radius: 22px; padding: 26px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.proximo .cabeza { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.proximo .ico { width: 46px; height: 46px; border-radius: 14px; background: var(--suave); color: var(--acento); display: grid; place-items: center; }
+.proximo .ico svg { width: 24px; height: 24px; }
+.proximo h3 { font-size: 24px; }
+.proximo p { color: var(--gris); }
+.etiqueta-pronto { font-size: 12px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--acento); background: var(--suave); padding: 4px 12px; border-radius: 999px; white-space: nowrap; }
+@media (max-width: 760px) { .proximos { grid-template-columns: 1fr; } }
 
 /* Calculadora */
 .calculadora { margin-top: 40px; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: start; }
@@ -412,6 +421,36 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
     </div>
   </section>
 
+  <section class="banda" id="proximamente">
+    <div class="envoltura">
+      <div class="eyebrow">Lo que viene</div>
+      <h2 class="titulo-seccion">Kumi crece contigo, por módulos</h2>
+      <p class="intro">Estamos preparando estas partes. Las verás aquí en cuanto estén listas, y podrás activar solo las que use tu cocina.</p>
+      <div class="proximos">
+        <article class="proximo">
+          <div class="cabeza"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg></div><span class="etiqueta-pronto">Próximamente</span></div>
+          <h3>Fichaje</h3>
+          <p>Cada persona ficha la entrada y la salida desde su móvil o desde la tablet de la cocina. Tú corriges los olvidos y guardas el registro de jornada del mes en PDF, como pide la ley.</p>
+        </article>
+        <article class="proximo">
+          <div class="cabeza"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2h9l4 4v16H6z"/><path d="M14 2v5h5M9 12h7M9 16h7"/></svg></div><span class="etiqueta-pronto">Próximamente</span></div>
+          <h3>Albaranes</h3>
+          <p>Le haces una foto al albarán del proveedor y Kumi lo apunta como compra: suma lo que ha llegado al stock y actualiza el precio de cada producto.</p>
+        </article>
+        <article class="proximo">
+          <div class="cabeza"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 4h16v16H4z"/><path d="M8 8h8M8 12h8M8 16h5"/></svg></div><span class="etiqueta-pronto">Próximamente</span></div>
+          <h3>Fichas técnicas y alérgenos</h3>
+          <p>Cada plato con sus ingredientes, su coste por ración y sus alérgenos. Saca la ficha en PDF y el cuadro de los 14 alérgenos de tu carta.</p>
+        </article>
+        <article class="proximo">
+          <div class="cabeza"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4M8 14l3 3 5-5"/></svg></div><span class="etiqueta-pronto">Próximamente</span></div>
+          <h3>Vacaciones y ausencias</h3>
+          <p>Apunta vacaciones, bajas y permisos, y mira cuántos días le quedan a cada persona. Kumi te avisa si alguien tiene turno un día que no viene.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
   <section class="banda" id="ahorro">
     <div class="envoltura">
       <div class="eyebrow">Lo que ahorras</div>
@@ -541,7 +580,8 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
         <details><summary>¿Mi equipo tiene que pagar?</summary><p>No. Paga el local, una sola vez. Cada persona del equipo entra gratis con el código que le compartes.</p></details>
         <details><summary>¿Imprimir los informes cuesta algo?</summary><p>No. Los informes de horas, de stock y la hoja del horario se imprimen o se guardan en PDF en todos los planes, también en el gratis.</p></details>
         <details><summary>¿Cómo funciona la tablet de los socios fundadores?</summary><p>Las 20 primeras cocinas que paguen el año reciben una tablet de 10 pulgadas con Kumi ya puesta y un soporte de pared. Muestra el horario del día y el tablón para que todo el equipo lo vea al entrar.</p></details>
-        <details><summary>¿Sirve como registro de jornada?</summary><p>Todavía no. Kumi organiza los turnos y las horas previstas. El fichaje de entrada y salida está en nuestra lista.</p></details>
+        <details><summary>¿Sirve como registro de jornada?</summary><p>Todavía no. Hoy Kumi organiza los turnos y las horas previstas. Estamos preparando el fichaje de entrada y salida desde el móvil o la tablet, con el registro del mes en PDF.</p></details>
+        <details><summary>¿Puedo meter los albaranes del proveedor?</summary><p>Muy pronto. Le harás una foto al albarán y Kumi lo apuntará como compra, con las cantidades y los precios. Mientras tanto, las compras se apuntan a mano en un momento.</p></details>
         <details><summary>¿Funciona sin internet?</summary><p>Sí. Lo que haces se guarda en tu dispositivo, y cuando vuelve la conexión el equipo recibe los cambios.</p></details>
       </div>
     </div>
