@@ -518,6 +518,21 @@
   .libre-mio { color: #1f7a4d; font-weight: 600; }
   .total-mio { display: flex; justify-content: space-between; align-items: baseline; padding-top: 12px; margin-top: 4px; border-top: 2px solid var(--borde); font-size: 14px; color: var(--gris); }
   .total-mio b { font-family: var(--titulo); font-style: italic; font-size: 22px; color: var(--frambuesa); }
+  .fichar-mio .sub { margin-bottom: 12px; }
+  .btn.fichar-ok { min-height: 56px; font-size: 18px; }
+  .btn.fichar-ok.salida { background: var(--deg-intenso); }
+  .btn.fichar-ok:disabled { opacity: .6; }
+  .fichado-hoy { margin: 10px 2px 0; font-size: 14px; color: var(--gris); font-variant-numeric: tabular-nums; }
+  .mis-fichajes { margin-top: 12px; border-top: 1px solid var(--borde); padding-top: 10px; font-size: 13px; }
+  .mis-fichajes summary { cursor: pointer; font-weight: 600; color: var(--frambuesa); }
+  .mis-fichajes > div { display: grid; grid-template-columns: 52px 1fr auto; gap: 8px; padding: 6px 0; border-bottom: 1px dashed var(--borde); font-variant-numeric: tabular-nums; }
+  .mis-fichajes small { display: block; color: var(--gris); font-size: 12px; }
+  .detalle-mes .toca { cursor: pointer; }
+  .fila-fichaje { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 10px 0; border-bottom: 1px solid var(--borde); }
+  .fila-fichaje > span { flex: 1; min-width: 140px; font-variant-numeric: tabular-nums; }
+  .fila-fichaje small { display: block; color: var(--gris); font-size: 12px; }
+  .fila-fichaje .btn.chico { margin: 0; }
+  .corregir-fichaje { margin-top: 12px; }
   .uCodigo { text-transform: uppercase; letter-spacing: .3em; font-size: 22px !important; text-align: center; font-weight: 700; }
 
   #zonaImprimir { display: none; }

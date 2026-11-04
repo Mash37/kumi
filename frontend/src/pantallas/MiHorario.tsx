@@ -6,6 +6,7 @@ import { VACIO, esLibre, nombreCorto, textoTurnos4 } from '../dominio/horario';
 import { cifra } from '../dominio/stock';
 import { lunesEsta, lunesProxima, usarUi } from '../estado/ui';
 import { sinLeer, usarSesion } from '../nube/sesion';
+import { TarjetaFichar } from './TarjetaFichar';
 
 export function fechaHora(ms: number) { const f = new Date(ms); return f.getDate() + '/' + (f.getMonth() + 1) + ' a las ' + f.getHours() + ':' + String(f.getMinutes()).padStart(2, '0'); }
 
@@ -44,6 +45,7 @@ export function MiHorario() {
             <div className="tarjeta tarjeta-ok"><i>🆕</i><div><b>Horario actualizado</b><span>Hay cambios publicados {fechaHora(mostrarNuevo)}.</span></div></div>
           )}
         </div>
+        {c.rid && <TarjetaFichar />}
         <div className="mes-nav">
           <button aria-label="Semana anterior" onClick={() => setLunes(sumarDias(lunesMi, -7))}>‹</button>
           <div><small>{clave === claveSemana(lunesEsta()) ? 'Esta semana' : clave === claveSemana(lunesProxima()) ? 'Semana que viene' : 'Semana'}</small><b>{rango(lunesMi, false)}</b></div>

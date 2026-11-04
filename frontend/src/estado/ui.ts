@@ -5,9 +5,9 @@ import { usarAlmacen } from '../datos/almacen';
 import { claveSemana, lunesDe, sumarDias } from '../dominio/fechas';
 import type { Datos } from '../datos/tipos';
 
-export type Vista = 'inicio' | 'rellenar' | 'cuadro' | 'stock' | 'mihorario' | 'avisos' | 'ajustes' | 'horas' | 'equipo';
+export type Vista = 'inicio' | 'rellenar' | 'cuadro' | 'stock' | 'mihorario' | 'avisos' | 'ajustes' | 'horas' | 'equipo' | 'fichajes';
 const CASA: Vista[] = ['inicio', 'mihorario'];
-const SOLO_JEFE: Vista[] = ['inicio', 'rellenar', 'stock', 'horas', 'equipo'];
+const SOLO_JEFE: Vista[] = ['inicio', 'rellenar', 'stock', 'horas', 'equipo', 'fichajes'];
 
 export const lunesEsta = () => lunesDe(new Date());
 export const lunesProxima = () => sumarDias(lunesEsta(), 7);

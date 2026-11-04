@@ -6,8 +6,9 @@ import { initializeApp } from 'firebase/app';
 import { GoogleAuthProvider, connectAuthEmulator, getAuth, onAuthStateChanged, signInWithCredential, signInWithPopup, signOut, type User } from 'firebase/auth';
 import {
   addDoc, collection, connectFirestoreEmulator, deleteDoc, doc, getDoc, getDocs, initializeFirestore, limit, onSnapshot,
-  orderBy, persistentLocalCache, query, serverTimestamp, setDoc, updateDoc, writeBatch,
+  orderBy, persistentLocalCache, query, serverTimestamp, setDoc, Timestamp, updateDoc, where, writeBatch,
 } from 'firebase/firestore';
+import type { Fichaje } from '../dominio/fichaje';
 
 // Identificadores públicos de la app web: la seguridad la ponen las reglas de firestore.rules.
 const app = initializeApp({
@@ -130,6 +131,24 @@ export const nube = {
     const u = yo();
     return setDoc(doc(db, 'restaurantes', rid, 'avisos', aid, 'leidos', u.uid), { personaId: personaId || null, nombre: u.displayName || '', cuando: serverTimestamp() });
   },
+  // --- Fichaje (ver firestore.rules: nunca se cambia ni se borra) ---
+  fichar: (rid: string, personaId: string, tipo: 'entrada' | 'salida', mes: string) =>
+    addDoc(collection(db, 'restaurantes', rid, 'fichajes'), { uid: yo().uid, personaId, tipo, cuando: serverTimestamp(), mes }),
+  /** La jefa corrige: añade un registro con la hora buena (hora), el que sustituye (corrige, o null si se olvidó) y el motivo. */
+  corregirFichaje: (rid: string, c: { personaId: string; tipo: 'entrada' | 'salida' | 'anula'; hora: number; corrige: string | null; motivo: string; mes: string }) =>
+    addDoc(collection(db, 'restaurantes', rid, 'fichajes'), {
+      uid: yo().uid, personaId: c.personaId, tipo: c.tipo, cuando: serverTimestamp(), mes: c.mes,
+      hora: Timestamp.fromMillis(c.hora), corrige: c.corrige, motivo: c.motivo,
+    }),
+  /** Los fichajes de un mes; con personaId, solo los de esa persona (es lo único que las reglas dejan leer al equipo).
+   *  Solo filtros de igualdad: así Firestore no pide crear índices compuestos a mano. */
+  escucharFichajes(rid: string, mes: string, personaId: string | null, cb: (f: Fichaje[]) => void, alFallar: () => void) {
+    const filtros = [where('mes', '==', mes), ...(personaId ? [where('personaId', '==', personaId)] : [])];
+    return onSnapshot(query(collection(db, 'restaurantes', rid, 'fichajes'), ...filtros),
+      (r) => cb(r.docs.map((d) => fichajeDesdeNube(d.id, d.data({ serverTimestamps: 'estimate' })))),
+      alFallar);
+  },
+
   escucharAvisos(rid: string, cb: (a: Aviso[]) => void, alFallar: () => void) {
     return onSnapshot(query(collection(db, 'restaurantes', rid, 'avisos'), orderBy('creado', 'desc'), limit(30)),
       (r) => cb(r.docs.map((d) => {
@@ -139,6 +158,15 @@ export const nube = {
       alFallar);
   },
 };
+
+// Lo que guarda la nube de un fichaje: las horas como Timestamp del servidor.
+function fichajeDesdeNube(id: string, x: Record<string, unknown>): Fichaje {
+  const ms = (v: unknown) => (v instanceof Timestamp ? v.toMillis() : Date.now());
+  return {
+    id, uid: x.uid as string, personaId: x.personaId as string, tipo: x.tipo as Fichaje['tipo'], cuando: ms(x.cuando), mes: x.mes as string,
+    ...(x.hora ? { hora: ms(x.hora), corrige: (x.corrige as string | null) ?? null, motivo: x.motivo as string } : {}),
+  };
+}
 
 // Con el simulador, las pruebas automáticas entran con nube.entrarPrueba() desde la consola del navegador.
 if (enEmulador) (window as unknown as { kumiNube: typeof nube }).kumiNube = nube;

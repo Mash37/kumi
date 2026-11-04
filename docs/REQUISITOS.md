@@ -2,7 +2,7 @@
 
 | | |
 |---|---|
-| Versión | 0.4 (borrador) |
+| Versión | 0.5 (borrador) |
 | Fecha | 4 de noviembre de 2026 |
 | Responsable | María Segura (producto) |
 | Estado | En revisión: los requisitos marcados «Pendiente» son propuestas, no compromisos |
@@ -121,12 +121,12 @@ Estado: ✅ Hecho · 🟡 Parcial · ⬜ Pendiente.
 ### 3.5 Fichaje (RF-FIC) · requisitos según el borrador de norma, a confirmar
 | ID | Requisito | Prioridad | Estado |
 |---|---|---|---|
-| RF-FIC-01 | Cada persona ficha entrada y salida desde su dispositivo, de forma personal | Debe | ⬜ |
-| RF-FIC-02 | La hora del fichaje la pone el **servidor**, no el dispositivo | Debe | ⬜ |
-| RF-FIC-03 | Un fichaje **nunca se borra ni se sobrescribe**. Corregirlo añade un registro nuevo con autor, fecha y motivo | Debe | ⬜ |
+| RF-FIC-01 | Cada persona ficha entrada y salida desde su dispositivo, de forma personal | Debe | ✅ Desde «Mi horario», con su cuenta del restaurante |
+| RF-FIC-02 | La hora del fichaje la pone el **servidor**, no el dispositivo | Debe | ✅ Lo exigen las reglas de Firestore |
+| RF-FIC-03 | Un fichaje **nunca se borra ni se sobrescribe**. Corregirlo añade un registro nuevo con autor, fecha y motivo | Debe | ✅ Ni el dueño puede cambiarlo ni borrarlo |
 | RF-FIC-04 | El empleado puede pedir una corrección; el encargado o el dueño la aprueban | Debe | ⬜ |
-| RF-FIC-05 | El empleado ve siempre sus fichajes y todas las correcciones | Debe | ⬜ |
-| RF-FIC-06 | Comparar fichado contra planificado (llegó tarde, salió antes, horas extra) | Debería | ⬜ |
+| RF-FIC-05 | El empleado ve siempre sus fichajes y todas las correcciones | Debe | ✅ Con el motivo de cada corrección |
+| RF-FIC-06 | Comparar fichado contra planificado (llegó tarde, salió antes, horas extra) | Debería | 🟡 Total del mes fichado frente al del horario |
 | RF-FIC-07 | Exportar el registro para la Inspección de Trabajo en un formato legible | Debe | ⬜ |
 | RF-FIC-08 | Conservar los registros 4 años | Debe | ⬜ |
 | RF-FIC-09 | Fichar sin conexión y enviarlo al recuperarla, guardando la hora real del evento con aviso de que se registró sin conexión | Debería | ⬜ |
@@ -275,3 +275,4 @@ restaurantes/{id}
 | 0.2 | 17/10/2026 | Pedido al proveedor en PDF (hecho); proveedores, pedido por proveedor e importación con plantilla (pendientes); APK de Android |
 | 0.3 | 17/10/2026 | Proveedores, producto con su proveedor y pedido por proveedor con WhatsApp directo (hechos) |
 | 0.4 | 04/11/2026 | Recuento desde foto y albaranes (RF-STK-13, 14); fichaje en tablet y PDF del registro (RF-FIC-10, 11); personas y ausencias (RF-PER); fichas técnicas y alérgenos (RF-PLA); cobro por módulos como pregunta abierta. Lo marcado «Prototipo en Kumi Mara» ya funciona en la app de Hinoki, pero no en Kumi |
+| 0.5 | 04/11/2026 | Fichaje desde el móvil en la nube: hora del servidor, sin borrar nada y correcciones de la jefa con motivo (RF-FIC-01, 02, 03, 05 hechos; 06 en parte) |
