@@ -62,24 +62,31 @@ function Lista() {
     <>
       {pedir.length > 0 && (
         <div className="tarjeta pedir">
-          <h3>🛒 {pedir.length + (pedir.length === 1 ? ' producto por pedir' : ' productos por pedir')}</h3>
-          {grupos.map((g) => (
-            <div className="grupo-pedido" key={g.proveedor?.id ?? 'sin'}>
-              {(g.proveedor || grupos.length > 1) && <div className="grupo-stock">{g.proveedor ? g.proveedor.nombre : 'Sin proveedor'}</div>}
-              <ul>{g.filas.map((f) => <li key={f.p.id}><b>{f.p.nombre}</b>: quedan {cantidadTxt(f.quedan, f.p)}, pedir <b>{cantidadTxt(f.pedir, f.p)}</b></li>)}</ul>
-              <div className="acciones">
-                <button className="btn principal" onClick={() => { enviarPedidoPdf(d, t.cocina, g).catch(() => avisar('No se pudo crear el PDF del pedido')); }}>{g.proveedor ? 'Enviar PDF a ' + g.proveedor.nombre : 'Enviar PDF del pedido'}</button>
-                <button className="btn secundario" onClick={() => enviarMensajePedido(d, g)}>{g.proveedor && telefonoWhatsApp(g.proveedor.telefono) ? 'WhatsApp a ' + g.proveedor.nombre : 'Enviar por mensaje'}</button>
+          <div className="pedir-cab"><h3>🛒 Por pedir</h3><span>{(pedir.length === 1 ? '1 producto' : pedir.length + ' productos') + (grupos.length > 1 ? ' · ' + grupos.length + ' proveedores' : '')}</span></div>
+          {grupos.map((g) => {
+            const nombre = g.proveedor ? g.proveedor.nombre : 'Sin proveedor';
+            const whatsapp = !!(g.proveedor && telefonoWhatsApp(g.proveedor.telefono));
+            return (
+              <div className="prov-pedido" key={g.proveedor?.id ?? 'sin'}>
+                <div className="prov-fila">
+                  <div><b>{nombre}</b><small>{g.filas.length === 1 ? '1 producto' : g.filas.length + ' productos'}</small></div>
+                  <div className="prov-botones">
+                    <button className="btn principal chico" aria-label={'Enviar PDF del pedido a ' + nombre} onClick={() => { enviarPedidoPdf(d, t.cocina, g).catch(() => avisar('No se pudo crear el PDF del pedido')); }}>PDF</button>
+                    <button className="btn secundario chico" aria-label={(whatsapp ? 'Enviar por WhatsApp a ' : 'Enviar por mensaje a ') + nombre} onClick={() => enviarMensajePedido(d, g)}>{whatsapp ? 'WhatsApp' : 'Mensaje'}</button>
+                  </div>
+                </div>
+                <details open={grupos.length === 1 && g.filas.length <= 3}>
+                  <summary>Ver qué pedir</summary>
+                  <ul>{g.filas.map((f) => <li key={f.p.id}><b>{f.p.nombre}</b>: quedan {cantidadTxt(f.quedan, f.p)}, pedir <b>{cantidadTxt(f.pedir, f.p)}</b></li>)}</ul>
+                </details>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
       <div className="fila-botones">
         <button className="btn principal" onClick={empezarRecuento}>Hacer recuento</button>
         <button className="btn secundario" onClick={() => abrirPanel(<PanelProducto id={null} />)}>+ Producto</button>
-      </div>
-      <div className="acciones">
         <button className="btn secundario" onClick={() => abrirPanel(<PanelProveedores />)}>{nProveedores ? 'Proveedores (' + nProveedores + ')' : 'Proveedores'}</button>
       </div>
       <div className="tarjeta">

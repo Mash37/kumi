@@ -186,10 +186,12 @@
   .turno .a { color: var(--gris); font-size: 13px; }
   .turno .borrar { width: 40px; height: 46px; border: 0; background: none; font-size: 18px; color: #c9b5bd; }
 
-  .acciones { display: grid; gap: 10px; margin: 16px 0; }
+  .acciones { display: flex; flex-wrap: wrap; gap: 8px; margin: 14px 0; }
+  .acciones > .btn { flex: 1 1 auto; width: auto; min-width: 120px; }
   .tarjeta .acciones { margin: 0; }
-  .btn { display: block; width: 100%; min-height: 52px; border-radius: 16px; border: 0; font-weight: 600; font-size: 16.5px; padding: 12px; letter-spacing: .01em; }
-  .btn.principal { background: var(--deg); color: var(--texto-sobre-deg); box-shadow: 0 8px 20px var(--sombra); }
+  .btn { display: block; width: 100%; min-height: 44px; border-radius: 12px; border: 0; font-weight: 600; font-size: 15px; padding: 10px 14px; letter-spacing: .01em; }
+  .btn.principal { background: var(--deg); color: var(--texto-sobre-deg); box-shadow: 0 4px 12px var(--sombra); }
+  .btn.chico { display: inline-flex; align-items: center; justify-content: center; width: auto; min-height: 34px; padding: 6px 12px; font-size: 13.5px; border-radius: 10px; box-shadow: none; }
   .btn.secundario { background: var(--blanco); border: 1px solid var(--rosa-medio); color: var(--frambuesa); }
   .btn.peligro { background: var(--blanco); border: 1px solid #f0c9c9; color: #b42318; }
   .btn:active { transform: scale(.985); }
@@ -389,13 +391,22 @@
   .segmento button { flex: 1; border: 0; background: none; border-radius: 11px; padding: 9px 0; font-size: 14px; font-weight: 500; color: var(--frambuesa); }
   .segmento button.activo { background: var(--blanco); font-weight: 600; box-shadow: 0 1px 4px var(--sombra-suave); }
   .fila-botones { display: flex; gap: 8px; margin-bottom: 14px; }
-  .fila-botones .btn { min-height: 46px; font-size: 15px; padding: 10px 8px; }
+  .fila-botones .btn { min-height: 42px; font-size: 14.5px; padding: 8px 6px; }
   .pedir { background: var(--deg-oscuro); color: #fff; }
   .pedir h3 { color: #fff; }
-  .pedir ul { margin: 8px 0 14px; padding-left: 18px; font-size: 14px; line-height: 1.6; opacity: .95; }
+  .pedir-cab { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 4px; }
+  .pedir-cab span { font-size: 12.5px; opacity: .8; }
+  .prov-pedido { padding: 10px 0; border-top: 1px solid rgba(255, 255, 255, .15); }
+  .prov-pedido:first-of-type { border-top: 0; }
+  .prov-fila { display: flex; align-items: center; justify-content: space-between; gap: 10px; }
+  .prov-fila b { display: block; font-size: 15px; }
+  .prov-fila small { font-size: 12.5px; opacity: .8; }
+  .prov-botones { display: flex; gap: 6px; flex: none; }
+  .pedir .btn.secundario { background: rgba(255, 255, 255, .12); border-color: rgba(255, 255, 255, .25); color: #fff; }
+  .prov-pedido summary { cursor: pointer; font-size: 12.5px; margin-top: 6px; opacity: .85; }
+  .pedir ul { margin: 6px 0 0; padding-left: 18px; font-size: 13.5px; line-height: 1.55; opacity: .95; }
   .grupo-stock { font-size: 12px; letter-spacing: .14em; text-transform: uppercase; color: var(--gris); margin: 6px 0 4px; }
   .pedir .grupo-stock { color: inherit; opacity: .75; margin-top: 10px; }
-  .grupo-pedido + .grupo-pedido { margin-top: 18px; padding-top: 6px; border-top: 1px solid rgba(255, 255, 255, .15); }
   .producto { display: flex; align-items: center; gap: 10px; padding: 11px 0; border-top: 1px solid var(--borde); cursor: pointer; }
   .producto:first-of-type { border-top: 0; }
   .producto .info { flex: 1; min-width: 0; }
@@ -431,7 +442,7 @@
   .hoja { max-height: 92vh; overflow-y: auto; }
   .historial { font-size: 13px; color: var(--gris); margin: 4px 0 14px; }
   .historial div { display: flex; justify-content: space-between; padding: 4px 0; border-bottom: 1px dashed var(--borde); }
-  .btn.texto { background: none; color: #b42318; min-height: 44px; }
+  .btn.texto { background: none; color: #b42318; min-height: 40px; }
   .copia { background: linear-gradient(135deg, #fff, var(--rosa-suave)); border: 1px solid var(--rosa-medio); }
   .copia .sub b { color: var(--frambuesa); }
 
