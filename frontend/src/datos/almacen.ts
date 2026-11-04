@@ -29,10 +29,19 @@ export const usarAlmacen = create<Almacen>((set, get) => ({
   reemplazar: (d) => set({ datos: d }),
 }));
 
+const AVISO_SIN_GUARDAR_CADA = 10000;
+let ultimoAvisoSinGuardar = 0;
 usarAlmacen.subscribe(({ datos }) => {
   const texto = JSON.stringify(datos);
   try { localStorage.setItem(CLAVE, texto); }
-  catch { /* sin espacio o en modo privado: la pantalla avisa al guardar */ }
+  catch {
+    // Sin espacio o en modo privado: lo que no se guarda se pierde al cerrar, así que se avisa (como mucho cada 10 s).
+    // La pantalla se carga aquí y no arriba porque estado/ui ya importa este archivo.
+    if (Date.now() - ultimoAvisoSinGuardar > AVISO_SIN_GUARDAR_CADA) {
+      ultimoAvisoSinGuardar = Date.now();
+      import('../estado/ui').then((m) => m.usarUi.getState().avisar('No se pudo guardar en este móvil. ¿Le queda espacio?'));
+    }
+  }
   copiaNativa(texto);
 });
 

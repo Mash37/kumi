@@ -69,7 +69,7 @@ export function Cuadro() {
               <div className="acciones">
                 <button className="btn principal" onClick={async () => {
                   const f = await archivo();
-                  try { if (!(await compartirArchivo(f, 'Horario ' + rango(lunes, false)))) { descargar(f); avisar('Imagen guardada en descargas'); } }
+                  try { if ((await compartirArchivo(f, 'Horario ' + rango(lunes, false))) === 'sin-compartir') { descargar(f); avisar('Imagen guardada en descargas'); } }
                   catch { avisar('No se pudo compartir'); }
                 }}>Compartir imagen (WhatsApp…)</button>
                 <div className="dos-botones">
