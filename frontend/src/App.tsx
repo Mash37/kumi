@@ -10,6 +10,7 @@ import { Avisos } from './pantallas/Avisos';
 import { Bienvenida } from './pantallas/Bienvenida';
 import { Cuadro } from './pantallas/Cuadro';
 import { Equipo } from './pantallas/Equipo';
+import { Fichajes } from './pantallas/Fichajes';
 import { Horas } from './pantallas/Horas';
 import { Inicio } from './pantallas/Inicio';
 import { MiHorario } from './pantallas/MiHorario';
@@ -18,7 +19,7 @@ import { Rellenar } from './pantallas/Rellenar';
 import { Stock } from './pantallas/Stock';
 import { Unirse } from './pantallas/Unirse';
 
-const PANTALLAS = { inicio: Inicio, rellenar: Rellenar, cuadro: Cuadro, horas: Horas, stock: Stock, equipo: Equipo, ajustes: Ajustes, mihorario: MiHorario, avisos: Avisos } as const;
+const PANTALLAS = { inicio: Inicio, rellenar: Rellenar, cuadro: Cuadro, horas: Horas, stock: Stock, equipo: Equipo, ajustes: Ajustes, mihorario: MiHorario, avisos: Avisos, fichajes: Fichajes } as const;
 // Un enlace de invitación (…/?unirse=ABC123) lleva directo a unirse, si este móvil aún no tiene restaurante.
 const codigoEnlace = new URLSearchParams(location.search).get('unirse');
 

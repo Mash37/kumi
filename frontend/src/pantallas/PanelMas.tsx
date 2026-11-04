@@ -32,6 +32,7 @@ export function PanelMas() {
       <div className="grupo-stock">Más</div>
       <div className="accesos">
         {acceso('🕒', 'Horas del mes', 'Informe en PDF para la nómina', () => irDesdePanel('horas'), ui.vista === 'horas')}
+        {acceso('⏱️', 'Fichajes', 'Entradas y salidas del equipo', () => irDesdePanel('fichajes'), ui.vista === 'fichajes')}
         {acceso('📣', 'Avisos al equipo', 'Tablón con «leído por»', () => irDesdePanel('avisos'), ui.vista === 'avisos')}
         {acceso('👥', 'Tu equipo', n + (n === 1 ? ' persona' : ' personas'), () => irDesdePanel('equipo'), ui.vista === 'equipo')}
         {acceso('⚙️', 'Ajustes', 'Perfil, restaurante, reglas, apariencia…', () => irDesdePanel('ajustes'), ui.vista === 'ajustes')}

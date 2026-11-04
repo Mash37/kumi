@@ -61,6 +61,40 @@ service cloud.firestore {
           allow delete: if esDueno(rid);
         }
       }
+
+      // Fichaje: la hora la pone el servidor y un registro nunca se cambia ni se borra, ni siquiera el dueño.
+      // Corregir es añadir otro registro del dueño con la hora buena, a cuál sustituye y por qué.
+      match /fichajes/{fid} {
+        function miPersona() { return get(/databases/$(database)/documents/restaurantes/$(rid)/miembros/$(request.auth.uid)).data.personaId; }
+        function mesValido(d) { return d.mes is string && d.mes.matches('^[0-9]{4}-[0-9]{2}$'); }
+        allow read: if esDueno(rid) || (esMiembro(rid) && resource.data.personaId == miPersona());
+        allow create: if esMiembro(rid)
+                      && request.resource.data.keys().hasOnly(['uid', 'personaId', 'tipo', 'cuando', 'mes'])
+                      && request.resource.data.uid == request.auth.uid
+                      && miPersona() is string
+                      && request.resource.data.personaId == miPersona()
+                      && request.resource.data.tipo in ['entrada', 'salida']
+                      && request.resource.data.cuando == request.time
+                      && mesValido(request.resource.data);
+        allow create: if esDueno(rid)
+                      && request.resource.data.keys().hasOnly(['uid', 'personaId', 'tipo', 'cuando', 'mes', 'hora', 'corrige', 'motivo'])
+                      && request.resource.data.keys().hasAll(['uid', 'personaId', 'tipo', 'cuando', 'mes', 'hora', 'corrige', 'motivo'])
+                      && request.resource.data.uid == request.auth.uid
+                      && request.resource.data.personaId is string
+                      && request.resource.data.tipo in ['entrada', 'salida', 'anula']
+                      && request.resource.data.cuando == request.time
+                      && request.resource.data.hora is timestamp
+                      && request.resource.data.hora <= request.time
+                      && (request.resource.data.corrige == null
+                          || (request.resource.data.corrige is string
+                              && exists(/databases/$(database)/documents/restaurantes/$(rid)/fichajes/$(request.resource.data.corrige))))
+                      && (request.resource.data.tipo != 'anula' || request.resource.data.corrige is string)
+                      && request.resource.data.motivo is string
+                      && request.resource.data.motivo.size() >= 3
+                      && request.resource.data.motivo.size() <= 300
+                      && mesValido(request.resource.data);
+        allow update, delete: if false;
+      }
     }
   }
 }
