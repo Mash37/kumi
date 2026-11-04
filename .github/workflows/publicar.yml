@@ -44,15 +44,20 @@ jobs:
       url: ${{ steps.despliegue.outputs.page_url }}
     steps:
       - uses: actions/checkout@v7
-      # Por ahora se publica la versión 2 (la que se usa hoy). Al pasar a la 3, se cambia por frontend/dist.
-      - name: Montar el sitio
+      - uses: actions/setup-node@v7
+        with:
+          node-version-file: .nvmrc
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      # Se publica la versión 3 compilada (incluye lo de frontend/public). La 2 sigue en frontend/legado para las pruebas de igualdad.
+      - name: Compilar la versión 3
+        working-directory: frontend
         run: |
-          mkdir _site
-          cp -R frontend/public/. _site/
-          cp -R frontend/legado/. _site/
+          npm ci
+          npm run build
       - uses: actions/upload-pages-artifact@v5
         with:
-          path: _site
+          path: frontend/dist
       - id: despliegue
         uses: actions/deploy-pages@v5
 
