@@ -7,8 +7,12 @@ import { compartirArchivo, descargar } from './archivos';
 export async function guardarCopia() {
   const ahora = new Date();
   const archivo = archivoCopia(usarAlmacen.getState().datos, ahora);
-  try { if (!(await compartirArchivo(archivo, 'Copia de Kumi'))) descargar(archivo); }
-  catch { descargar(archivo); }
+  try {
+    const r = await compartirArchivo(archivo, 'Copia de Kumi');
+    // Cancelar no guarda nada: no se apunta como copia hecha.
+    if (r === 'cancelado') return;
+    if (r === 'sin-compartir') descargar(archivo);
+  } catch { descargar(archivo); }
   usarAlmacen.getState().cambiar((x) => { x.ultimaCopia = ahora.getTime(); });
   usarUi.getState().avisar('Copia guardada: ' + archivo.name);
 }

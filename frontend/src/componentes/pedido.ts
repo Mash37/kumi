@@ -106,7 +106,7 @@ export async function pdfPedido(d: Datos, cocina: string, grupo: GrupoPedido, ho
 export async function enviarPedidoPdf(d: Datos, cocina: string, grupo: GrupoPedido): Promise<void> {
   const archivo = await pdfPedido(d, cocina, grupo);
   if (!archivo) return;
-  if (!(await compartirArchivo(archivo, 'Pedido ' + (grupo.proveedor?.nombre || d.restaurante?.nombre || cocina)))) descargar(archivo);
+  if ((await compartirArchivo(archivo, 'Pedido ' + (grupo.proveedor?.nombre || d.restaurante?.nombre || cocina))) === 'sin-compartir') descargar(archivo);
 }
 
 // Con teléfono: abre directamente el chat de WhatsApp del proveedor. Sin él: «Compartir» con el texto.

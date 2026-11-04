@@ -34,16 +34,16 @@ export function descargar(archivo: File) {
   document.body.appendChild(a); a.click(); a.remove();
   setTimeout(() => URL.revokeObjectURL(url), 5000);
 }
-/** true si se compartió o se canceló; false si este móvil no sabe compartir archivos. */
-export async function compartirArchivo(archivo: File, titulo: string): Promise<boolean> {
+/** «sin-compartir»: este móvil no sabe compartir archivos y hay que descargarlo. */
+export type ResultadoCompartir = 'compartido' | 'cancelado' | 'sin-compartir';
+export async function compartirArchivo(archivo: File, titulo: string): Promise<ResultadoCompartir> {
   if (esNativa) {
-    try { await compartirNativo(archivo, titulo); } catch (e) { if (!/cancel/i.test(String((e as Error).message))) throw e; }
-    return true;
+    try { await compartirNativo(archivo, titulo); return 'compartido'; }
+    catch (e) { if (/cancel/i.test(String((e as Error).message))) return 'cancelado'; throw e; }
   }
-  if (!(navigator.canShare && navigator.canShare({ files: [archivo] }))) return false;
-  try { await navigator.share({ files: [archivo], title: titulo }); }
-  catch (e) { if ((e as Error).name !== 'AbortError') throw e; }
-  return true;
+  if (!(navigator.canShare && navigator.canShare({ files: [archivo] }))) return 'sin-compartir';
+  try { await navigator.share({ files: [archivo], title: titulo }); return 'compartido'; }
+  catch (e) { if ((e as Error).name === 'AbortError') return 'cancelado'; throw e; }
 }
 export function lienzoAArchivo(c: HTMLCanvasElement, nombre: string): Promise<File> {
   return new Promise((ok) => c.toBlob((blob) => ok(new File([blob!], nombre, { type: 'image/png' })), 'image/png'));
