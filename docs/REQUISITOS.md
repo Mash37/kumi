@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| Versión | 0.3 (borrador) |
-| Fecha | 17 de octubre de 2026 |
+| Versión | 0.4 (borrador) |
+| Fecha | 4 de noviembre de 2026 |
 | Responsable | María Segura (producto) |
 | Estado | En revisión: los requisitos marcados «Pendiente» son propuestas, no compromisos |
 
@@ -108,6 +108,8 @@ Estado: ✅ Hecho · 🟡 Parcial · ⬜ Pendiente.
 | RF-STK-10 | Asignar a cada producto el proveedor que lo trae | Debería | ✅ |
 | RF-STK-11 | Pedido separado por proveedor: un PDF o un mensaje para cada uno, con WhatsApp directo a su teléfono si lo tiene | Debería | ✅ |
 | RF-STK-12 | Importar proveedores y productos desde una plantilla (CSV, abre en Excel o Google Sheets) | Podría | ⬜ |
+| RF-STK-13 | Rellenar el recuento desde una foto de la hoja de inventario: se leen los productos y las cantidades escritas a mano, y la persona los revisa antes de guardar | Podría | 🟡 En prueba en Kumi Mara; lento, no pasa a Kumi hasta que sea rápido |
+| RF-STK-14 | Albaranes: con una foto del albarán del proveedor se crea la compra (productos, cantidades y precios) y se actualiza el precio de cada producto; la persona lo revisa antes de guardar | Debería | ⬜ |
 
 ### 3.4 Equipo y comunicación (RF-EQP)
 | ID | Requisito | Prioridad | Estado |
@@ -128,6 +130,8 @@ Estado: ✅ Hecho · 🟡 Parcial · ⬜ Pendiente.
 | RF-FIC-07 | Exportar el registro para la Inspección de Trabajo en un formato legible | Debe | ⬜ |
 | RF-FIC-08 | Conservar los registros 4 años | Debe | ⬜ |
 | RF-FIC-09 | Fichar sin conexión y enviarlo al recuperarla, guardando la hora real del evento con aviso de que se registró sin conexión | Debería | ⬜ |
+| RF-FIC-10 | Fichar desde una tablet compartida en la cocina: cada persona toca su nombre y, si lo tiene, pone su código de 4 cifras | Debería | 🟡 Prototipo en Kumi Mara, solo en el dispositivo |
+| RF-FIC-11 | Registro de jornada del mes en PDF, por persona, con lo fichado, lo corregido marcado y espacio para firmar | Debe | 🟡 Prototipo en Kumi Mara |
 
 ### 3.6 Notificaciones (RF-NOT)
 | ID | Requisito | Prioridad | Estado |
@@ -167,14 +171,31 @@ Estado: ✅ Hecho · 🟡 Parcial · ⬜ Pendiente.
 | RF-INT-02 | API con clave por restaurante para que otros programas lean datos de Kumi | Podría | ⬜ |
 | RF-INT-03 | Avisos automáticos a otros sistemas (webhooks) cuando ocurre un fichaje o se publica un horario | Podría | ⬜ |
 
-### 3.10 Otros (RF-OTR)
+### 3.10 Personas (RF-PER)
+| ID | Requisito | Prioridad | Estado |
+|---|---|---|---|
+| RF-PER-01 | Ficha de cada persona: datos personales, contacto de emergencia, fecha de alta, puesto, contrato, fin de contrato y carné de manipulador | Debería | 🟡 Prototipo en Kumi Mara |
+| RF-PER-02 | Avisar cuando un contrato acaba o un carné de manipulador caduca en los próximos 30 días | Podría | 🟡 Prototipo en Kumi Mara |
+| RF-PER-03 | Apuntar vacaciones, bajas, permisos y asuntos propios por fechas, y ver los días de vacaciones que le quedan a cada persona | Debería | 🟡 Prototipo en Kumi Mara |
+| RF-PER-04 | Avisar en el horario si alguien tiene turno un día que está de vacaciones o de baja | Debería | 🟡 Prototipo en Kumi Mara |
+
+### 3.11 Fichas técnicas y alérgenos (RF-PLA)
+| ID | Requisito | Prioridad | Estado |
+|---|---|---|---|
+| RF-PLA-01 | Ficha de cada plato: ingredientes con cantidad y preparación, elaboración, emplatado, conservación y fotos | Debería | 🟡 Prototipo en Kumi Mara |
+| RF-PLA-02 | Coste por ración a partir del precio de los productos del stock | Debería | 🟡 Prototipo en Kumi Mara |
+| RF-PLA-03 | Los 14 alérgenos del Reglamento (UE) 1169/2011 por ingrediente y por plato, con «contiene» y «puede contener» | Debe | 🟡 Prototipo en Kumi Mara |
+| RF-PLA-04 | PDF de la ficha y cuadro de alérgenos de la carta | Debería | 🟡 Prototipo en Kumi Mara |
+| RF-PLA-05 | Hojas de montaje con una foto por paso | Podría | 🟡 Prototipo en Kumi Mara |
+
+### 3.12 Otros (RF-OTR)
 | ID | Requisito | Prioridad | Estado |
 |---|---|---|---|
 | RF-OTR-01 | Copia de seguridad: guardar y recuperar todos los datos del dispositivo en un archivo | Debe | ✅ |
 | RF-OTR-02 | Tipos de cocina con sus colores; Kumi Kitchen (pizarra y azafrán) por defecto | Podría | ✅ |
 | RF-OTR-03 | Modo claro, oscuro y automático | Debería | ✅ |
 | RF-OTR-04 | Vista para ordenador pensada para el dueño (semana completa, varios locales) | Debería | 🟡 Hay vista de tablet |
-| RF-OTR-05 | Planes y cobro: Gratis, Equipo mensual y anual, por local | Debe | ⬜ |
+| RF-OTR-05 | Planes y cobro por local; se estudia cobrar por módulos (horarios, fichaje, stock, cartas) | Debe | ⬜ |
 | RF-OTR-06 | Web pública con SEO y guías | Debería | 🟡 Preparada, sin publicar |
 | RF-OTR-07 | App de Android instalable (APK de prueba; Google Play en la fase de tiendas) | Debe | 🟡 APK de prueba |
 
@@ -237,14 +258,15 @@ restaurantes/{id}
 - Nóminas y cálculo de salarios.
 - Facturación, TPV y cobro a clientes del restaurante.
 - Reconocimiento facial o huella guardados en el servidor.
-- Gestión de vacaciones con flujo de aprobación (posible versión futura).
+- Flujo de aprobación de vacaciones (pedir y aprobar). Apuntarlas sí entra (RF-PER-03).
 
 ## 8. Preguntas abiertas
-1. ¿Se permite fichar desde una tablet compartida en la cocina, además del móvil de cada persona?
+1. ¿Se permite fichar desde una tablet compartida en la cocina, además del móvil de cada persona? (Kumi Mara lo prueba con código de 4 cifras, RF-FIC-10.)
 2. ¿Se exige ubicación al fichar? Si sí, ¿cómo se informa y se limita según el RGPD?
 3. ¿Qué formato concreto pedirá la Inspección cuando se publique la norma?
 4. ¿El plan gratuito incluye fichaje, o solo los de pago?
 5. ¿Cuánto tiempo después del inicio del turno se manda el primer aviso de fichaje?
+6. ¿Se cobra por módulos o por planes? ¿Qué entra en el plan gratuito?
 
 ## 9. Historial
 | Versión | Fecha | Cambios |
@@ -252,3 +274,4 @@ restaurantes/{id}
 | 0.1 | 17/10/2026 | Primer borrador: estado actual de la app e ideas de fichaje, roles, avisos, acceso, web e integraciones |
 | 0.2 | 17/10/2026 | Pedido al proveedor en PDF (hecho); proveedores, pedido por proveedor e importación con plantilla (pendientes); APK de Android |
 | 0.3 | 17/10/2026 | Proveedores, producto con su proveedor y pedido por proveedor con WhatsApp directo (hechos) |
+| 0.4 | 04/11/2026 | Recuento desde foto y albaranes (RF-STK-13, 14); fichaje en tablet y PDF del registro (RF-FIC-10, 11); personas y ausencias (RF-PER); fichas técnicas y alérgenos (RF-PLA); cobro por módulos como pregunta abierta. Lo marcado «Prototipo en Kumi Mara» ya funciona en la app de Hinoki, pero no en Kumi |
