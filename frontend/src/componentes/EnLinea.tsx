@@ -50,7 +50,7 @@ export function NubeJefe() {
   const intentar = async (f: () => Promise<unknown>) => {
     try { await f(); } catch (e) {
       const codigo = (e as { code?: string }).code;
-      if (codigo === 'kumi/nativo-sin-configurar') avisar('Entrar con Google en la app llega muy pronto; de momento, desde la web');
+      if (codigo === 'kumi/nativo-sin-configurar') avisar('Para entrar con Google, abre Kumi en la web: mash37.github.io/kumi');
       else if (codigo !== 'auth/popup-closed-by-user') avisar('No se pudo completar. ¿Tienes internet?');
     }
   };

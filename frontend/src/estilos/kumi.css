@@ -213,3 +213,13 @@ nav button.activo { color: var(--rosa); }
 .accesos button.activo { background: var(--rosa-suave); }
 .cifras b { font-size: 21px; white-space: nowrap; }
 .detalle-mes .extra-mes { margin: 0 0 6px; color: var(--gris); font-size: 12.5px; }
+
+/* Mensajes de abajo: caben en cualquier pantalla y, si son largos, ocupan dos líneas. */
+.aviso {
+  white-space: normal;
+  width: max-content;
+  max-width: min(calc(100vw - 32px), 560px);
+  text-align: center;
+  line-height: 1.35;
+  border-radius: 16px;
+}
