@@ -3,21 +3,24 @@ import { CLAVE, usarAlmacen } from '../datos/almacen';
 import type { Reglas, Restaurante } from '../datos/tipos';
 import { textoUltimaCopia } from '../dominio/copia';
 import { reglas } from '../dominio/horario';
+import { Paletas } from '../componentes/Paletas';
+import { TARJETAS_INICIO, moverTarjeta, ordenInicio, tarjetaVisible } from '../dominio/inicio';
 import { Tipos } from '../componentes/Tipos';
+import { paletaDe } from '../dominio/paletas';
 import { MiRestaurante, NubeJefe } from '../componentes/EnLinea';
 import { guardarCopia, recuperarCopia } from '../componentes/copias';
 import { usarUi } from '../estado/ui';
 import { PanelServicios } from './PanelServicios';
+import { Icono } from '../componentes/Icono';
 
 export const VERSION = '3.0';
-const MODOS = [['auto', 'Automático'], ['claro', '☀️ Claro'], ['oscuro', '🌙 Oscuro']] as const;
+const MODOS = [['auto', 'Automático'], ['claro', 'Claro'], ['oscuro', 'Oscuro']] as const;
 const REGLAS_UI: [keyof Reglas, string, string, number, number, number][] = [
   ['entreDias', 'Descanso entre jornadas', 'Del final de un día al inicio del siguiente', 1, 6, 24],
   ['semanal', 'Descanso semanal seguido', 'Día y medio = 36 h; dos días = 48 h', 12, 12, 96],
   ['maxDia', 'Máximo de horas en un día', 'Horas de trabajo efectivo', 1, 4, 14],
   ['maxSemana', 'Máximo de horas a la semana', 'Para quien no tenga horas de contrato', 1, 10, 60],
 ];
-const TARJETAS_INICIO = [['servicio', 'El servicio de hoy'], ['semana', 'Semana que viene'], ['horas', 'Horas de cada uno'], ['stock', 'Stock'], ['dato', 'Palabra / dato del día']] as const;
 
 export function Ajustes() {
   const d = usarAlmacen((s) => s.datos);
@@ -25,7 +28,6 @@ export function Ajustes() {
   const { ir, avisar, abrirPanel } = usarUi.getState();
   const r = d.restaurante ?? {};
   const R = reglas(d);
-  const ver = { servicio: true, semana: true, horas: true, stock: true, dato: true, ...(d.inicio || {}) };
   // Las casillas de texto guardan sin espacios sobrantes, pero dejan escribirlos mientras se escribe.
   const [persona, setPersona] = useState(r.persona || '');
   const [nombre, setNombre] = useState(r.nombre || '');
@@ -45,18 +47,24 @@ export function Ajustes() {
           <h3>Restaurante</h3><p className="sub">&nbsp;</p>
           <label className="campo"><span>Nombre del restaurante</span><input value={nombre} onChange={(e) => { setNombre(e.target.value); ponerR({ nombre: e.target.value.trim() }); }} /></label>
           <div className="grupo-stock">Tipo de cocina</div>
+          <p className="pista-campo" style={{ margin: '0 2px 8px' }}>Para los productos de ejemplo y el dato del día.</p>
           <Tipos sel={r.tipo || 'kumi'} elegir={(tipo) => ponerR({ tipo })} />
         </div>
         <div className="tarjeta">
           <h3>Apariencia</h3><p className="sub">&nbsp;</p>
+          <div className="solo-jefe">
+            <div className="grupo-stock">Colores</div>
+            <Paletas sel={paletaDe(r)} elegir={(tema) => ponerR({ tema })} />
+            <div className="grupo-stock" style={{ marginTop: 14 }}>Modo</div>
+          </div>
           <div className="modos">{MODOS.map(([k, l]) => <button key={k} className={(r.modo || 'auto') === k ? 'sel' : ''} onClick={() => ponerR({ modo: k })}>{l}</button>)}</div>
           <p className="pista-campo" style={{ marginTop: 8 }}>«Automático» sigue el modo claro u oscuro del móvil.</p>
         </div>
         <div className="tarjeta solo-jefe">
           <h3>Equipo y servicios</h3><p className="sub">Personas, horas de contrato y gente mínima por servicio.</p>
           <div className="acciones">
-            <button className="btn secundario" onClick={() => ir('equipo')}>{'👥 Tu equipo (' + n + (n === 1 ? ' persona)' : ' personas)')}</button>
-            <button className="btn secundario" onClick={() => abrirPanel(<PanelServicios />)}>🍽️ Servicios y mínimos</button>
+            <button className="btn secundario" onClick={() => ir('equipo')}>{'Tu equipo (' + n + (n === 1 ? ' persona)' : ' personas)')}</button>
+            <button className="btn secundario" onClick={() => abrirPanel(<PanelServicios />)}>Servicios y mínimos</button>
           </div>
         </div>
         <div className="tarjeta solo-jefe" id="tarjetaNube">
@@ -81,18 +89,26 @@ export function Ajustes() {
           <button className="btn texto" style={{ color: 'var(--frambuesa)' }} onClick={() => { cambiar((x) => { delete x.reglas; }); avisar('Reglas del Estatuto restablecidas'); }}>Volver a las del Estatuto</button>
         </div>
         <div className="tarjeta solo-jefe">
-          <h3>Pantalla de inicio</h3><p className="sub">Elige qué tarjetas quieres ver.</p>
-          {TARJETAS_INICIO.map(([k, t]) => (
-            <div className="opcion-inicio" key={k}>{t}
-              <button className={'interruptor' + (ver[k] ? ' on' : '')} role="switch" aria-checked={ver[k]} aria-label={t} onClick={() => cambiar((x) => { x.inicio = { ...ver, [k]: !ver[k] }; })}><i /></button>
-            </div>
-          ))}
+          <h3>Pantalla de inicio</h3><p className="sub">Elige qué tarjetas ver y en qué orden.</p>
+          {ordenInicio(d).map((k, i, todas) => {
+            const visible = tarjetaVisible(d, k), t = TARJETAS_INICIO[k];
+            return (
+              <div className="opcion-inicio" key={k}>
+                <span className="orden">
+                  <button disabled={i === 0} aria-label={'Subir ' + t} onClick={() => cambiar((x) => { x.inicioOrden = moverTarjeta(ordenInicio(x), k, -1); })}>↑</button>
+                  <button disabled={i === todas.length - 1} aria-label={'Bajar ' + t} onClick={() => cambiar((x) => { x.inicioOrden = moverTarjeta(ordenInicio(x), k, 1); })}>↓</button>
+                </span>
+                <span className="nombre-opcion">{t}</span>
+                <button className={'interruptor' + (visible ? ' on' : '')} role="switch" aria-checked={visible} aria-label={t} onClick={() => cambiar((x) => { x.inicio = { ...(x.inicio || {}), [k]: !visible }; })}><i /></button>
+              </div>
+            );
+          })}
         </div>
         <div className="tarjeta solo-jefe">
           <h3>Tus datos</h3><p className="sub">{textoUltimaCopia(d)}</p>
           <div className="acciones">
-            <button className="btn secundario" onClick={guardarCopia}>💾 Guardar copia de seguridad</button>
-            <button className="btn secundario" onClick={recuperarCopia}>📂 Recuperar desde una copia</button>
+            <button className="btn secundario" onClick={guardarCopia}><Icono n="guardar" tam={18} /> Guardar copia de seguridad</button>
+            <button className="btn secundario" onClick={recuperarCopia}><Icono n="recuperar" tam={18} /> Recuperar desde una copia</button>
             <button className="btn peligro" onClick={() => {
               if (!confirm('¿Borrar TODOS los datos de Kumi en este móvil? Horarios, equipo, incidencias, stock y ajustes.')) return;
               if (!confirm('Última comprobación: no se puede deshacer. Si no has guardado una copia de seguridad, pulsa Cancelar. ¿Borrar todo?')) return;

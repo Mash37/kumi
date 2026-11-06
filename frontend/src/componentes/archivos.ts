@@ -21,9 +21,9 @@ async function compartirNativo(archivo: File, titulo: string) {
 export function fuentesListas(): Promise<unknown> {
   if (!document.fonts) return Promise.resolve();
   return Promise.all([
-    document.fonts.load('italic 700 30px "Playfair Display"'),
-    document.fonts.load('600 19px Jost'),
-    document.fonts.load('500 20px Jost'),
+    document.fonts.load('700 30px "DM Sans Variable"'),
+    document.fonts.load('600 19px "DM Sans Variable"'),
+    document.fonts.load('400 20px "DM Sans Variable"'),
   ]).catch(() => {});
 }
 export function descargar(archivo: File) {

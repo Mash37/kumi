@@ -7,7 +7,7 @@
 .tabla-inv .nombre { position: sticky; left: 0; background: var(--blanco); text-align: left; white-space: normal; width: 100%; min-width: 150px; max-width: 260px; font-size: 14px; line-height: 1.3; box-shadow: 1px 0 0 var(--borde); }
 .tabla-inv .nombre small { color: var(--gris); }
 .tabla-inv td.mes { background: var(--rosa-suave); }
-.tabla-inv td.vacia { color: #c9b5bd; }
+.tabla-inv td.vacia { color: #A9B5B8; }
 .tabla-inv th[data-columna], .tabla-inv td[data-celda], .tabla-inv td.nombre { cursor: pointer; }
 .fila-fecha { display: flex; gap: 10px; align-items: flex-end; flex-wrap: wrap; margin: 12px 0 4px; }
 .fila-fecha .campo { margin: 0; }

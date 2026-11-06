@@ -2,6 +2,7 @@
 // El jefe sigue trabajando en su móvil; solo sube lo que publica. El equipo lo lee.
 // Mismas colecciones y reglas que la versión 2 (firestore.rules): las dos versiones conviven sin problema.
 import { Capacitor } from '@capacitor/core';
+import type { ClavePaleta } from '../dominio/paletas';
 import { initializeApp } from 'firebase/app';
 import { GoogleAuthProvider, connectAuthEmulator, getAuth, onAuthStateChanged, signInWithCredential, signInWithPopup, signOut, type User } from 'firebase/auth';
 import {
@@ -41,7 +42,7 @@ function yo(): User {
 
 export interface PersonaNube { id: string; nombre: string; contrato: number | null }
 export interface SemanaNube { equipo: PersonaNube[]; turnos: Record<string, string[]>; libres: Record<string, number[]> }
-export interface Codigo { rid: string; dueno: string; nombre: string; tipo: string; equipo: PersonaNube[] }
+export interface Codigo { rid: string; dueno: string; nombre: string; tipo: string; tema?: ClavePaleta; equipo: PersonaNube[] }
 export interface Miembro { uid: string; rol: string; codigo: string; personaId: string | null; nombre: string; correo: string }
 export interface Aviso { id: string; texto: string; creado: number }
 export interface Leido { uid: string; personaId: string | null; nombre: string }
@@ -59,23 +60,23 @@ export const nube = {
     : undefined,
 
   // --- Jefe ---
-  async crearRestaurante({ nombre, tipo, equipo }: { nombre: string; tipo: string; equipo: PersonaNube[] }) {
+  async crearRestaurante({ nombre, tipo, tema, equipo }: { nombre: string; tipo: string; tema: ClavePaleta; equipo: PersonaNube[] }) {
     const u = yo();
     let codigo = nuevoCodigo();
     for (let i = 0; i < 5 && (await getDoc(doc(db, 'codigos', codigo))).exists(); i++) codigo = nuevoCodigo();
     const ref = doc(collection(db, 'restaurantes'));
     const lote = writeBatch(db);
-    lote.set(ref, { nombre, tipo, dueno: u.uid, codigo, creado: serverTimestamp() });
-    lote.set(doc(db, 'codigos', codigo), { rid: ref.id, dueno: u.uid, nombre, tipo, equipo });
+    lote.set(ref, { nombre, tipo, tema, dueno: u.uid, codigo, creado: serverTimestamp() });
+    lote.set(doc(db, 'codigos', codigo), { rid: ref.id, dueno: u.uid, nombre, tipo, tema, equipo });
     await lote.commit();
     return { rid: ref.id, codigo };
   },
-  async publicarSemana(rid: string, codigo: string, clave: string, semana: SemanaNube, cabecera: { nombre: string; tipo: string }) {
+  async publicarSemana(rid: string, codigo: string, clave: string, semana: SemanaNube, cabecera: { nombre: string; tipo: string; tema: ClavePaleta }) {
     yo();
     const lote = writeBatch(db);
     lote.set(doc(db, 'restaurantes', rid, 'semanas', clave), { ...semana, publicado: serverTimestamp() });
-    lote.update(doc(db, 'restaurantes', rid), { nombre: cabecera.nombre, tipo: cabecera.tipo });
-    lote.update(doc(db, 'codigos', codigo), { nombre: cabecera.nombre, tipo: cabecera.tipo, equipo: semana.equipo });
+    lote.update(doc(db, 'restaurantes', rid), { nombre: cabecera.nombre, tipo: cabecera.tipo, tema: cabecera.tema });
+    lote.update(doc(db, 'codigos', codigo), { nombre: cabecera.nombre, tipo: cabecera.tipo, tema: cabecera.tema, equipo: semana.equipo });
     await lote.commit();
   },
   async miembros(rid: string): Promise<Miembro[]> {
@@ -97,9 +98,9 @@ export const nube = {
       rol: 'equipo', codigo, personaId, nombre: u.displayName || '', correo: u.email || '', unido: serverTimestamp(),
     });
   },
-  async leerRestaurante(rid: string): Promise<{ nombre: string; tipo: string } | null> {
+  async leerRestaurante(rid: string): Promise<{ nombre: string; tipo: string; tema?: ClavePaleta } | null> {
     const d = await getDoc(doc(db, 'restaurantes', rid));
-    return d.exists() ? (d.data() as { nombre: string; tipo: string }) : null;
+    return d.exists() ? (d.data() as { nombre: string; tipo: string; tema?: ClavePaleta }) : null;
   },
   async leerMiFicha(rid: string): Promise<{ personaId: string | null } | null> {
     const d = await getDoc(doc(db, 'restaurantes', rid, 'miembros', yo().uid));

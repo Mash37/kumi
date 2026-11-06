@@ -59,9 +59,9 @@ export function PanelIncidencia({ id }: { id: string }) {
       <h3>{nombreDe(d, id) + ' · ' + DIAS[(fecha.getDay() + 6) % 7] + ' ' + fecha.getDate()}</h3>
       <p className="sub">{u.tienePlan ? <>En el horario: <b>{textoTurnos4(plan)}</b></> : 'Según el horario, libra este día'}</p>
       <div className="opciones-inc">
-        {u.tienePlan && opcion('falta', '❌ Faltó', 'No vino a trabajar')}
-        {u.tienePlan && opcion('cambio', '🕒 Hizo otro horario', 'Llegó tarde, se fue antes o se quedó más')}
-        {opcion('cubre', '🤝 Cubrió a un compañero', u.tienePlan ? 'Además de su turno, hizo el de otra persona' : 'Vino aunque libraba, para cubrir a alguien')}
+        {u.tienePlan && opcion('falta', 'Faltó', 'No vino a trabajar')}
+        {u.tienePlan && opcion('cambio', 'Hizo otro horario', 'Llegó tarde, se fue antes o se quedó más')}
+        {opcion('cubre', 'Cubrió a un compañero', u.tienePlan ? 'Además de su turno, hizo el de otra persona' : 'Vino aunque libraba, para cubrir a alguien')}
       </div>
       {u.tipo === 'falta' && (
         <>

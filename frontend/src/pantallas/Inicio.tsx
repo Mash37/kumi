@@ -10,6 +10,8 @@ import { Instalar } from '../componentes/Instalar';
 import { TarjetaTablon } from '../componentes/EnLinea';
 import { lunesEsta, lunesProxima, usarUi } from '../estado/ui';
 import { tema } from '../tema';
+import { ordenInicio, tarjetaVisible } from '../dominio/inicio';
+import { Icono } from '../componentes/Icono';
 
 function saludo(h: number) { return h < 6 ? 'Buenas noches' : h < 14 ? 'Buenos días' : h < 21 ? 'Buenas tardes' : 'Buenas noches'; }
 // El inicio muestra quién está en cocina «ahora»: se actualiza cada minuto.
@@ -24,7 +26,6 @@ export function Inicio() {
   const ahora = usarMinuto();
   const r = d.restaurante ?? {};
   const t = tema(r.tipo);
-  const ver = { servicio: true, semana: true, horas: true, stock: true, dato: true, ...(d.inicio || {}) };
   const h = ahora.getHours();
 
   // Hasta las 6:00 sigue contando el servicio de la noche anterior.
@@ -45,7 +46,6 @@ export function Inicio() {
           <span className="nombre">{r.persona}</span>
         </div>
         <div className="fecha">{DIAS[(ahora.getDay() + 6) % 7] + ', ' + ahora.getDate() + ' de ' + MESES[ahora.getMonth()]}</div>
-        <div className="ilustracion" dangerouslySetInnerHTML={{ __html: t.ilustracion }} />
         <div className="ahora">
           <span className={'pulso' + (enCocina.length ? ' vivo' : '')} />
           <span>{enCocina.length ? (enCocina.length === 1 ? '1 persona' : enCocina.length + ' personas') + ' en cocina ahora'
@@ -55,18 +55,22 @@ export function Inicio() {
 
       <div className="tablero">
         <Instalar />
-        {ver.servicio && (
-          <div className="tarjeta" id="tarjetaServicio">
-            <h3>El servicio de hoy</h3>
-            <div className="sub">{DIAS[idxServicio][0].toUpperCase() + DIAS[idxServicio].slice(1) + ' ' + diaServicio.getDate() + (trabajan.length ? ' · ' + trabajan.length + ' de turno' : '')}</div>
-            <LineaHoy filas={filas} trabajan={trabajan} minAhora={minAhora} />
-          </div>
-        )}
-        {ver.semana && <TarjetaSemana />}
-        <TarjetaTablon />
-        {ver.horas && <TarjetaHoras />}
-        {ver.stock && <TarjetaStock />}
-        {ver.dato && <TarjetaDato ahora={ahora} />}
+        {ordenInicio(d).filter((k) => tarjetaVisible(d, k)).map((k) => {
+          switch (k) {
+            case 'servicio': return (
+              <div className="tarjeta" id="tarjetaServicio" key={k}>
+                <h3>El servicio de hoy</h3>
+                <div className="sub">{DIAS[idxServicio][0].toUpperCase() + DIAS[idxServicio].slice(1) + ' ' + diaServicio.getDate() + (trabajan.length ? ' · ' + trabajan.length + ' de turno' : '')}</div>
+                <LineaHoy filas={filas} trabajan={trabajan} minAhora={minAhora} />
+              </div>
+            );
+            case 'semana': return <TarjetaSemana key={k} />;
+            case 'tablon': return <TarjetaTablon key={k} />;
+            case 'horas': return <TarjetaHoras key={k} />;
+            case 'stock': return <TarjetaStock key={k} />;
+            case 'dato': return <TarjetaDato key={k} ahora={ahora} />;
+          }
+        })}
         <div className="firma">© {ahora.getFullYear()} · Kumi by <b>Mash</b></div>
       </div>
     </section>
@@ -117,7 +121,6 @@ function TarjetaSemana() {
   const porDia = DIAS_CORTOS.map((_, i) => d.equipo.filter((p) => prox && prox[p.id] && prox[p.id][i].some(Boolean)).length);
   const listos = porDia.filter(Boolean).length;
   const maxDia = Math.max(...porDia, 1);
-  const anillo = tema(d.restaurante?.tipo).colores.anillo;
   const r = 36, circ = 2 * Math.PI * r;
   const revisar = listos ? cosasQueRevisar(d, lunesP) : 0;
   const preparar = () => { ponerSemana(lunesP); ponerDia(0); ir('rellenar'); };
@@ -128,9 +131,8 @@ function TarjetaSemana() {
       <div className="resumen">
         <div className="anillo">
           <svg width="86" height="86" viewBox="0 0 86 86">
-            <defs><linearGradient id="gAnillo" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor={anillo[0]} /><stop offset="1" stopColor={anillo[1]} /></linearGradient></defs>
             <circle cx="43" cy="43" r={r} fill="none" style={{ stroke: 'var(--rosa-suave)' }} strokeWidth="9" />
-            <circle cx="43" cy="43" r={r} fill="none" stroke="url(#gAnillo)" strokeWidth="9" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - listos / 7)} />
+            <circle cx="43" cy="43" r={r} fill="none" style={{ stroke: 'var(--boton)' }} strokeWidth="9" strokeLinecap="round" strokeDasharray={circ} strokeDashoffset={circ * (1 - listos / 7)} />
           </svg>
           <div className="cifra"><b>{listos}/7</b><small>días</small></div>
         </div>
@@ -144,8 +146,8 @@ function TarjetaSemana() {
         {listos === 0 ? <>Todavía <b>sin empezar</b>. Lo normal es prepararla el jueves o el viernes.</>
           : listos === 7 ? <><b>¡Lista!</b> Todos los días tienen turnos. Ya puedes enviarla.</>
           : <>Vas por <b>{listos} de 7 días</b>. ¡Ya casi!</>}
-        {revisar > 0 ? <><br />⚠️ <b>{revisar === 1 ? '1 cosa que revisar' : revisar + ' cosas que revisar'}</b>: míralas en Cuadro antes de enviarla.</>
-          : listos > 0 && <><br />✅ Sin avisos: cobertura y descansos bien.</>}
+        {revisar > 0 ? <><br /><Icono n="alerta" tam={16} /> <b>{revisar === 1 ? '1 cosa que revisar' : revisar + ' cosas que revisar'}</b>: míralas en Cuadro antes de enviarla.</>
+          : listos > 0 && <><br /><Icono n="ok" tam={16} /> Sin avisos: cobertura y descansos bien.</>}
       </div>
       <div className="acciones">
         <button className="btn principal" onClick={preparar}>{listos ? 'Seguir con el horario' : 'Preparar el horario'}</button>
@@ -191,7 +193,7 @@ function TarjetaStock() {
       <div className="sub">{activos.length ? 'Compras de ' + MESES[hoy.getMonth()] + ': ' + euros.format(gasto) : 'Nuevo'}</div>
       {!activos.length ? <div className="vacio">Lleva el control de lo que hay en cocina, qué pedir y cuánto se gasta cada mes.</div>
         : pedir.length ? <div className="estado"><b>{pedir.length + (pedir.length === 1 ? ' producto' : ' productos') + ' por pedir:'}</b> {pedir.slice(0, 4).map((x) => x.p.nombre).join(', ') + (pedir.length > 4 ? '…' : '')}</div>
-        : <div className="estado">Todo por encima del mínimo. 👌</div>}
+        : <div className="estado">Todo por encima del mínimo.</div>}
       <div className="acciones" style={{ marginTop: 12 }}>
         <button className="btn secundario" onClick={() => usarUi.getState().ir('stock')}>{!activos.length ? 'Empezar con el stock' : pedir.length ? 'Ver qué pedir' : 'Ir al stock'}</button>
       </div>

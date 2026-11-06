@@ -50,7 +50,7 @@ export async function escucharMiRestaurante() {
   const nube = await cargarNube();
   if (dejarDeEscuchar) return;
   escucharAvisos();
-  nube.leerRestaurante(c.rid).then((r) => { if (r) cambiar((x) => { x.restaurante = { ...(x.restaurante || {}), nombre: r.nombre, tipo: r.tipo }; }); }).catch(() => {});
+  nube.leerRestaurante(c.rid).then((r) => { if (r) cambiar((x) => { x.restaurante = { ...(x.restaurante || {}), nombre: r.nombre, tipo: r.tipo, ...(r.tema ? { tema: r.tema } : {}) }; }); }).catch(() => {});
   nube.leerMiFicha(c.rid).then((f) => { if (f && f.personaId !== c.personaId) cambiar((x) => { x.cuenta!.personaId = f.personaId; }); }).catch(() => {});
   dejarDeEscuchar = nube.escucharSemanas(c.rid, (semanas) => {
     if (!semanas.length) return;

@@ -24,7 +24,7 @@ export interface Compra { id: string; p: string; cant: number; coste: number; ts
 export interface Recuento { id: string; p: string; cant: number; ts: number; tipo?: 'mes' }
 export interface Stock { productos: Producto[]; compras: Compra[]; recuentos: Recuento[]; proveedores?: Proveedor[]; ultimoProveedor?: string }
 
-export interface Restaurante { persona?: string; nombre?: string; tipo?: string; modo?: 'auto' | 'claro' | 'oscuro' }
+export interface Restaurante { persona?: string; nombre?: string; tipo?: string; tema?: 'kitchen' | 'vegano' | 'mar'; modo?: 'auto' | 'claro' | 'oscuro' }
 
 export interface Cuenta {
   rol: 'jefe' | 'equipo';
@@ -51,7 +51,8 @@ export interface Datos {
   reglas?: Partial<Reglas>;
   franjas?: Franja[];
   stock?: Stock;
-  inicio?: Partial<Record<'servicio' | 'semana' | 'horas' | 'stock' | 'dato', boolean>>;
+  inicio?: Partial<Record<'servicio' | 'semana' | 'tablon' | 'horas' | 'stock' | 'dato', boolean>>;
+  inicioOrden?: ('servicio' | 'semana' | 'tablon' | 'horas' | 'stock' | 'dato')[];
   cuenta?: Cuenta;
   /** Por semana publicada: lo que se subió (para saber si hay cambios sin publicar) y cuándo. */
   publicado?: Record<string, { huella: string; cuando: number }>;

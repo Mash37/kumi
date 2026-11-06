@@ -5,6 +5,7 @@ import type { Persona } from '../datos/tipos';
 import { leerNumero } from '../dominio/stock';
 import { Avatar } from '../componentes/Avatar';
 import { usarUi } from '../estado/ui';
+import { Icono } from '../componentes/Icono';
 
 export function Equipo() {
   const d = usarAlmacen((s) => s.datos);
@@ -14,7 +15,7 @@ export function Equipo() {
     <main>
       <section className="vista activa" id="vistaEquipo">
         <button className="volver" onClick={() => usarUi.getState().ir('inicio')}><span>‹</span> Inicio</button>
-        <h2 className="titulo-equipo"><span className="jp-equipo">仲間</span> Tu equipo</h2>
+        <h2 className="titulo-equipo">Tu equipo</h2>
         <p className="sub-equipo">{d.restaurante?.nombre ? 'El equipo de ' + d.restaurante.nombre : 'Tu equipo de cocina'}</p>
         <div id="equipo">
           {d.equipo.map((p, i) => <FilaEquipo key={p.id} p={p} i={i} total={d.equipo.length} enfocar={p.id === nuevo} />)}
@@ -45,7 +46,7 @@ function FilaEquipo({ p, i, total, enfocar }: { p: Persona; i: number; total: nu
         if (!confirm('¿Quitar a ' + (p.nombre || 'esta persona') + ' del equipo?')) return;
         // Se guarda su nombre: sus horas de este mes siguen saliendo en el informe para la nómina.
         cambiar((x) => { x.bajas = x.bajas || {}; x.bajas[p.id] = p.nombre; x.equipo.splice(i, 1); });
-      }}>🗑</button>
+      }}><Icono n="papelera" tam={18} /></button>
       <label className="contrato">Contrato{' '}
         <input className="numero" inputMode="decimal" value={contrato} placeholder="—" aria-label="Horas de contrato a la semana" style={malo ? { borderColor: '#d92d20' } : undefined}
           onChange={(e) => {

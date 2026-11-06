@@ -8,6 +8,8 @@ import { cifra } from '../dominio/stock';
 import { fuentesListas, imprimir } from '../componentes/archivos';
 import { usarUi } from '../estado/ui';
 import { tema } from '../tema';
+import { AVATARES } from '../dominio/paletas';
+import { Icono } from '../componentes/Icono';
 
 // Los primeros días del mes se suele preparar la nómina del mes anterior.
 function mesInicial() { const h = new Date(); return h.getDate() <= 7 ? new Date(h.getFullYear(), h.getMonth() - 1, 1) : new Date(h.getFullYear(), h.getMonth(), 1); }
@@ -37,7 +39,7 @@ export function Horas() {
           <div><b>{ultimo - sinHorario.length + '/' + ultimo}</b><span>días con horario</span></div>
         </div></div>
         {sinHorario.length > 0 && sinHorario.length < ultimo && (
-          <div className="alerta">⚠️ <b>{sinHorario.length + (sinHorario.length === 1 ? ' día' : ' días') + ' sin ningún turno'}</b> ({tramosDias(sinHorario)}). Si se trabajó esos días, falta rellenarlos para que la nómina salga bien.</div>
+          <div className="alerta"><Icono n="alerta" tam={18} /> <b>{sinHorario.length + (sinHorario.length === 1 ? ' día' : ' días') + ' sin ningún turno'}</b> ({tramosDias(sinHorario)}). Si se trabajó esos días, falta rellenarlos para que la nómina salga bien.</div>
         )}
         <div className="tarjeta">
           <h3>Por persona</h3>
@@ -49,17 +51,16 @@ export function Horas() {
             if (persona?.contrato) extras.push('contrato ' + cifra.format(persona.contrato) + ' h/sem');
             if (f.faltas) extras.push(f.faltas + (f.faltas === 1 ? ' falta' : ' faltas'));
             if (f.coberturas) extras.push('cubrió ' + f.coberturas);
-            if (f.noche) extras.push(horasExactas(f.noche) + ' noche');
-            if (f.domingo) extras.push(horasExactas(f.domingo) + ' domingo');
             return (
               <details className="persona-mes" key={f.id}>
                 <summary>
-                  <span className="avatar" style={{ background: i >= 0 ? t.avatares[i % t.avatares.length] : '#b3a9b1' }}>{iniciales(d, f.nombre.replace(' (baja)', ''))}</span>
+                  <span className="avatar" style={{ background: i >= 0 ? AVATARES[i % AVATARES.length] : '#A9B5B8' }}>{iniciales(d, f.nombre.replace(' (baja)', ''))}</span>
                   <span className="quien"><b>{f.nombre}</b><small>{extras.join(' · ')}</small></span>
                   <span className={'total' + (f.min ? '' : ' cero')}>{horasExactas(f.min)}</span>
                 </summary>
                 {f.dias.length > 0 && (
                   <div className="detalle-mes">
+                    {(f.noche > 0 || f.domingo > 0) && <p className="extra-mes">{[f.noche ? horasExactas(f.noche) + ' de noche (22–6 h)' : '', f.domingo ? horasExactas(f.domingo) + ' en domingo' : ''].filter(Boolean).join(' · ')}</p>}
                     {f.dias.map((dia, k) => (
                       <div key={k}><span>{DIAS_ABREV[dia.idx] + ' ' + dia.fecha.getDate()}</span><span style={dia.inc ? { color: 'var(--frambuesa)' } : undefined}>{textoDiaInforme(d, dia)}</span><span>{horasExactas(dia.min)}</span></div>
                     ))}
