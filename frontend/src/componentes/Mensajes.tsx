@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { usarUi } from '../estado/ui';
 
-// El mensajito de abajo (2,5 s) y la barra «Deshacer» (10 s).
+// El mensajito de abajo (de 2,5 a 6 s, según lo largo) y la barra «Deshacer» (10 s).
 export function Mensajes() {
   const aviso = usarUi((s) => s.aviso);
   const deshacer = usarUi((s) => s.deshacer);
@@ -9,7 +9,7 @@ export function Mensajes() {
   useEffect(() => {
     if (!aviso) return;
     setVer(true);
-    const t = setTimeout(() => setVer(false), 2500);
+    const t = setTimeout(() => setVer(false), Math.min(6000, 2500 + aviso.texto.length * 40));
     return () => clearTimeout(t);
   }, [aviso]);
   useEffect(() => {

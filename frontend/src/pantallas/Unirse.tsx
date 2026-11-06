@@ -56,7 +56,7 @@ export function Unirse({ codigoInicial, volver }: { codigoInicial: string; volve
         <div className="tarjeta">
           <h3>1 · Entra con Google</h3>
           <p className="sub">{u ? <>Has entrado como <b>{u.displayName || u.email}</b>.</> : 'Así tu jefe sabe quién eres y nadie de fuera ve el horario.'}</p>
-          {!u && <div className="acciones"><button className="btn principal" onClick={() => nube.entrar().catch((e) => { if (e.code === 'kumi/nativo-sin-configurar') avisar('Entrar con Google en la app llega muy pronto; de momento, desde la web'); else if (e.code !== 'auth/popup-closed-by-user') avisar('No se pudo entrar con Google'); })}>Entrar con Google</button></div>}
+          {!u && <div className="acciones"><button className="btn principal" onClick={() => nube.entrar().catch((e) => { if (e.code === 'kumi/nativo-sin-configurar') avisar('Para entrar con Google, abre Kumi en la web: mash37.github.io/kumi'); else if (e.code !== 'auth/popup-closed-by-user') avisar('No se pudo entrar con Google'); })}>Entrar con Google</button></div>}
         </div>
         {u && (
           <div className="tarjeta">
