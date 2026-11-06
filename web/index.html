@@ -3,26 +3,25 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Kumi: app de cuadrantes y horarios para cocinas de restaurante</title>
-<meta name="description" content="Haz el cuadrante de turnos de tu cocina en cinco minutos. Horarios, horas del mes e inventario con precios en el móvil de todo el equipo. Un precio por local. Prueba gratis.">
+<title>Kumi: app de cuadrantes y horarios para equipos con turnos</title>
+<meta name="description" content="Haz el cuadrante de turnos de tu equipo en cinco minutos: cocinas, hoteles pequeños, cafeterías y tiendas. Horarios, horas del mes e inventario en el móvil de todo el equipo. Un precio por local. Prueba gratis.">
 <link rel="canonical" href="https://mash37.github.io/kumi-web/">
 <meta name="robots" content="index, follow, max-image-preview:large">
 <meta name="theme-color" content="#22303a">
 <meta property="og:type" content="website">
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="Kumi">
-<meta property="og:title" content="Kumi: el horario de tu cocina, en un momento">
+<meta property="og:title" content="Kumi: el horario de tu equipo, en un momento">
 <meta property="og:description" content="Cuadrante de turnos, horas del mes e inventario con precios, en el móvil de todo el equipo. Prueba gratis.">
 <meta property="og:url" content="https://mash37.github.io/kumi-web/">
 <meta property="og:image" content="https://mash37.github.io/kumi-web/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="Kumi, la app de horarios para cocinas, con la pantalla de turnos del día">
+<meta property="og:image:alt" content="Kumi, la app de horarios para equipos con turnos, con la pantalla de turnos del día">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
 <link rel="apple-touch-icon" href="icon-180.png">
-<link rel="preload" href="fuentes/PlayfairDisplay-Italic.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="preload" href="fuentes/Jost.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fuentes/DMSans-latin.woff2" as="font" type="font/woff2" crossorigin>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -37,7 +36,7 @@
     {
       "@type": "SoftwareApplication",
       "name": "Kumi",
-      "description": "App para hacer el cuadrante de turnos, contar las horas del mes y llevar el inventario de la cocina de un restaurante.",
+      "description": "App para hacer el cuadrante de turnos, contar las horas del mes y llevar el inventario de equipos pequeños con turnos: cocinas, hoteles, cafeterías y tiendas.",
       "applicationCategory": "BusinessApplication",
       "operatingSystem": "Web, Android, iOS",
       "url": "https://mash37.github.io/kumi/",
@@ -51,8 +50,9 @@
       "@type": "FAQPage",
       "mainEntity": [
         { "@type": "Question", "name": "¿Necesito instalar algo para usar Kumi?", "acceptedAnswer": { "@type": "Answer", "text": "No. Kumi funciona en el navegador del móvil, la tablet o el ordenador, y se puede añadir a la pantalla de inicio." } },
-        { "@type": "Question", "name": "¿El equipo de cocina tiene que pagar?", "acceptedAnswer": { "@type": "Answer", "text": "No. Paga el local, una sola vez, y cada persona del equipo entra gratis con un código." } },
+        { "@type": "Question", "name": "¿El equipo tiene que pagar?", "acceptedAnswer": { "@type": "Answer", "text": "No. Paga el local, una sola vez, y cada persona del equipo entra gratis con un código." } },
         { "@type": "Question", "name": "¿Imprimir los informes de horas y stock cuesta algo?", "acceptedAnswer": { "@type": "Answer", "text": "No. Los informes se imprimen o se guardan en PDF en todos los planes, también en el gratis." } },
+        { "@type": "Question", "name": "¿Sirve si mi negocio no es una cocina?", "acceptedAnswer": { "@type": "Answer", "text": "Sí. Kumi nació en una cocina, pero el horario, las horas del mes y el tablón de avisos sirven a cualquier equipo con turnos: un hotel pequeño, una cafetería o una tienda. De momento, los productos de ejemplo del stock están pensados para cocinas; en otro negocio añades los tuyos." } },
         { "@type": "Question", "name": "¿Kumi sirve como registro de jornada?", "acceptedAnswer": { "@type": "Answer", "text": "Todavía no. Kumi organiza los turnos y las horas previstas; el fichaje de entrada y salida está en preparación." } }
       ]
     }
@@ -60,14 +60,13 @@
 }
 </script>
 <style>
-@font-face { font-family: 'Playfair Display'; font-style: italic; font-weight: 400 900; font-display: swap; src: url(fuentes/PlayfairDisplay-Italic.woff2) format('woff2'); }
-@font-face { font-family: 'Great Vibes'; font-weight: 400; font-display: swap; src: url(fuentes/GreatVibes.woff2) format('woff2'); }
-@font-face { font-family: 'Jost'; font-weight: 100 900; font-display: swap; src: url(fuentes/Jost.woff2) format('woff2'); }
-/* Layout: una columna con bandas a todo lo ancho; el móvil de Kumi se puede tocar y la página entera toma el color de la cocina que elijas. */
+@font-face { font-family: 'DM Sans'; font-weight: 100 1000; font-display: swap; src: url(fuentes/DMSans-latin.woff2) format('woff2'); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: 'DM Sans'; font-weight: 100 1000; font-display: swap; src: url(fuentes/DMSans-latin-ext.woff2) format('woff2'); unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF; }
+/* Layout: una columna con bandas a todo lo ancho; el móvil de Kumi se puede tocar y la página entera toma el tema de color que elijas. */
 :root {
   --t-rosa: #f2a900; --t-coral: #ffc94a; --t-frambuesa: #8a5d00; --t-medio: #f2a900; --t-suave: #fbf1d4; --t-sobre: #1b252c;
-  --t-intenso: linear-gradient(150deg, #3a4a52 0%, #22303a 60%, #1b252c 100%);
-  --t-em: linear-gradient(135deg, #8a5d00 0%, #c98a00 100%);
+  --t-intenso: #22303a;
+  --t-em: #8a5d00;
   --t-hero-acento: #f2a900;
   --fondo: #f6f5f0;
   --papel: #ffffff;
@@ -77,12 +76,12 @@
   --suave: var(--t-suave);
   --acento: var(--t-frambuesa);
   --rosa: var(--t-rosa);
-  --deg: linear-gradient(135deg, var(--t-rosa) 0%, var(--t-coral) 100%);
+  --deg: var(--t-rosa);
   --deg-intenso: var(--t-intenso);
   --sombra: color-mix(in srgb, var(--t-rosa) 30%, transparent);
-  --titulo: 'Playfair Display', Georgia, serif;
-  --firma: 'Great Vibes', 'Snell Roundhand', cursive;
-  --texto: 'Jost', 'Avenir Next', system-ui, sans-serif;
+  --titulo: 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --firma: var(--titulo);
+  --texto: var(--titulo);
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
@@ -96,7 +95,7 @@
 }
 * { box-sizing: border-box; }
 body { background: var(--fondo); color: var(--tinta); font-family: var(--texto); font-size: 17px; line-height: 1.6; transition: background-color .4s; }
-h1, h2, h3 { font-family: var(--titulo); font-style: italic; line-height: 1.1; text-wrap: balance; margin: 0; }
+h1, h2, h3 { font-family: var(--titulo); font-style: normal; font-weight: 700; letter-spacing: -.02em; line-height: 1.1; text-wrap: balance; margin: 0; }
 p { margin: 0; }
 a { color: inherit; }
 button { font: inherit; color: inherit; }
@@ -116,8 +115,8 @@ button { font: inherit; color: inherit; }
 .cabecera { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--fondo) 88%, transparent); backdrop-filter: blur(10px); border-bottom: 1px solid var(--borde); }
 .cabecera .envoltura { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-block: 12px; }
 .marca { display: flex; align-items: center; gap: 10px; text-decoration: none; }
-.marca .logo { width: 36px; height: 36px; border-radius: 10px; background: var(--deg); display: grid; place-items: center; color: var(--t-sobre); font-family: var(--firma); font-size: 26px; line-height: 1; }
-.marca span { font-family: var(--titulo); font-style: italic; font-weight: 800; font-size: 24px; }
+.marca .logo { width: 36px; height: 36px; border-radius: 10px; background: var(--deg); display: grid; place-items: center; color: var(--t-sobre); font-family: var(--titulo); font-weight: 700; font-size: 20px; line-height: 1; }
+.marca span { font-family: var(--titulo); font-style: normal; font-weight: 800; font-size: 24px; }
 .cabecera nav { display: flex; gap: 22px; font-size: 15px; color: var(--gris); }
 .cabecera nav a { text-decoration: none; }
 .cabecera nav a:hover { color: var(--tinta); }
@@ -129,7 +128,7 @@ button { font: inherit; color: inherit; }
 .hero::before { content: ''; position: absolute; inset: -30% -10% auto auto; width: 70vw; max-width: 760px; aspect-ratio: 1; background: radial-gradient(circle, color-mix(in srgb, var(--t-coral) 30%, transparent), transparent 62%); pointer-events: none; }
 .hero .envoltura { position: relative; display: grid; grid-template-columns: 1.1fr .9fr; gap: 48px; align-items: center; padding-block: clamp(40px, 7vw, 88px); }
 .hero h1 { font-size: clamp(42px, 6.4vw, 78px); font-weight: 800; }
-.hero h1 em { font-family: var(--firma); font-style: normal; font-weight: 400; background: var(--t-em); -webkit-background-clip: text; background-clip: text; color: transparent; font-size: 1.18em; padding-right: .1em; }
+.hero h1 em { font-style: normal; color: var(--t-hero-acento); }
 .hero .lead { margin-top: 22px; font-size: clamp(18px, 2vw, 21px); color: var(--gris); max-width: 34em; }
 .cocinas { margin-top: 26px; }
 .cocinas p { font-size: 14px; font-weight: 600; color: var(--gris); margin-bottom: 10px; }
@@ -143,10 +142,10 @@ button { font: inherit; color: inherit; }
 .tienda b { display: block; font-size: 16px; }
 .tienda .pronto { font-size: 11px; opacity: .7; }
 @media (max-width: 880px) { .hero .envoltura { grid-template-columns: 1fr; } }
-/* Hero en pizarra (o en el color intenso de la cocina elegida) */
+/* Hero en pizarra (o en el color profundo del tema elegido) */
 .hero { background: var(--deg-intenso); color: #f2f1ec; transition: background .4s; }
 .hero .eyebrow { color: var(--t-hero-acento); }
-.hero h1 em { background: var(--t-hero-acento); -webkit-background-clip: text; background-clip: text; }
+.hero h1 em { color: var(--t-hero-acento); }
 .hero .lead, .cocinas p, .pista-demo { color: rgba(242, 241, 236, .82); }
 .hero .chip-cocina { background: rgba(255, 255, 255, .06); border-color: rgba(255, 255, 255, .18); color: #f2f1ec; }
 .hero .chip-cocina[aria-pressed="true"] { background: rgba(255, 255, 255, .16); border-color: var(--t-coral); }
@@ -160,7 +159,7 @@ button { font: inherit; color: inherit; }
 .pantalla { height: 100%; border-radius: 34px; overflow: hidden; background: #fff8f9; color: #1f1418; display: flex; flex-direction: column; font-size: 12px; }
 .pantalla .barra { background: var(--deg-intenso); color: #fff; padding: 26px 16px 16px; transition: background .4s; }
 .pantalla .barra small { opacity: .85; font-size: 11px; }
-.pantalla .barra .dia-titulo { margin: 2px 0 0; font-family: var(--titulo); font-style: italic; font-size: 22px; }
+.pantalla .barra .dia-titulo { margin: 2px 0 0; font-family: var(--titulo); font-style: normal; font-size: 22px; }
 .dias { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; padding: 12px 12px 6px; }
 .dia { text-align: center; padding: 6px 0; border-radius: 10px; background: #fff; border: 1px solid #f1e2e8; font-size: 10px; color: #74656b; cursor: pointer; }
 .dia b { display: block; font-size: 13px; color: #1f1418; }
@@ -215,6 +214,12 @@ button { font: inherit; color: inherit; }
 .barra-h .riel span { display: block; height: 100%; background: var(--deg); border-radius: inherit; }
 .barra-h b { text-align: right; font-variant-numeric: tabular-nums; }
 @media (max-width: 760px) { .funciones { grid-template-columns: 1fr; } }
+.negocios { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; margin-top: 40px; }
+.negocio { background: var(--papel); border: 1px solid var(--borde); border-radius: 22px; padding: 26px; display: grid; gap: 10px; align-content: start; min-width: 0; }
+.negocio h3 { font-size: 22px; }
+.negocio p { color: var(--gris); }
+@media (max-width: 960px) { .negocios { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+@media (max-width: 560px) { .negocios { grid-template-columns: 1fr; } }
 .proximos { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; margin-top: 40px; }
 .proximo { background: var(--papel); border: 1px dashed var(--borde); border-radius: 22px; padding: 26px; display: grid; gap: 10px; align-content: start; min-width: 0; }
 .proximo .cabeza { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
@@ -233,7 +238,7 @@ button { font: inherit; color: inherit; }
 .control small { display: block; color: var(--gris); font-size: 14px; margin-top: 2px; }
 input[type="range"] { width: 100%; margin-top: 10px; accent-color: var(--t-rosa); }
 .resultado { border-radius: 22px; padding: 28px; background: var(--deg-intenso); color: #fff; display: grid; gap: 18px; box-shadow: 0 20px 40px var(--sombra); transition: background .4s; }
-.resultado .grande { font-family: var(--titulo); font-style: italic; font-weight: 800; font-size: clamp(48px, 7vw, 72px); line-height: 1; font-variant-numeric: tabular-nums; }
+.resultado .grande { font-family: var(--titulo); font-style: normal; font-weight: 800; font-size: clamp(48px, 7vw, 72px); line-height: 1; font-variant-numeric: tabular-nums; }
 .resultado .linea { display: flex; justify-content: space-between; gap: 12px; padding-top: 12px; border-top: 1px solid rgba(255,255,255,.3); font-variant-numeric: tabular-nums; }
 .resultado .linea b { white-space: nowrap; }
 .resultado small { opacity: .85; font-size: 13px; }
@@ -255,15 +260,15 @@ input[type="range"] { width: 100%; margin-top: 10px; accent-color: var(--t-rosa)
 /* Pasos */
 .pasos { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; margin-top: 40px; counter-reset: paso; }
 .paso { counter-increment: paso; padding-top: 18px; border-top: 2px solid var(--rosa); }
-.paso::before { content: counter(paso); font-family: var(--titulo); font-style: italic; font-weight: 800; font-size: 44px; color: var(--acento); line-height: 1; }
+.paso::before { content: counter(paso); font-family: var(--titulo); font-style: normal; font-weight: 800; font-size: 44px; color: var(--acento); line-height: 1; }
 .paso h3 { font-size: 22px; margin: 10px 0 6px; }
 .paso p { color: var(--gris); }
 @media (max-width: 760px) { .pasos { grid-template-columns: 1fr; } }
 
 /* Historia */
 .historia { background: var(--deg-intenso); color: #fff; transition: background .4s; }
-.historia p.grande { font-family: var(--titulo); font-style: italic; font-size: clamp(26px, 3.6vw, 42px); line-height: 1.25; max-width: 26em; text-wrap: balance; }
-.historia p.firma { margin-top: 18px; font-family: var(--firma); font-size: 34px; }
+.historia p.grande { font-family: var(--titulo); font-style: normal; font-size: clamp(26px, 3.6vw, 42px); line-height: 1.25; max-width: 26em; text-wrap: balance; }
+.historia p.firma { margin-top: 18px; font-size: 18px; font-weight: 600; }
 
 /* Precios */
 .periodo { margin-top: 28px; display: inline-flex; padding: 4px; border-radius: 999px; background: var(--papel); border: 1px solid var(--borde); }
@@ -317,12 +322,12 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
   <section class="hero">
     <div class="envoltura">
       <div>
-        <p class="eyebrow">App de cuadrantes y horarios para cocinas</p>
-        <h1>El horario de tu cocina, <em>en un momento</em></h1>
-        <p class="lead">Turnos, horas, libres e inventario en el móvil de todo el equipo. Haces el cuadrante en cinco minutos y cada persona ve el suyo al instante. Sin fotos por WhatsApp.</p>
+        <p class="eyebrow">App de cuadrantes y horarios para equipos</p>
+        <h1>El horario de tu equipo, <em>en un momento</em></h1>
+        <p class="lead">Turnos, horas, libres e inventario en el móvil de todo el equipo. Haces el cuadrante en cinco minutos y cada persona ve el suyo al instante. Nació en una cocina y sirve igual para un hotel pequeño, una cafetería o una tienda.</p>
         <div class="cocinas">
-          <p>¿Qué cocina tienes? Kumi se viste de tu cocina:</p>
-          <div class="chips" id="chips-cocina" role="group" aria-label="Tipo de cocina"></div>
+          <p>Elige los colores de tu app:</p>
+          <div class="chips" id="chips-cocina" role="group" aria-label="Colores de la app"></div>
         </div>
         <div class="acciones">
           <a class="boton lleno" href="https://mash37.github.io/kumi/">Empezar gratis</a>
@@ -352,7 +357,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
   <section class="banda">
     <div class="envoltura">
       <div class="eyebrow">Te suena, ¿verdad?</div>
-      <h2 class="titulo-seccion">La cocina va a mil. El cuadrante no debería ir en un papel pegado en la nevera.</h2>
+      <h2 class="titulo-seccion">El día va a mil. El cuadrante no debería ir en un papel pegado en la pared.</h2>
       <div class="contraste">
         <div class="caja">
           <h3>El domingo por la noche, sin Kumi</h3>
@@ -360,7 +365,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
             <li>Haces el cuadrante en papel, le sacas una foto y la mandas al grupo.</li>
             <li>El martes alguien pide cambiar el libre y ya hay tres versiones.</li>
             <li>A fin de mes sumas las horas a mano con la calculadora.</li>
-            <li>El inventario vive en una hoja con manchas de aceite.</li>
+            <li>El inventario vive en una hoja que nadie compara.</li>
           </ul>
         </div>
         <div class="caja despues">
@@ -379,12 +384,12 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
   <section class="banda clara" id="funciones">
     <div class="envoltura">
       <div class="eyebrow">Qué hace</div>
-      <h2 class="titulo-seccion">Cuadrante de turnos, horas e inventario de cocina en una sola app</h2>
+      <h2 class="titulo-seccion">Cuadrante de turnos, horas e inventario en una sola app</h2>
       <div class="funciones">
         <article class="funcion">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3" y="4" width="18" height="17" rx="3"/><path d="M3 9h18M8 2v4M16 2v4"/></svg></div>
           <h3>Horario semanal</h3>
-          <p>Por persona y por día, con turno partido, libres e incidencias. Kumi te avisa si un servicio se queda corto de gente.</p>
+          <p>Toca «Mediodía» o «Noche» y el turno queda puesto; si es otra hora, la escribes. Ves la semana entera en una tabla, con libres e incidencias, y Kumi te avisa si un servicio se queda corto de gente.</p>
         </article>
         <article class="funcion">
           <div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></div>
@@ -421,16 +426,30 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
     </div>
   </section>
 
+  <section class="banda" id="negocios">
+    <div class="envoltura">
+      <div class="eyebrow">Para quién</div>
+      <h2 class="titulo-seccion">Para cualquier equipo pequeño con turnos</h2>
+      <p class="intro">Kumi nació en la cocina de un restaurante, y las cocinas siguen siendo lo primero. Pero el problema es el mismo en cualquier local con turnos: quién trabaja hoy, cuántas horas lleva cada uno y qué hay que pedir.</p>
+      <div class="negocios">
+        <article class="negocio"><h3>Cocinas y restaurantes</h3><p>Servicios de mediodía y noche, turnos partidos, el stock de cámara y el pedido a cada proveedor.</p></article>
+        <article class="negocio"><h3>Hoteles pequeños</h3><p>Recepción, pisos y desayunos en un mismo cuadrante, con mañana, tarde y noche como servicios.</p></article>
+        <article class="negocio"><h3>Cafeterías y panaderías</h3><p>Turnos desde primera hora, libres que rotan y la lista de lo que hay que pedir.</p></article>
+        <article class="negocio"><h3>Tiendas</h3><p>Apertura y cierre cubiertos, horas de cada persona para la nómina y avisos a todo el equipo.</p></article>
+      </div>
+    </div>
+  </section>
+
   <section class="banda" id="proximamente">
     <div class="envoltura">
       <div class="eyebrow">Lo que viene</div>
       <h2 class="titulo-seccion">Kumi crece contigo, por módulos</h2>
-      <p class="intro">Estamos preparando estas partes. Las verás aquí en cuanto estén listas, y podrás activar solo las que use tu cocina.</p>
+      <p class="intro">Estamos preparando estas partes. Las verás aquí en cuanto estén listas, y podrás activar solo las que use tu equipo.</p>
       <div class="proximos">
         <article class="proximo">
           <div class="cabeza"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2M9 2h6"/></svg></div><span class="etiqueta-pronto">Próximamente</span></div>
           <h3>Fichaje</h3>
-          <p>Cada persona ficha la entrada y la salida desde su móvil o desde la tablet de la cocina. Tú corriges los olvidos y guardas el registro de jornada del mes en PDF, como pide la ley.</p>
+          <p>Cada persona ficha la entrada y la salida desde su móvil o desde la tablet del local. Tú corriges los olvidos y guardas el registro de jornada del mes en PDF, como pide la ley.</p>
         </article>
         <article class="proximo">
           <div class="cabeza"><div class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 2h9l4 4v16H6z"/><path d="M14 2v5h5M9 12h7M9 16h7"/></svg></div><span class="etiqueta-pronto">Próximamente</span></div>
@@ -454,7 +473,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
   <section class="banda" id="ahorro">
     <div class="envoltura">
       <div class="eyebrow">Lo que ahorras</div>
-      <h2 class="titulo-seccion">Haz la cuenta con tu cocina</h2>
+      <h2 class="titulo-seccion">Haz la cuenta con tu equipo</h2>
       <p class="intro">Mueve las barras. La cuenta usa tus números y supone que Kumi te ahorra la mitad del tiempo que hoy dedicas al cuadrante.</p>
       <div class="calculadora">
         <div class="controles">
@@ -514,7 +533,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
       <div class="eyebrow">Cómo empieza</div>
       <h2 class="titulo-seccion">Tu primer cuadrante, hoy mismo</h2>
       <div class="pasos">
-        <div class="paso"><h3>Elige tu cocina</h3><p>Kumi te propone una lista de productos para empezar, con los de tu tipo de cocina.</p></div>
+        <div class="paso"><h3>Prepara tu local</h3><p>Pon tu nombre, el del local y tus colores. Si es una cocina, Kumi te propone una lista de productos para empezar; si no, añades los tuyos.</p></div>
         <div class="paso"><h3>Añade a tu equipo</h3><p>Escribe los nombres y el horario de servicio. Comparte el código para que cada persona entre desde su móvil.</p></div>
         <div class="paso"><h3>Rellena la semana</h3><p>Toca cada día y marca el turno. Publica y el equipo lo ve al momento.</p></div>
       </div>
@@ -557,7 +576,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
           <h3>Socios fundadores</h3>
           <div class="precio">69 € <small>/ año</small></div>
           <div class="equivale">El plan Equipo, con regalo</div>
-          <ul><li>Una tablet para la cocina, de regalo, con Kumi lista en la pared</li><li>Tu precio no sube nunca</li><li>Nos dices qué hace falta y lo hacemos primero</li></ul>
+          <ul><li>Una tablet para tu local, de regalo, con Kumi lista en la pared</li><li>Tu precio no sube nunca</li><li>Nos dices qué hace falta y lo hacemos primero</li></ul>
           <div class="plazas"><span id="plazas-texto">Quedan 20 de 20 plazas</span><div class="riel"><span></span></div></div>
           <a class="boton borde" href="#preguntas">Quiero una plaza</a>
         </div>
@@ -577,9 +596,10 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
       <h2 class="titulo-seccion">Lo que suelen preguntar</h2>
       <div class="faq">
         <details open><summary>¿Necesito instalar algo?</summary><p>No. Kumi funciona en el navegador del móvil, la tablet o el ordenador, y puedes añadirlo a la pantalla de inicio. Pronto estará también en App Store y Google Play.</p></details>
+        <details><summary>¿Sirve si mi negocio no es una cocina?</summary><p>Sí. Kumi nació en una cocina, pero el horario, las horas del mes y el tablón de avisos sirven a cualquier equipo con turnos: un hotel pequeño, una cafetería o una tienda. De momento, los productos de ejemplo del stock están pensados para cocinas; en otro negocio añades los tuyos.</p></details>
         <details><summary>¿Mi equipo tiene que pagar?</summary><p>No. Paga el local, una sola vez. Cada persona del equipo entra gratis con el código que le compartes.</p></details>
         <details><summary>¿Imprimir los informes cuesta algo?</summary><p>No. Los informes de horas, de stock y la hoja del horario se imprimen o se guardan en PDF en todos los planes, también en el gratis.</p></details>
-        <details><summary>¿Cómo funciona la tablet de los socios fundadores?</summary><p>Las 20 primeras cocinas que paguen el año reciben una tablet de 10 pulgadas con Kumi ya puesta y un soporte de pared. Muestra el horario del día y el tablón para que todo el equipo lo vea al entrar.</p></details>
+        <details><summary>¿Cómo funciona la tablet de los socios fundadores?</summary><p>Los 20 primeros locales que paguen el año reciben una tablet de 10 pulgadas con Kumi ya puesta y un soporte de pared. Muestra el horario del día y el tablón para que todo el equipo lo vea al entrar.</p></details>
         <details><summary>¿Sirve como registro de jornada?</summary><p>Todavía no. Hoy Kumi organiza los turnos y las horas previstas. Estamos preparando el fichaje de entrada y salida desde el móvil o la tablet, con el registro del mes en PDF.</p></details>
         <details><summary>¿Puedo meter los albaranes del proveedor?</summary><p>Muy pronto. Le harás una foto al albarán y Kumi lo apuntará como compra, con las cantidades y los precios. Mientras tanto, las compras se apuntan a mano en un momento.</p></details>
         <details><summary>¿Funciona sin internet?</summary><p>Sí. Lo que haces se guarda en tu dispositivo, y cuando vuelve la conexión el equipo recibe los cambios.</p></details>
@@ -599,7 +619,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
 </main>
 
 <footer>
-  <div class="envoltura"><span>Kumi · horarios de cocina</span><a href="guias/cuadrante-turnos-cocina/">Guía: cómo hacer el cuadrante de turnos de una cocina</a><span>Hecho en España para cocinas de verdad</span></div>
+  <div class="envoltura"><span>Kumi · horarios de equipo</span><a href="guias/cuadrante-turnos-cocina/">Guía: cómo hacer el cuadrante de turnos de una cocina</a><span>Hecho en España, nacido en una cocina de verdad</span></div>
 </footer>
 
 <script>
@@ -607,15 +627,11 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
   const PRECIO_ANO = 69, PRECIO_MES = 6.99, POR_PERSONA = 5;
   const eur = n => n.toLocaleString('es-ES', { minimumFractionDigits: n % 1 ? 2 : 0, maximumFractionDigits: 2 }) + ' €';
 
+  // Los tres temas de color de la app (no dependen del tipo de cocina): nombre, acento, acento, texto de acento sobre claro, acento, fondo suave, color profundo, texto sobre el acento.
   const COCINAS = [
-    ['Otra cocina', '#f2a900', '#ffc94a', '#8a5d00', '#f2a900', '#fbf1d4', 'linear-gradient(150deg, #3a4a52 0%, #22303a 60%, #1b252c 100%)', '#1b252c', 'linear-gradient(135deg, #8a5d00 0%, #c98a00 100%)'],
-    ['Sushi', '#ff4d8d', '#ff7a59', '#b0135f', '#ffc2d6', '#fff0f5', 'linear-gradient(150deg, #ff8a5c 0%, #ff4d8d 38%, #d6247a 70%, #8e2de2 100%)', '#ffffff'],
-    ['Asador', '#e85d04', '#ffaa33', '#b3311b', '#ffd2b0', '#fff3ea', 'linear-gradient(150deg, #f2731d 0%, #d9480f 35%, #a61e1e 70%, #3d0c06 100%)', '#ffffff'],
-    ['Italiana', '#e63946', '#ff8f5a', '#b5232f', '#ffc9c5', '#fff1ef', 'linear-gradient(150deg, #ff7a45 0%, #e63946 40%, #b5232f 70%, #1f6f4a 100%)', '#ffffff'],
-    ['Vegana', '#2fa35a', '#8bd450', '#1f7a45', '#c4eccf', '#effaf1', 'linear-gradient(150deg, #43b581 0%, #2fa35a 40%, #17805a 70%, #0b5345 100%)', '#ffffff'],
-    ['Marisquería', '#1f7fd1', '#3ec6e0', '#1d5fa8', '#bfe3f7', '#eef8ff', 'linear-gradient(150deg, #2aa7d6 0%, #1f7fd1 40%, #1f4fb0 70%, #1b2f6e 100%)', '#ffffff'],
-    ['Cervecería', '#d9800f', '#ffb732', '#9a5408', '#ffe0a6', '#fff8e8', 'linear-gradient(150deg, #e08a12 0%, #c76b0c 40%, #8a4b0f 75%, #4a2508 100%)', '#ffffff'],
-    ['Pastelería', '#c2577a', '#e39b8f', '#8f3f5c', '#f3cddb', '#fdf1f5', 'linear-gradient(150deg, #d98aa8 0%, #b5677d 38%, #8a5a6b 68%, #5b3a29 100%)', '#ffffff'],
+    ['Kitchen', '#f2a900', '#f2a900', '#8a5d00', '#f2a900', '#fbf1d4', '#22303a', '#22303a'],
+    ['Vegano', '#8bd450', '#8bd450', '#1f7a45', '#8bd450', '#eef8e6', '#17432c', '#17432c'],
+    ['Marisquería', '#3ec6e0', '#3ec6e0', '#1d5fa8', '#3ec6e0', '#e8f6fb', '#0f2a4a', '#0f2a4a'],
   ];
   const chips = document.getElementById('chips-cocina');
   COCINAS.forEach((c, i) => {
@@ -627,7 +643,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
     chips.appendChild(b);
   });
   function ponerCocina(i) {
-    const [, rosa, coral, fram, medio, suave, intenso, sobre, em] = COCINAS[i];
+    const [, rosa, coral, fram, medio, suave, intenso, sobre] = COCINAS[i];
     const r = document.documentElement.style;
     if (i === 0) {
       ['--t-rosa', '--t-coral', '--t-frambuesa', '--t-medio', '--t-suave', '--t-intenso', '--t-sobre', '--t-em', '--t-hero-acento'].forEach(n => r.removeProperty(n));
@@ -636,11 +652,11 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
     }
     r.setProperty('--t-rosa', rosa); r.setProperty('--t-coral', coral); r.setProperty('--t-frambuesa', fram);
     r.setProperty('--t-medio', medio); r.setProperty('--t-suave', suave); r.setProperty('--t-intenso', intenso);
-    r.setProperty('--t-sobre', sobre); r.setProperty('--t-hero-acento', medio); r.setProperty('--t-em', 'linear-gradient(135deg, ' + rosa + ' 0%, ' + coral + ' 100%)');
+    r.setProperty('--t-sobre', sobre); r.setProperty('--t-hero-acento', medio); r.setProperty('--t-em', fram);
     [...chips.children].forEach((b, j) => b.setAttribute('aria-pressed', j === i ? 'true' : 'false'));
   }
 
-  const EQUIPO = [['Lucía', '#e8336f'], ['Diego', '#7b2bd1'], ['Aitana', '#f2614a'], ['Marco', '#b0135f']];
+  const EQUIPO = [['Lucía', '#2c3e48'], ['Diego', '#1f7a45'], ['Aitana', '#1d5fa8'], ['Marco', '#9c3d54']];
   const DIAS = [['L', 13, 'Lunes'], ['M', 14, 'Martes'], ['X', 15, 'Miércoles'], ['J', 16, 'Jueves'], ['V', 17, 'Viernes'], ['S', 18, 'Sábado'], ['D', 19, 'Domingo']];
   const T = { m: ['10:00 – 16:00', 'Mañana', 1, 0], p: ['12:00 – 16:00 · 20:00 – 00:00', 'Partido', 1, 1], n: ['17:00 – 00:00', 'Noche', 0, 1], l: ['—', 'Libre', 0, 0] };
   const semana = ['mpnl', 'lmpn', 'nlmp', 'mpnl', 'pmnm', 'pnmp', 'nlpm'].map(s => s.split(''));
@@ -708,7 +724,7 @@ footer .envoltura { padding-block: 28px; display: flex; flex-wrap: wrap; justify
     $('j-mensaje').textContent =
       'Hola ' + jefe + ', te escribo por una cosa que creo que nos vendría muy bien en ' + local + '.\n\n' +
       'Se llama Kumi. Con ella hago el cuadrante de los ' + personas + ' en el móvil, cada uno ve su horario al momento y se acaban las fotos por WhatsApp. También lleva las horas del mes y el inventario, y prepara el pedido al proveedor en PDF.\n\n' +
-      'Calculo que me ahorraría unas ' + horasMes + ' horas al mes que puedo dedicar a la cocina. Cuesta 69 € al año para todo el local, no por persona.\n\n' +
+      'Calculo que me ahorraría unas ' + horasMes + ' horas al mes que puedo dedicar a lo importante. Cuesta 69 € al año para todo el local, no por persona.\n\n' +
       'Se puede probar gratis. ¿Lo miramos esta semana?\n\n' + tu;
   }
   ['j-tu', 'j-jefe', 'j-local'].forEach(id => $(id).addEventListener('input', escribirMensaje));
