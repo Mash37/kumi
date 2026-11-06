@@ -2,8 +2,8 @@
 
 | | |
 |---|---|
-| Versión | 0.5 (borrador) |
-| Fecha | 4 de noviembre de 2026 |
+| Versión | 0.7 (borrador) |
+| Fecha | 6 de noviembre de 2026 |
 | Responsable | María Segura (producto) |
 | Estado | En revisión: los requisitos marcados «Pendiente» son propuestas, no compromisos |
 
@@ -13,7 +13,7 @@
 Describir qué debe hacer Kumi, para quién y con qué límites, de forma que cualquier persona que se sume al proyecto (desarrollo, diseño o negocio) entienda el producto sin depender de una conversación.
 
 ### 1.2 Alcance
-Kumi es una app para **cocinas de restaurante** que reúne en el móvil de todo el equipo:
+Kumi es una app para **equipos pequeños con turnos**. El primer mercado son las **cocinas de restaurante**, donde nació; después, hoteles pequeños, cafeterías y tiendas. Reúne en el móvil de todo el equipo:
 - el **horario** semanal (turnos, libres, incidencias),
 - las **horas** trabajadas del mes,
 - el **inventario** (stock, compras y recuentos),
@@ -33,7 +33,9 @@ Se vende **por local**, no por persona. Funciona en el navegador (web), en Andro
 | Recuento | Cantidad contada de un producto en una fecha. Puede ser semanal o de cierre de mes |
 | Fichaje | Registro de entrada y salida real de una persona, con fecha y hora del servidor |
 | Corrección | Cambio sobre un fichaje. Nunca borra el original: se añade con motivo y autor |
-| Tipo de cocina | Tema visual y datos de ejemplo (Kumi Kitchen, Sushi, Asador…) |
+| Tipo de cocina | Productos de ejemplo y dato del día (Kumi Kitchen, Sushi, Asador…). No cambia los colores |
+| Tema de color | Colores de la app: Kitchen, Vegano o Marisquería. Lo elige el local y lo ve todo el equipo |
+| Tipo de negocio | Cocina, hotel, cafetería, tienda… Hoy la app solo conoce tipos de cocina (ver RF-OTR-10) |
 
 ### 1.4 Referencias
 - Estatuto de los Trabajadores, art. 34.9: obligación de registro diario de jornada (desde 2019) y conservación durante 4 años.
@@ -84,6 +86,8 @@ Estado: ✅ Hecho · 🟡 Parcial · ⬜ Pendiente.
 | RF-HOR-06 | Registrar incidencias del día: falta con motivo, cambio de horas, cubrir a otra persona | Debe | ✅ |
 | RF-HOR-07 | Publicar la semana para que el equipo la vea en su móvil | Debe | ✅ |
 | RF-HOR-08 | Cada empleado ve solo su horario y el del equipo, sin poder cambiarlo | Debe | 🟡 Depende de RF-ROL |
+| RF-HOR-09 | Los servicios del día sirven de atajo al rellenar: un toque pone o quita ese turno; cualquier otra hora se escribe a mano | Debería | ✅ |
+| RF-HOR-10 | Ver la semana entera en una tabla legible en el móvil (nombres fijos, días deslizables) y saltar desde un día al de Rellenar | Debe | ✅ |
 
 ### 3.2 Horas (RF-HRS)
 | ID | Requisito | Prioridad | Estado |
@@ -192,12 +196,15 @@ Estado: ✅ Hecho · 🟡 Parcial · ⬜ Pendiente.
 | ID | Requisito | Prioridad | Estado |
 |---|---|---|---|
 | RF-OTR-01 | Copia de seguridad: guardar y recuperar todos los datos del dispositivo en un archivo | Debe | ✅ |
-| RF-OTR-02 | Tipos de cocina con sus colores; Kumi Kitchen (pizarra y azafrán) por defecto | Podría | ✅ |
+| RF-OTR-02 | Tres temas de color (Kitchen, Vegano, Marisquería), independientes del tipo de cocina; Kitchen por defecto. El equipo ve el del local | Debería | ✅ |
 | RF-OTR-03 | Modo claro, oscuro y automático | Debería | ✅ |
-| RF-OTR-04 | Vista para ordenador pensada para el dueño (semana completa, varios locales) | Debería | 🟡 Hay vista de tablet |
+| RF-OTR-04 | Vista para ordenador pensada para el dueño (semana completa, varios locales) | Debería | 🟡 Menú lateral y semana completa en tablet y ordenador; varios locales pendiente (RF-ROL-05) |
 | RF-OTR-05 | Planes y cobro por local; se estudia cobrar por módulos (horarios, fichaje, stock, cartas) | Debe | ⬜ |
 | RF-OTR-06 | Web pública con SEO y guías | Debería | 🟡 Preparada, sin publicar |
 | RF-OTR-07 | App de Android instalable (APK de prueba; Google Play en la fase de tiendas) | Debe | 🟡 APK de prueba |
+| RF-OTR-08 | Inicio a medida: cada jefe elige qué tarjetas ver y en qué orden | Podría | ✅ |
+| RF-OTR-09 | Aviso visible cuando no hay conexión, explicando qué sigue funcionando y qué espera a internet | Debería | ✅ |
+| RF-OTR-10 | Textos de la app para cualquier equipo, no solo cocinas («Vamos a preparar tu equipo», «trabajando ahora»), y «Tipo de negocio» con productos de ejemplo propios (hotel: lencería y amenities; tienda; cafetería) | Debería | ⬜ |
 
 ## 4. Requisitos no funcionales
 
@@ -207,7 +214,7 @@ Estado: ✅ Hecho · 🟡 Parcial · ⬜ Pendiente.
 | RNF-02 | Privacidad | Datos en la UE. Sin datos biométricos. Cada persona puede ver y pedir el borrado de sus datos, salvo los fichajes que la ley obliga a conservar |
 | RNF-03 | Sin conexión | Horario, horas y stock funcionan sin internet. Los cambios se sincronizan al volver la conexión |
 | RNF-04 | Rendimiento | La app abre en menos de 2 segundos en un móvil de gama media con conexión 4G |
-| RNF-05 | Accesibilidad | Contraste de texto de al menos 4,5:1 en modo claro **y oscuro**, en todos los tipos de cocina. Zonas táctiles de al menos 44 px |
+| RNF-05 | Accesibilidad | Contraste de texto de al menos 4,5:1 en modo claro **y oscuro**, en los tres temas de color. Zonas táctiles de al menos 44 px. Iconos de una sola familia de línea, sin emojis |
 | RNF-06 | Compatibilidad | Últimas dos versiones de Chrome, Safari y Firefox; Android 7 o posterior; iOS 16 o posterior |
 | RNF-07 | Calidad | TypeScript estricto. Cada PR pasa tipos, pruebas y compilación en el CI. Pruebas e2e con Playwright en los recorridos principales |
 | RNF-08 | Mantenibilidad | Código en inglés, documentado en el repositorio; cualquiera puede arrancar el proyecto siguiendo el README |
@@ -276,3 +283,5 @@ restaurantes/{id}
 | 0.3 | 17/10/2026 | Proveedores, producto con su proveedor y pedido por proveedor con WhatsApp directo (hechos) |
 | 0.4 | 04/11/2026 | Recuento desde foto y albaranes (RF-STK-13, 14); fichaje en tablet y PDF del registro (RF-FIC-10, 11); personas y ausencias (RF-PER); fichas técnicas y alérgenos (RF-PLA); cobro por módulos como pregunta abierta. Lo marcado «Prototipo en Kumi Mara» ya funciona en la app de Hinoki, pero no en Kumi |
 | 0.5 | 04/11/2026 | Fichaje desde el móvil en la nube: hora del servidor, sin borrar nada y correcciones de la jefa con motivo (RF-FIC-01, 02, 03, 05 hechos; 06 en parte) |
+| 0.6 | 06/11/2026 | Rediseño visual (una letra, colores lisos, iconos de línea): tres temas de color (RF-OTR-02), Rellenar con servicios como atajo (RF-HOR-09), cuadro en tabla (RF-HOR-10), menú lateral en tablet y ordenador (RF-OTR-04), Inicio a medida (RF-OTR-08), aviso sin conexión (RF-OTR-09) |
+| 0.7 | 06/11/2026 | Enfoque: equipos pequeños con turnos, con las cocinas como primer mercado (1.2, definiciones); textos para cualquier equipo y tipo de negocio (RF-OTR-10, pendiente) |
