@@ -7,6 +7,7 @@ import { cifra } from '../dominio/stock';
 import { lunesEsta, lunesProxima, usarUi } from '../estado/ui';
 import { sinLeer, usarSesion } from '../nube/sesion';
 import { TarjetaFichar } from './TarjetaFichar';
+import { Icono } from '../componentes/Icono';
 
 export function fechaHora(ms: number) { const f = new Date(ms); return f.getDate() + '/' + (f.getMonth() + 1) + ' a las ' + f.getHours() + ':' + String(f.getMinutes()).padStart(2, '0'); }
 
@@ -37,12 +38,12 @@ export function MiHorario() {
         <div>
           {pendientes.length > 0 && (
             <div className="tarjeta tarjeta-ok" data-ver-avisos onClick={() => usarUi.getState().ir('avisos')}>
-              <i>📣</i><div><b>{pendientes.length === 1 ? 'Tienes 1 aviso nuevo' : 'Tienes ' + pendientes.length + ' avisos nuevos'}</b>
+              <i><Icono n="avisos" tam={24} /></i><div><b>{pendientes.length === 1 ? 'Tienes 1 aviso nuevo' : 'Tienes ' + pendientes.length + ' avisos nuevos'}</b>
                 <span>{pendientes[0].texto.split('\n')[0].slice(0, 70)} · Toca para leerlo</span></div>
             </div>
           )}
           {mostrarNuevo && (
-            <div className="tarjeta tarjeta-ok"><i>🆕</i><div><b>Horario actualizado</b><span>Hay cambios publicados {fechaHora(mostrarNuevo)}.</span></div></div>
+            <div className="tarjeta tarjeta-ok"><i><Icono n="nuevo" tam={24} /></i><div><b>Horario actualizado</b><span>Hay cambios publicados {fechaHora(mostrarNuevo)}.</span></div></div>
           )}
         </div>
         {c.rid && <TarjetaFichar />}
@@ -63,7 +64,7 @@ export function MiHorario() {
                   <div key={i} className={'dia-mio' + (claveSemana(f) === claveSemana(new Date()) ? ' hoy' : '')}>
                     <div><b>{nombreDia[0].toUpperCase() + nombreDia.slice(1)}</b><small>{f.getDate() + ' ' + MESES_CORTOS[f.getMonth()]}</small></div>
                     <div>{min ? <><b>{textoTurnos4(t)}</b>{con.length > 0 && <small>Con {con.join(', ')}</small>}</>
-                      : esLibre(d, f, pid!) ? <span className="libre-mio">🌴 Libre</span> : <small>Sin turno</small>}</div>
+                      : esLibre(d, f, pid!) ? <span className="libre-mio">Libre</span> : <small>Sin turno</small>}</div>
                     <span>{min ? textoHoras(min) : ''}</span>
                   </div>
                 );

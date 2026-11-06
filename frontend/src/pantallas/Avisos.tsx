@@ -6,6 +6,7 @@ import { nube } from '../nube';
 import type { Leido, Miembro } from '../nube/firebase';
 import { arrancarSesion, esEquipo, esJefeEnLinea, marcarLeidos, sinLeer, usarSesion } from '../nube/sesion';
 import { fechaHora } from './MiHorario';
+import { Icono } from '../componentes/Icono';
 
 // Tablón: el jefe escribe, el equipo lee y queda apuntado quién lo leyó.
 export function Avisos() {
@@ -47,14 +48,14 @@ export function Avisos() {
       {jefe && (
         <div className="tarjeta"><h3>Nuevo aviso</h3><p className="sub">Lo verá todo tu equipo en Kumi.</p>
           <label className="campo"><textarea rows={3} maxLength={1000} placeholder="Ej.: El sábado hacemos inventario a las 10" value={borrador} onChange={(e) => setBorrador(e.target.value)} /></label>
-          <div className="acciones"><button className="btn principal" onClick={publicar}>📣 Publicar aviso</button></div>
+          <div className="acciones"><button className="btn principal" onClick={publicar}><Icono n="avisos" tam={18} /> Publicar aviso</button></div>
         </div>
       )}
       <div className="tarjeta">
         {avisos.length ? avisos.map((a) => (
           <div key={a.id} className={'tablon-item' + (nuevos.has(a.id) ? ' nuevo' : '')}>
             <p>{a.texto}</p>
-            <div className="fila-aviso"><small>{(nuevos.has(a.id) ? '🆕 ' : '') + fechaHora(a.creado)}</small>
+            <div className="fila-aviso"><small>{(nuevos.has(a.id) ? 'Nuevo · ' : '') + fechaHora(a.creado)}</small>
               {jefe && <button onClick={async () => {
                 if (!confirm('¿Borrar este aviso? Tu equipo dejará de verlo.')) return;
                 try { await nube.borrarAviso(d.cuenta!.rid, a.id); avisar('Aviso borrado'); } catch { avisar('No se pudo borrar. ¿Tienes internet?'); }

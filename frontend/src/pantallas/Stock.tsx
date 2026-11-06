@@ -62,26 +62,13 @@ function Lista() {
     <>
       {pedir.length > 0 && (
         <div className="tarjeta pedir">
-          <div className="pedir-cab"><h3>🛒 Por pedir</h3><span>{(pedir.length === 1 ? '1 producto' : pedir.length + ' productos') + (grupos.length > 1 ? ' · ' + grupos.length + ' proveedores' : '')}</span></div>
-          {grupos.map((g) => {
-            const nombre = g.proveedor ? g.proveedor.nombre : 'Sin proveedor';
-            const whatsapp = !!(g.proveedor && telefonoWhatsApp(g.proveedor.telefono));
-            return (
-              <div className="prov-pedido" key={g.proveedor?.id ?? 'sin'}>
-                <div className="prov-fila">
-                  <div><b>{nombre}</b><small>{g.filas.length === 1 ? '1 producto' : g.filas.length + ' productos'}</small></div>
-                  <div className="prov-botones">
-                    <button className="btn principal chico" aria-label={'Enviar PDF del pedido a ' + nombre} onClick={() => { enviarPedidoPdf(d, t.cocina, g).catch(() => avisar('No se pudo crear el PDF del pedido')); }}>PDF</button>
-                    <button className="btn secundario chico" aria-label={(whatsapp ? 'Enviar por WhatsApp a ' : 'Enviar por mensaje a ') + nombre} onClick={() => enviarMensajePedido(d, g)}>{whatsapp ? 'WhatsApp' : 'Mensaje'}</button>
-                  </div>
-                </div>
-                <details open={grupos.length === 1 && g.filas.length <= 3}>
-                  <summary>Ver qué pedir</summary>
-                  <ul>{g.filas.map((f) => <li key={f.p.id}><b>{f.p.nombre}</b>: quedan {cantidadTxt(f.quedan, f.p)}, pedir <b>{cantidadTxt(f.pedir, f.p)}</b></li>)}</ul>
-                </details>
-              </div>
-            );
-          })}
+          <div className="pedir-cab"><h3>Por pedir</h3><span>{(pedir.length === 1 ? '1 producto' : pedir.length + ' productos') + (grupos.length > 1 ? ' · ' + grupos.length + ' proveedores' : '')}</span></div>
+          {grupos.map((g) => (
+            <button className="prov-pedido" key={g.proveedor?.id ?? 'sin'} onClick={() => abrirPanel(<PanelPedido proveedor={g.proveedor?.id ?? null} />)}>
+              <span><b>{g.proveedor ? g.proveedor.nombre : 'Sin proveedor'}</b><small>{g.filas.length === 1 ? '1 producto' : g.filas.length + ' productos'}</small></span>
+              <span className="ver-pedido">Ver pedido ›</span>
+            </button>
+          ))}
         </div>
       )}
       <div className="fila-botones">
@@ -517,6 +504,32 @@ function PanelProveedor({ id }: { id: string | null }) {
           cambiarConDeshacer('Proveedor dado de baja', (y) => { y.stock!.proveedores!.find((z) => z.id === id)!.archivado = true; });
           volver();
         }}>Dar de baja este proveedor</button>}
+      </div>
+    </>
+  );
+}
+
+// El pedido de un proveedor: qué pedir y cómo mandarlo. En la lista solo se ve el proveedor, para que respire.
+function PanelPedido({ proveedor }: { proveedor: string | null }) {
+  const d = usarAlmacen((s) => s.datos);
+  const { avisar, cerrarPanel } = usarUi.getState();
+  const t = tema(d.restaurante?.tipo);
+  const g = pedidoPorProveedor(d).find((x) => (x.proveedor?.id ?? null) === proveedor);
+  if (!g) return <><h3>Pedido</h3><p className="sub">Ya no falta nada de este proveedor.</p><div className="acciones"><button className="btn secundario" onClick={() => cerrarPanel()}>Cerrar</button></div></>;
+  const nombre = g.proveedor ? g.proveedor.nombre : 'Sin proveedor';
+  const whatsapp = !!(g.proveedor && telefonoWhatsApp(g.proveedor.telefono));
+  return (
+    <>
+      <h3>Pedido · {nombre}</h3>
+      <p className="sub">{g.filas.length === 1 ? '1 producto por debajo del mínimo' : g.filas.length + ' productos por debajo del mínimo'}. Se pide lo que falta para llegar al doble del mínimo.</p>
+      <div className="lista-pedido">
+        {g.filas.map((f) => (
+          <div key={f.p.id}><span><b>{f.p.nombre}</b><small>quedan {cantidadTxt(f.quedan, f.p)}</small></span><b>{cantidadTxt(f.pedir, f.p)}</b></div>
+        ))}
+      </div>
+      <div className="acciones">
+        <button className="btn principal" onClick={() => enviarMensajePedido(d, g)}>{whatsapp ? 'Enviar por WhatsApp' : 'Enviar como mensaje'}</button>
+        <button className="btn secundario" onClick={() => { enviarPedidoPdf(d, t.cocina, g).catch(() => avisar('No se pudo crear el PDF del pedido')); }}>PDF del pedido</button>
       </div>
     </>
   );

@@ -8,23 +8,25 @@ import { usarUi } from '../estado/ui';
 import { nube } from '../nube';
 import type { Miembro } from '../nube/firebase';
 import { semanaANube } from '../nube/conversion';
+import { paletaDe } from '../dominio/paletas';
 import { arrancarSesion, esJefeEnLinea, escucharAvisos, pararTodo, usarSesion } from '../nube/sesion';
 import { fechaHora } from '../pantallas/MiHorario';
+import { Icono } from './Icono';
 
 export function Publicar({ clave }: { clave: string }) {
   const d = usarAlmacen((s) => s.datos);
   usarSesion((s) => s.usuario);
   const [subiendo, setSubiendo] = useState(false);
   if (!esJefeEnLinea()) {
-    return <p className="nota" style={{ textAlign: 'left', margin: '0 2px 12px' }}>💡 Tu equipo puede ver este horario en su móvil, sin fotos: <b>＋ → Ajustes → Tu equipo en Kumi</b>.</p>;
+    return <p className="nota" style={{ textAlign: 'left', margin: '0 2px 12px' }}>Tu equipo puede ver este horario en su móvil, sin fotos: <b>＋ → Ajustes → Tu equipo en Kumi</b>.</p>;
   }
   const hayDatos = semanaTieneDatos(d.semanas[clave]), pub = (d.publicado || {})[clave];
-  const estado = !hayDatos ? 'Esta semana está vacía.' : pub && pub.huella === JSON.stringify(semanaANube(d, clave)) ? '✅ Publicado el ' + fechaHora(pub.cuando) : pub ? '⚠️ Hay cambios sin publicar.' : 'Todavía no está publicado.';
+  const estado = !hayDatos ? 'Esta semana está vacía.' : pub && pub.huella === JSON.stringify(semanaANube(d, clave)) ? 'Publicado el ' + fechaHora(pub.cuando) : pub ? 'Hay cambios sin publicar.' : 'Todavía no está publicado.';
   const publicar = async () => {
     const c = d.cuenta!, semana = semanaANube(d, clave);
     setSubiendo(true);
     try {
-      await nube.publicarSemana(c.rid, c.codigo, clave, semana, { nombre: d.restaurante?.nombre || 'Mi restaurante', tipo: d.restaurante?.tipo || 'kumi' });
+      await nube.publicarSemana(c.rid, c.codigo, clave, semana, { nombre: d.restaurante?.nombre || 'Mi restaurante', tipo: d.restaurante?.tipo || 'kumi', tema: paletaDe(d.restaurante) });
       usarAlmacen.getState().cambiar((x) => { x.publicado = x.publicado || {}; x.publicado[clave] = { huella: JSON.stringify(semana), cuando: Date.now() }; });
       usarUi.getState().avisar('Publicado: tu equipo ya lo ve en Kumi');
     } catch { usarUi.getState().avisar('No se pudo publicar. ¿Tienes internet?'); }
@@ -32,7 +34,7 @@ export function Publicar({ clave }: { clave: string }) {
   };
   return (
     <div className="tarjeta"><h3>Tu equipo en Kumi</h3><p className="sub">{estado}</p>
-      <div className="acciones"><button className="btn principal" disabled={!hayDatos || subiendo} onClick={publicar}>📤 Publicar este horario</button></div>
+      <div className="acciones"><button className="btn principal" disabled={!hayDatos || subiendo} onClick={publicar}><Icono n="enviar" tam={18} /> Publicar este horario</button></div>
     </div>
   );
 }
@@ -69,7 +71,7 @@ export function NubeJefe() {
           <button className="btn principal" disabled={ocupado} onClick={() => intentar(async () => {
             setOcupado(true);
             try {
-              const r = await nube.crearRestaurante({ nombre: d.restaurante?.nombre || 'Mi restaurante', tipo: d.restaurante?.tipo || 'kumi', equipo: d.equipo.map((p) => ({ id: p.id, nombre: p.nombre, contrato: p.contrato || null })) });
+              const r = await nube.crearRestaurante({ nombre: d.restaurante?.nombre || 'Mi restaurante', tipo: d.restaurante?.tipo || 'kumi', tema: paletaDe(d.restaurante), equipo: d.equipo.map((p) => ({ id: p.id, nombre: p.nombre, contrato: p.contrato || null })) });
               usarAlmacen.getState().cambiar((x) => { x.cuenta = { rol: 'jefe', rid: r.rid, codigo: r.codigo, uid: u.uid }; });
               escucharAvisos();
               avisar('Listo. Comparte el código con tu equipo');

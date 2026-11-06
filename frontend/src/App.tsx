@@ -2,9 +2,11 @@ import { useEffect, useState } from 'react';
 import { usarAlmacen } from './datos/almacen';
 import { Menu } from './componentes/Menu';
 import { Mensajes, Panel } from './componentes/Mensajes';
+import { SinConexion } from './componentes/SinConexion';
 import { usarUi } from './estado/ui';
 import { arrancarSesion, sinLeer, usarSesion } from './nube/sesion';
 import { usarTema } from './tema';
+import { paletaDe } from './dominio/paletas';
 import { Ajustes } from './pantallas/Ajustes';
 import { Avisos } from './pantallas/Avisos';
 import { Bienvenida } from './pantallas/Bienvenida';
@@ -30,7 +32,7 @@ export function App() {
   usarSesion((s) => s.avisos);
   usarAlmacen((s) => s.datos.cuenta?.leidos);
   const [unirse, setUnirse] = useState<string | null>(!r && codigoEnlace ? codigoEnlace : null);
-  usarTema(r?.tipo, r?.modo);
+  usarTema(paletaDe(r), r?.modo);
   useEffect(() => { document.body.classList.toggle('modo-equipo', esEquipo); }, [esEquipo]);
   const conectado = usarAlmacen((s) => !!s.datos.cuenta);
   useEffect(() => { if (conectado) arrancarSesion(); }, [conectado]);
@@ -43,6 +45,7 @@ export function App() {
   const Pantalla = PANTALLAS[vista];
   return (
     <>
+      <SinConexion />
       <Pantalla />
       <Menu vista={vista} ir={usarUi.getState().ir} abrirMas={() => usarUi.getState().abrirPanel(<PanelMas />)} sinLeer={sinLeer().length} />
       <Mensajes />

@@ -9,6 +9,7 @@ import { nube } from '../nube';
 import { usarFichajes } from '../nube/fichajes';
 import { esJefeEnLinea } from '../nube/sesion';
 import { horaDe, textoTramo } from './TarjetaFichar';
+import { Icono } from '../componentes/Icono';
 
 // La jefa ve lo que ha fichado cada persona en el mes y corrige los olvidos. Corregir nunca borra: añade un registro.
 export function Fichajes() {
@@ -49,7 +50,7 @@ export function Fichajes() {
         <div><b>{ids.length}</b><span>personas</span></div>
         <div><b>{pendientes}</b><span>sin cerrar</span></div>
       </div></div>
-      {pendientes > 0 && <div className="alerta">⚠️ Hay {pendientes === 1 ? '1 fichaje' : pendientes + ' fichajes'} sin entrada o sin salida. Toca el día para corregirlo.</div>}
+      {pendientes > 0 && <div className="alerta"><Icono n="alerta" tam={18} /> Hay {pendientes === 1 ? '1 fichaje' : pendientes + ' fichajes'} sin entrada o sin salida. Toca el día para corregirlo.</div>}
       <div className="tarjeta"><h3>Por persona</h3><div className="sub">Toca un día para corregirlo</div>
         <div>{error ? <div className="vacio">No se pudieron leer los fichajes. ¿Tienes internet?</div>
           : !listo ? <div className="vacio">Cargando…</div>

@@ -1,9 +1,11 @@
+import { useState } from 'react';
 import { usarAlmacen } from '../datos/almacen';
-import { alternarLibre, copiarSemana, semanaDe, turnosDe, vaciarSemana } from '../datos/acciones';
-import type { Persona, Turnos } from '../datos/tipos';
+import { alternarLibre, copiarSemana, quitarLibre, semanaDe, turnosDe, vaciarSemana } from '../datos/acciones';
+import type { Franja, Persona, Turnos } from '../datos/tipos';
 import { DIAS, MESES, claveSemana, fechaDeClave, sumarDias } from '../dominio/fechas';
-import { aCasilla, minutosTurnos, normalizarHora, semanaTieneDatos, textoHoras } from '../dominio/horas';
-import { avisosSemana, coberturaDia, detalleCorto, esLibre, incidenciaDe, textoIncidencia, VACIO, type Aviso } from '../dominio/horario';
+import { aCasilla, minutosTurnos, normalizarHora, semanaTieneDatos, textoHoras, tramo } from '../dominio/horas';
+import { alternarServicio, huecoDeServicio, turnoCorto } from '../dominio/rellenar';
+import { avisosSemana, coberturaDia, detalleCorto, esLibre, franjas, incidenciaDe, textoIncidencia, VACIO, type Aviso } from '../dominio/horario';
 import { Avatar } from '../componentes/Avatar';
 import { Cabecera } from '../componentes/Cabecera';
 import { usarUi } from '../estado/ui';
@@ -52,7 +54,7 @@ export function Rellenar() {
               const ok = !r.cortos.length;
               return (
                 <div key={r.f.id} className={'franja ' + (ok ? 'ok' : 'corta')}>
-                  <b>{r.f.icono + ' ' + r.f.nombre}</b><span>{r.min + '/' + r.f.minimo + (ok ? ' ✓' : ' ⚠️')}</span>
+                  <b>{r.f.nombre}</b><span>{r.min + '/' + r.f.minimo + (ok ? ' ✓' : ' · falta gente')}</span>
                   {!ok && <small>{detalleCorto(r).replace(/^./, (c) => c.toUpperCase())}</small>}
                 </div>
               );
@@ -85,17 +87,26 @@ function FilaPersona({ p, lunes, dia, avisos }: { p: Persona; lunes: Date; dia: 
   const d = usarAlmacen((s) => s.datos);
   const cambiar = usarAlmacen((s) => s.cambiar);
   const { avisar, abrirPanel } = usarUi.getState();
+  const [editando, setEditando] = useState(false);
   const fecha = sumarDias(lunes, dia);
   const t: Turnos = d.semanas[claveSemana(lunes)]?.[p.id]?.[dia] ?? VACIO;
   const trabaja = t.some(Boolean);
   const libre = esLibre(d, fecha, p.id);
   const inc = incidenciaDe(d, fecha, p.id);
   const suyos = avisos.filter((a) => a.id === p.id && (a.dia === dia || a.dia === null));
+  const servicios = franjas(d).filter((f) => f.dias.includes(dia) && tramo(f.desde, f.hasta));
+  // Las horas exactas siempre a la vista: un horario que no es un servicio no tiene botón que lo marque.
+  const resumen = [turnoCorto(t[0], t[1]), turnoCorto(t[2], t[3])].filter(Boolean).join(' y ');
 
   const guardarHora = (i: number, texto: string) => {
     const valor = normalizarHora(texto);
     if (valor === null) { avisar('Esa hora no es válida'); return; }
-    if (t[i] !== valor) cambiar((x) => { turnosDe(semanaDe(x, lunes), p.id, dia)[i] = valor; });
+    if (t[i] !== valor) cambiar((x) => { turnosDe(semanaDe(x, lunes), p.id, dia)[i] = valor; quitarLibre(x, fecha, p.id); });
+  };
+  const tocarServicio = (f: Franja) => {
+    const nuevos = alternarServicio(t, f);
+    if (nuevos === 'lleno') { avisar('Ya tiene dos turnos: quita uno en «Otra hora»'); return; }
+    cambiar((x) => { const tt = turnosDe(semanaDe(x, lunes), p.id, dia); nuevos.forEach((v, i) => { tt[i] = v; }); quitarLibre(x, fecha, p.id); });
   };
   const casilla = (i: number, etiqueta: string) => (
     <input type="time" step={60} className={t[i] ? 'lleno' : ''} aria-label={etiqueta} value={aCasilla(t[i])} onChange={(e) => guardarHora(i, e.target.value)} />
@@ -114,16 +125,24 @@ function FilaPersona({ p, lunes, dia, avisos }: { p: Persona; lunes: Date; dia: 
       <div className="nombre">
         <Avatar p={p} />{p.nombre.toUpperCase()}
         <span className="derecha">
-          {trabaja && <span className="etiqueta trabaja">{textoHoras(minutosTurnos(t))}</span>}
-          <button className={'interruptor' + (libre ? ' on' : '')} role="switch" aria-checked={libre} onClick={() => cambiar((x) => alternarLibre(x, lunes, dia, p.id))}>Libre<i /></button>
+          {trabaja && <b className="horas-dia">{textoHoras(minutosTurnos(t))}</b>}
+          <button className={'libre-chip' + (libre ? ' sel' : '')} aria-pressed={libre} onClick={() => cambiar((x) => alternarLibre(x, lunes, dia, p.id))}>Libre</button>
         </span>
       </div>
-      {suyos.length > 0 && <div className="avisos-desc">{suyos.map((a, i) => <div key={i}>⚠️ {a.texto}</div>)}</div>}
-      {libre ? <div className="dia-libre">🌴 Libre</div> : [fila(0), fila(1)]}
+      {suyos.length > 0 && <div className="avisos-desc">{suyos.map((a, i) => <div key={i}>{a.texto}</div>)}</div>}
+      <div className="chips-turno" role="group" aria-label={'Turnos de ' + p.nombre}>
+        {servicios.map((f) => {
+          const puesto = huecoDeServicio(t, f) >= 0;
+          return <button key={f.id} className={puesto ? 'sel' : ''} aria-pressed={puesto} onClick={() => tocarServicio(f)}>{f.nombre}<small>{turnoCorto(f.desde, f.hasta)}</small></button>;
+        })}
+      </div>
+      {trabaja && !editando && <p className="resumen-turnos">{resumen}</p>}
+      {editando && !libre && <div className="editar-horas">{fila(0)}{fila(1)}</div>}
       <div className="incid">
-        {trabaja && <button className="repetir" onClick={() => abrirPanel(<PanelRepetir ids={[p.id]} />)}>{ICONO_REPETIR}Repetir</button>}
+        {!libre && <button className="enlace" aria-expanded={editando} onClick={() => setEditando((v) => !v)}>{editando ? 'Listo' : trabaja ? 'Cambiar horas' : 'Otra hora'}</button>}
+        {trabaja && <button className="enlace" onClick={() => abrirPanel(<PanelRepetir ids={[p.id]} />)}>Repetir</button>}
         {inc && <span className={'badge ' + inc.tipo}>{textoIncidencia(d, inc, fecha, p.id)}</span>}
-        <button className="que-paso" onClick={() => abrirPanel(<PanelIncidencia id={p.id} />)}>{inc ? 'Cambiar' : '¿Qué pasó este día?'}</button>
+        <button className="enlace que-paso" onClick={() => abrirPanel(<PanelIncidencia id={p.id} />)}>{inc ? 'Cambiar' : '¿Qué pasó?'}</button>
       </div>
     </div>
   );

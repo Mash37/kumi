@@ -2,9 +2,8 @@
 import type { Datos } from '../datos/tipos';
 import { DIAS, MESES_CORTOS, claveSemana, rango, sumarDias } from './fechas';
 import { esLibre } from './horario';
-import type { Colores } from './temas';
 
-export function dibujarCuadro(c: HTMLCanvasElement, d: Datos, lunes: Date, colores: Colores): HTMLCanvasElement {
+export function dibujarCuadro(c: HTMLCanvasElement, d: Datos, lunes: Date, colores: { titulo: string; cabecera: string }): HTMLCanvasElement {
   const ctx = c.getContext('2d')!;
   const sem = d.semanas[claveSemana(lunes)] || {};
   const equipo = d.equipo;
@@ -15,19 +14,19 @@ export function dibujarCuadro(c: HTMLCanvasElement, d: Datos, lunes: Date, color
   ctx.setTransform(ESC, 0, 0, ESC, 0, 0);
   ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, ancho, alto);
 
-  const fuente = 'Jost, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
+  const fuente = '"DM Sans Variable", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif';
   ctx.textBaseline = 'middle';
-  ctx.fillStyle = colores.frambuesa; ctx.textAlign = 'left';
-  ctx.font = 'italic 700 30px "Playfair Display", Georgia, serif';
+  ctx.fillStyle = colores.titulo; ctx.textAlign = 'left';
+  ctx.font = '700 28px "DM Sans Variable", Arial, sans-serif';
   ctx.fillText('Horario · semana del ' + rango(lunes, true) + ' ' + sumarDias(lunes, 6).getFullYear(), M, M + TIT / 2 - 8);
 
   const x0 = M, y0 = M + TIT, xd = x0 + NOM, yp = y0 + CAB;
   const finX = xd + COL * 14, finY = yp + equipo.length * FIL * 2;
-  ctx.fillStyle = colores.pdfCabecera;
+  ctx.fillStyle = colores.cabecera;
   ctx.fillRect(xd, y0, COL * 14, CAB);
   ctx.fillRect(x0, yp, NOM, finY - yp);
 
-  ctx.fillStyle = '#1f1418';
+  ctx.fillStyle = '#1D292D';
   for (let i = 0; i < 7; i++) {
     const x = xd + i * COL * 2;
     ctx.font = '600 19px ' + fuente;
@@ -63,10 +62,10 @@ export function dibujarCuadro(c: HTMLCanvasElement, d: Datos, lunes: Date, color
     ctx.fillStyle = '#1f7a4d'; ctx.font = 'italic 600 19px ' + fuente; ctx.textAlign = 'center';
     ctx.fillText('Libre', x + COL, y + FIL + 1);
   });
-  for (let i = 0; i <= 7; i++) linea(xd + i * COL * 2, y0, xd + i * COL * 2, finY, 2.5, '#1f1418');
-  for (let i = 0; i <= equipo.length; i++) linea(x0, yp + i * FIL * 2, finX, yp + i * FIL * 2, 2.5, '#1f1418');
-  linea(xd, y0, finX, y0, 2.5, '#1f1418');
-  linea(x0, yp, x0, finY, 2.5, '#1f1418');
+  for (let i = 0; i <= 7; i++) linea(xd + i * COL * 2, y0, xd + i * COL * 2, finY, 2.5, '#1D292D');
+  for (let i = 0; i <= equipo.length; i++) linea(x0, yp + i * FIL * 2, finX, yp + i * FIL * 2, 2.5, '#1D292D');
+  linea(xd, y0, finX, y0, 2.5, '#1D292D');
+  linea(x0, yp, x0, finY, 2.5, '#1D292D');
   return c;
 }
 export function nombreArchivo(lunes: Date, ext: string): string {

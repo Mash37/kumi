@@ -1,7 +1,9 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+import '@fontsource-variable/dm-sans/wght.css';
 import './estilos/legado.css';
 import './estilos/hoja.css';
+import './estilos/kumi.css';
 import { App } from './App';
 
 // Los datos solo viven en este dispositivo: se pide al navegador que no los borre cuando le falte espacio.

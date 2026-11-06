@@ -6,6 +6,7 @@ import { nube } from '../nube';
 import type { Codigo } from '../nube/firebase';
 import { arrancarSesion, escucharMiRestaurante, usarSesion } from '../nube/sesion';
 import { usarTema } from '../tema';
+import { paletaDe } from '../dominio/paletas';
 
 // Alguien del equipo: entra con Google, escribe el código y elige su nombre.
 export function Unirse({ codigoInicial, volver }: { codigoInicial: string; volver: () => void }) {
@@ -15,7 +16,7 @@ export function Unirse({ codigoInicial, volver }: { codigoInicial: string; volve
   const [rest, setRest] = useState<Codigo | null>(null);
   const [personaId, setPersona] = useState<string | null>(null);
   const [uniendo, setUniendo] = useState(false);
-  usarTema(rest?.tipo, usarAlmacen.getState().datos.restaurante?.modo);
+  usarTema(paletaDe(rest), usarAlmacen.getState().datos.restaurante?.modo);
   useEffect(() => { arrancarSesion(); }, []);
   useEffect(() => { document.body.classList.add('en-bienvenida'); window.scrollTo(0, 0); return () => document.body.classList.remove('en-bienvenida'); }, []);
 
@@ -37,7 +38,7 @@ export function Unirse({ codigoInicial, volver }: { codigoInicial: string; volve
     const yo = rest.equipo.find((p) => p.id === personaId)!;
     usarAlmacen.getState().reemplazar({
       equipo: rest.equipo.map((p) => ({ id: p.id, nombre: p.nombre, contrato: p.contrato || null })), semanas: {},
-      restaurante: { persona: nombreCorto(yo.nombre), nombre: rest.nombre, tipo: rest.tipo, modo: usarAlmacen.getState().datos.restaurante?.modo || 'auto' },
+      restaurante: { persona: nombreCorto(yo.nombre), nombre: rest.nombre, tipo: rest.tipo, ...(rest.tema ? { tema: rest.tema } : {}), modo: usarAlmacen.getState().datos.restaurante?.modo || 'auto' },
       cuenta: { rol: 'equipo', rid: rest.rid, codigo: cod, personaId, uid: u.uid },
     });
     escucharMiRestaurante();

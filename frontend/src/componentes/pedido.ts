@@ -25,29 +25,29 @@ function hoja(nombre: string, fecha: string, para: string, filas: FilaPedido[], 
   g.fillStyle = '#ffffff'; g.fillRect(0, 0, ANCHO, ALTO);
   g.textBaseline = 'alphabetic';
 
-  g.fillStyle = col.titulo; g.font = '600 22px Jost, Arial, sans-serif';
+  g.fillStyle = col.titulo; g.font = '600 22px "DM Sans Variable", Arial, sans-serif';
   g.fillText('KUMI · ' + nombre.toUpperCase(), IZQ, 120);
-  g.font = 'italic 700 58px "Playfair Display", Georgia, serif';
+  g.font = '700 52px "DM Sans Variable", Arial, sans-serif';
   g.fillText('Pedido · ' + fecha, IZQ, 200);
-  g.fillStyle = GRIS; g.font = '400 26px Jost, Arial, sans-serif';
+  g.fillStyle = GRIS; g.font = '400 26px "DM Sans Variable", Arial, sans-serif';
   g.fillText((para ? para + ' · ' : '') + cuantos + (cuantos === 1 ? ' producto' : ' productos') + (de > 1 ? ' · Hoja ' + num + ' de ' + de : ''), IZQ, 250);
 
   g.fillStyle = col.cabecera; g.fillRect(IZQ, 300, DER - IZQ, 56);
-  g.fillStyle = TINTA; g.font = '600 24px Jost, Arial, sans-serif';
+  g.fillStyle = TINTA; g.font = '600 24px "DM Sans Variable", Arial, sans-serif';
   g.textAlign = 'left'; g.fillText('Producto', IZQ + 16, 337);
   g.textAlign = 'right';
   g.fillText('Quedan', COL.quedan, 337); g.fillText('Mínimo', COL.minimo, 337); g.fillText('Pedir', COL.pedir, 337); g.fillText('Importe aprox.', COL.importe - 12, 337);
 
   let y = 356;
   filas.forEach((f) => {
-    g.textAlign = 'left'; g.fillStyle = TINTA; g.font = '400 26px Jost, Arial, sans-serif';
+    g.textAlign = 'left'; g.fillStyle = TINTA; g.font = '400 26px "DM Sans Variable", Arial, sans-serif';
     g.fillText(recortar(g, f.p.nombre, COL.quedan - 150 - IZQ), IZQ + 16, y + 34);
     g.textAlign = 'right';
     g.fillText(cantidadTxt(f.quedan, f.p), COL.quedan, y + 34);
     g.fillText(cantidadTxt(f.p.minimo ?? 0, f.p), COL.minimo, y + 34);
-    g.font = '600 26px Jost, Arial, sans-serif';
+    g.font = '600 26px "DM Sans Variable", Arial, sans-serif';
     g.fillText(cantidadTxt(f.pedir, f.p), COL.pedir, y + 34);
-    g.font = '400 26px Jost, Arial, sans-serif';
+    g.font = '400 26px "DM Sans Variable", Arial, sans-serif';
     g.fillText(f.importe != null ? euros.format(f.importe) : '—', COL.importe - 12, y + 34);
     y += FILA;
     g.strokeStyle = LINEA; g.lineWidth = 1.5; g.beginPath(); g.moveTo(IZQ, y); g.lineTo(DER, y); g.stroke();
@@ -57,18 +57,18 @@ function hoja(nombre: string, fecha: string, para: string, filas: FilaPedido[], 
     y += 20;
     if (total != null) {
       g.strokeStyle = TINTA; g.lineWidth = 3; g.beginPath(); g.moveTo(IZQ, y); g.lineTo(DER, y); g.stroke();
-      g.fillStyle = TINTA; g.font = '600 28px Jost, Arial, sans-serif';
+      g.fillStyle = TINTA; g.font = '600 28px "DM Sans Variable", Arial, sans-serif';
       g.textAlign = 'left'; g.fillText('Total aproximado', IZQ + 16, y + 44);
       g.textAlign = 'right'; g.fillText(euros.format(total), COL.importe - 12, y + 44);
       y += 60;
     }
-    g.textAlign = 'left'; g.fillStyle = GRIS; g.font = '400 21px Jost, Arial, sans-serif';
+    g.textAlign = 'left'; g.fillStyle = GRIS; g.font = '400 21px "DM Sans Variable", Arial, sans-serif';
     g.fillText('«Pedir» es lo que falta para llegar al doble del mínimo.', IZQ, y + 50);
     g.fillText('El importe usa el precio guardado de cada producto y es orientativo.', IZQ, y + 80);
     const firmas = Math.min(y + 220, ALTO - 90);
     g.strokeStyle = TINTA; g.lineWidth = 1.5;
     g.beginPath(); g.moveTo(IZQ, firmas); g.lineTo(560, firmas); g.moveTo(680, firmas); g.lineTo(DER, firmas); g.stroke();
-    g.fillStyle = TINTA; g.font = '400 24px Jost, Arial, sans-serif';
+    g.fillStyle = TINTA; g.font = '400 24px "DM Sans Variable", Arial, sans-serif';
     g.fillText('Pedido por', IZQ, firmas + 34); g.fillText('Recibido', 680, firmas + 34);
   }
   return c;
